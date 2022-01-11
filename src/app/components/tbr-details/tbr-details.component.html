@@ -1,1 +1,124 @@
-<p>tbr-details works!</p>
+<ng-container *ngIf="details | async as tbrDetails">
+  <ui5-page>
+    <ui5-bar design="Header" slot="header">
+      <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> Close
+      </ui5-button>
+    </ui5-bar>
+
+    <div fxLayout style="padding: 2rem 3rem; background: linear-gradient(to bottom, #a9c4df, #e7ecf0)">
+      <div fxFlex="60" fxLayout="column">
+        <ui5-label> {{tbrDetails.shipitId}} </ui5-label>
+        <ui5-label> {{tbrDetails.consignee | consignorText}} </ui5-label>
+        <ui5-label> Ship from: {{ tbrDetails.shipFrom | address }} </ui5-label>
+        <ui5-label> Ship to: {{ tbrDetails.shipTo | address }} </ui5-label>
+        <ui5-label> Unloading Point: {{ tbrDetails.shipTo.loadUnloadPoint }} </ui5-label>
+        <ui5-label> Consignor: {{ tbrDetails.consignor | consignorText }} </ui5-label>
+        <ui5-label> Customs: {{ tbrDetails.transportNetwork.customs }} </ui5-label>
+      </div>
+      <div fxFlex="40" fxLayout="column">
+        <ui5-label> {{tbrDetails.shipitStatus}} </ui5-label>
+        <ui5-label> Total Weight: {{tbrDetails.orderWeight}} </ui5-label>
+        <ui5-label> Total Volume: {{tbrDetails.orderVolume}} </ui5-label>
+        <ui5-label> #THU: {{tbrDetails | thuAmount}} </ui5-label>
+        <ui5-label></ui5-label>
+        <ui5-label> Original Pick-up Date: {{ tbrDetails.originalDeliveryDate | parseDate }} </ui5-label>
+      </div>
+    </div>
+  </ui5-page>
+
+  <ui5-page>
+    <ui5-table mode="MultiSelect" id="table">
+      <!-- Columns -->
+      <ui5-table-column slot="columns">
+        <span>Part</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>Name</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>Req. Qty</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>Ship Qty</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>PO</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>Weight</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>Volume</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>#</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>THU</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>Sub HU</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>No Del</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>Mix</span>
+      </ui5-table-column>
+
+      <ui5-table-column slot="columns">
+        <span>Wh. loc</span>
+      </ui5-table-column>
+
+      <ui5-table-row *ngFor="let row of tbrDetails.lines">
+        <ui5-table-cell>{{row.articleNumber}}</ui5-table-cell>
+        <ui5-table-cell>{{row.articleName}}</ui5-table-cell>
+        <ui5-table-cell>{{row.requestedQuantity}}</ui5-table-cell>
+        <ui5-table-cell>
+          <ui5-input [value]="row.packagedQuantity"></ui5-input>
+        </ui5-table-cell>
+        <ui5-table-cell>{{row.purchaseOrderNumber}}</ui5-table-cell>
+        <ui5-table-cell>{{row.weightSULUom}}</ui5-table-cell>
+        <ui5-table-cell>{{row.volumeSULUom}}</ui5-table-cell>
+        <ui5-table-cell>{{row.quantity}}</ui5-table-cell>
+        <ui5-table-cell>
+          <ui5-input [value]="row.type"></ui5-input>
+        </ui5-table-cell>
+        <ui5-table-cell>{{row.subHu}}</ui5-table-cell>
+        <ui5-table-cell>
+          <ui5-icon name="cancel" style="color: red"></ui5-icon>
+        </ui5-table-cell>
+        <ui5-table-cell>
+          <ui5-icon *ngIf="row.shipUnitLineId" name="circle-task-2" style="color: orange"></ui5-icon>
+          <ui5-icon *ngIf="row.mixValid" name="circle-task-2" style="color: #47962d"></ui5-icon>
+        </ui5-table-cell>
+        <ui5-table-cell>{{row.whLoc}}</ui5-table-cell>
+      </ui5-table-row>
+
+    </ui5-table>
+
+    <div slot="footer">
+      <ui5-bar design="Footer">
+        <ui5-button slot="startContent" icon="delete" design="Negative" (click)="goBack()">Do not deliver full
+          shipment
+        </ui5-button>
+        <ui5-button icon="cancel" (click)="goBack()"></ui5-button>
+        <div slot="endContent">
+          <ui5-button design="Positive" icon="save" style="margin-right: 1rem"> Continue to details</ui5-button>
+          <ui5-button design="Emphasized" icon="accounting-document-verification"> Continue to details</ui5-button>
+        </div>
+      </ui5-bar>
+    </div>
+  </ui5-page>
+</ng-container>

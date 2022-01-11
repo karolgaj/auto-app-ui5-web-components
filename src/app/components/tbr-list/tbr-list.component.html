@@ -1,20 +1,22 @@
-<ui5-bar design="Header">
-  <ui5-label>Title level 1</ui5-label>
-</ui5-bar>
-<ui5-panel accessible-role="Complementary" [attr.header-text]="type" *ngFor="let type of tbrTypes">
-  <ui5-list no-data-text="No Data Available" separators="None">
-    <ui5-li>
-      <div class="object-list-item" *ngFor="let tbr of tbrList | async">
-        <ui5-label>{{ tbr.shipToName | lowercase }}</ui5-label>
-        <div class="object-list-item__parms">
-          <ui5-icon class="samples-margin" name="approvals"></ui5-icon>
-          <span>1234</span>
+<ui5-page background-design="List">
+  <ui5-bar design="Header" slot="header">
+    <ui5-label>TBRs</ui5-label>
+  </ui5-bar>
+  <ui5-panel accessible-role="Complementary" [attr.header-text]="type" *ngFor="let type of tbrTypes">
+    <ui5-list no-data-text="No Data Available">
+      <ui5-li (click)="selectTbr(tbr)" *ngFor="let tbr of (tbrList | async | tbrType: type) ">
+        <div class="object-list-item">
+          <ui5-label>{{ tbr.shipToName | lowercase }}</ui5-label>
+          <div class="object-list-item__parms">
+            <ui5-icon class="samples-margin" name="approvals"></ui5-icon>
+            <span>1234</span>
+          </div>
+          <ui5-label>Name</ui5-label>
+          <ui5-label>Name</ui5-label>
+          <span>Name</span>
+          <span>Name</span>
         </div>
-        <ui5-label>Name</ui5-label>
-        <ui5-label>Name</ui5-label>
-        <span>Name</span>
-        <span>Name</span>
-      </div>
-    </ui5-li>
-  </ui5-list>
-</ui5-panel>
+      </ui5-li>
+    </ui5-list>
+  </ui5-panel>
+</ui5-page>
