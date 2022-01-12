@@ -1,7 +1,8 @@
-<ui5-page background-design="List">
+<div fxLayout="column" style="height: 100%;" >
   <ui5-bar design="Header" slot="header">
     <ui5-label>TBRs</ui5-label>
   </ui5-bar>
+  <div fxFlex>
   <ui5-panel accessible-role="Complementary" [attr.header-text]="type" *ngFor="let type of tbrTypes">
     <ui5-list no-data-text="No Data Available">
       <ui5-li (click)="selectTbr(tbr)" *ngFor="let tbr of (tbrList | async | tbrType: type) ">
@@ -19,4 +20,9 @@
       </ui5-li>
     </ui5-list>
   </ui5-panel>
-</ui5-page>
+  </div>
+  <ui5-bar design="Footer" slot="footer">
+    <ui5-button slot="startContent" icon="add" design="Transparent"></ui5-button>
+    <ui5-button slot="endContent" icon="refresh"></ui5-button>
+  </ui5-bar>
+</div>

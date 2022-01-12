@@ -1,0 +1,21 @@
+<ui5-page>
+  <div fxLayout style="padding: 2rem 3rem; background: linear-gradient(to bottom, #a9c4df, #e7ecf0)">
+  <div fxFlex="60" fxLayout="column">
+    <ui5-label> {{tbrDetails.shipitId}} </ui5-label>
+    <ui5-label> {{tbrDetails.consignee | consignorText}} </ui5-label>
+    <ui5-label> Ship from: {{ tbrDetails.shipFrom | address }} </ui5-label>
+    <ui5-label> Ship to: {{ tbrDetails.shipTo | address }} </ui5-label>
+    <ui5-label> Unloading Point: {{ tbrDetails.shipTo.loadUnloadPoint }} </ui5-label>
+    <ui5-label> Consignor: {{ tbrDetails.consignor | consignorText }} </ui5-label>
+    <ui5-label> Customs: {{ tbrDetails.transportNetwork.customs }} </ui5-label>
+  </div>
+  <div fxFlex="40" fxLayout="column">
+    <ui5-label> {{tbrDetails.shipitStatus}} </ui5-label>
+    <ui5-label> Total Weight: {{tbrDetails.orderWeight}} </ui5-label>
+    <ui5-label> Total Volume: {{tbrDetails.orderVolume}} </ui5-label>
+    <ui5-label> #THU: {{tbrDetails | thuAmount}} </ui5-label>
+    <ui5-label></ui5-label>
+    <ui5-label> Original Pick-up Date: {{ tbrDetails.originalDeliveryDate | parseDate }} </ui5-label>
+  </div>
+</div>
+</ui5-page>

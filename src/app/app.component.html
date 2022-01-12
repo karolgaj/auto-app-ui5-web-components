@@ -3,13 +3,10 @@
 </ui5-shellbar>
 
 <ui5-page>
-  <div fxLayout style="height: calc(100% - 44px)">
+  <main fxLayout style="height: calc(100vh - 44px)">
     <div fxFlex="20rem">
       <app-tbr-list></app-tbr-list>
     </div>
-
-    <main fxFlex>
-      <router-outlet></router-outlet>
-    </main>
-  </div>
+    <router-outlet></router-outlet>
+  </main>
 </ui5-page>

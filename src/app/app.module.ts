@@ -35,6 +35,7 @@ import { AddressPipe } from './pipes/address.pipe';
 import { ConsignorTextPipe } from './pipes/consignor-text.pipe';
 import { ThuAmountPipe } from './pipes/thu-amount.pipe';
 import { ParseDatePipe } from './pipes/parse-date.pipe';
+import { TbrNetworkComponent } from './components/tbr-network/tbr-network.component';
 
 setTheme('sap_belize');
 
@@ -50,6 +51,7 @@ setTheme('sap_belize');
     ConsignorTextPipe,
     ThuAmountPipe,
     ParseDatePipe,
+    TbrNetworkComponent,
   ],
   imports: [BrowserModule, CommonModule, AppRoutingModule, FlexLayoutModule],
   providers: [],
