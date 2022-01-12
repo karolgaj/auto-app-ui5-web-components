@@ -12,3 +12,5 @@ export type TbrTypes =
   | 'DELETED'
   | 'CANCELED'
   | 'SENT_BACK_TO_TBR';
+
+export type ShipitStatus = 'CREATED' | 'IN_PROCESS';

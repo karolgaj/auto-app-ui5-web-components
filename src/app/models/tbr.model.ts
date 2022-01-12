@@ -1,3 +1,5 @@
+import { ShipitStatus } from './tbr-type.model';
+
 export interface Tbr {
   orderReleaseLines: OrderReleaseLine[];
   transportBookings: any[];
@@ -17,7 +19,7 @@ export interface Tbr {
   tbrId: null;
   tbrType: string;
   shipitId: string;
-  shipitStatus: string;
+  shipitStatus: ShipitStatus;
   shipitStatusType: string;
   originalShipitId: null;
   baseShipUnitLineId: string;

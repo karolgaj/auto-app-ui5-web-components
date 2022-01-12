@@ -1,3 +1,5 @@
+import { ShipitStatus } from './tbr-type.model';
+
 export interface TbrLight {
   status: string;
   details: TbrLightDetails[];
@@ -24,7 +26,7 @@ export interface TbrLightDetails {
   originalDeliveryDate: string;
   unloadingPoint: string;
   unloadingPointName: string;
-  shipitStatus: string;
+  shipitStatus: ShipitStatus;
   shipitStatusType: string;
   shipitId: string;
   split: boolean;

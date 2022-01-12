@@ -15,6 +15,9 @@ import '@ui5/webcomponents/dist/TableCell.js';
 import '@ui5/webcomponents/dist/Avatar';
 import '@ui5/webcomponents/dist/Panel';
 import '@ui5/webcomponents/dist/Input.js';
+import '@ui5/webcomponents/dist/DatePicker';
+import '@ui5/webcomponents/dist/Switch';
+import '@ui5/webcomponents/dist/Dialog';
 
 import '@ui5/webcomponents-fiori/dist/Bar';
 import '@ui5/webcomponents-fiori/dist/ShellBar';
@@ -36,6 +39,9 @@ import { ConsignorTextPipe } from './pipes/consignor-text.pipe';
 import { ThuAmountPipe } from './pipes/thu-amount.pipe';
 import { ParseDatePipe } from './pipes/parse-date.pipe';
 import { TbrNetworkComponent } from './components/tbr-network/tbr-network.component';
+import { ShipitStatusPipe } from './pipes/shipit-status.pipe';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ThuDetailsComponent } from './components/thu-details/thu-details.component';
 
 setTheme('sap_belize');
 
@@ -52,8 +58,10 @@ setTheme('sap_belize');
     ThuAmountPipe,
     ParseDatePipe,
     TbrNetworkComponent,
+    ShipitStatusPipe,
+    ThuDetailsComponent,
   ],
-  imports: [BrowserModule, CommonModule, AppRoutingModule, FlexLayoutModule],
+  imports: [BrowserModule, CommonModule, AppRoutingModule, FlexLayoutModule, FormsModule, ReactiveFormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

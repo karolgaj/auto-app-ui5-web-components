@@ -1,0 +1,6 @@
+<div fxLayout="column" style="height: 100%" *ngIf="details | async as tbrDetails">
+  <ui5-bar design="Header" slot="header">
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field"
+                (click)="goBack(tbrDetails.shipitId)"></ui5-button>
+  </ui5-bar>
+</div>

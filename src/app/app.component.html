@@ -1,12 +1,14 @@
-<ui5-shellbar primary-title="Corporate Portal" secondary-title="secondary title">
-  <ui5-avatar slot="profile" icon="customer"></ui5-avatar>
-</ui5-shellbar>
+<div>
+  <ui5-shellbar primary-title="Corporate Portal" secondary-title="secondary title">
+    <ui5-avatar slot="profile" icon="customer"></ui5-avatar>
+  </ui5-shellbar>
 
-<ui5-page>
   <main fxLayout style="height: calc(100vh - 44px)">
     <div fxFlex="20rem">
       <app-tbr-list></app-tbr-list>
     </div>
-    <router-outlet></router-outlet>
+    <div fxFlex>
+      <router-outlet></router-outlet>
+    </div>
   </main>
-</ui5-page>
+</div>
