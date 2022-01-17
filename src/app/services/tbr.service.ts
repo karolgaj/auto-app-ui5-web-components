@@ -23,11 +23,10 @@ export class TbrService {
   getTbrDetails(): Observable<Tbr & { lines: any[] }> {
     return of(tbrDetails as Tbr).pipe(
       map((tbr) => {
-        const a = {
+        return {
           ...tbr,
           lines: TbrService.mapToLines(tbr),
         };
-        return a;
       })
     );
   }
@@ -43,7 +42,6 @@ export class TbrService {
       );
 
       const res = TbrService.mapTBRline(oORL, aSUL, aTBRlines);
-      console.log(res);
       if (res && res.aSubHU && res.oTBRline) {
         aSubHUs = aSubHUs.concat(res.aSubHU);
         let oTBRline = res.oTBRline;

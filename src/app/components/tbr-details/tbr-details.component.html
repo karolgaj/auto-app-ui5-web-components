@@ -21,7 +21,7 @@
         <ui5-date-picker [value]="tbrDetails.deliveryDate"></ui5-date-picker>
       </div>
     </ui5-bar>
-    <ui5-table mode="MultiSelect" id="table">
+    <ui5-table mode="MultiSelect">
       <!-- Columns -->
       <ui5-table-column slot="columns">
         <span>Part</span>
@@ -76,7 +76,7 @@
       </ui5-table-column>
 
       <ui5-table-row data-ui5-compact-size *ngFor="let row of tbrDetails.lines"
-                     (click)="navigateToThuDetails(tbrDetails.shipitId)">
+                     (click)="navigateToThuDetails(row, tbrDetails.shipitId)">
         <ui5-table-cell>{{ row.articleNumber }}</ui5-table-cell>
         <ui5-table-cell>{{ row.articleName }}</ui5-table-cell>
         <ui5-table-cell>{{ row.requestedQuantity }}</ui5-table-cell>
@@ -84,8 +84,8 @@
           <ui5-input style="width: 140px !important" [value]="row.packagedQuantity"></ui5-input>
         </ui5-table-cell>
         <ui5-table-cell>{{ row.purchaseOrderNumber }}</ui5-table-cell>
-        <ui5-table-cell>{{ row.weightSULUom }}</ui5-table-cell>
-        <ui5-table-cell>{{ row.volumeSULUom }}</ui5-table-cell>
+        <ui5-table-cell>{{ row.weightSUL }} {{ row.weightSULUom }}</ui5-table-cell>
+        <ui5-table-cell>{{ row.volumeSUL }} {{ row.volumeSULUom }}</ui5-table-cell>
         <ui5-table-cell>{{ row.quantity }}</ui5-table-cell>
         <ui5-table-cell>
           <ui5-input [value]="row.type"></ui5-input>
@@ -108,7 +108,7 @@
     </ui5-button>
     <ui5-switch text-on="Imperial" text-off="Metric"></ui5-switch>
     <div slot="endContent">
-      <ui5-button design="Positive" icon="save" style="margin-right: 1rem"> Continue to details</ui5-button>
+      <ui5-button design="Positive" icon="save" style="margin-right: 1rem"> Save draft </ui5-button>
       <ui5-button design="Emphasized" icon="accounting-document-verification"> Continue to details</ui5-button>
     </div>
   </ui5-bar>

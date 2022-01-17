@@ -15,7 +15,7 @@ const routes: Routes = [
     component: TbrDetailsComponent,
   },
   {
-    path: 'thu/:shipItId',
+    path: ':shipItId/:articleNumber',
     component: ThuDetailsComponent,
   },
 ];

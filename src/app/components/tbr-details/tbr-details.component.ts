@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { TbrService } from '../../services/tbr.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { fromEvent } from 'rxjs';
+import { TbrLine } from '../../models/tbr-line.model';
 
 @Component({
   selector: 'app-tbr-details',
@@ -94,7 +95,7 @@ export class TbrDetailsComponent implements OnInit, AfterViewInit {
     this.addLineDialog.nativeElement.close();
   }
 
-  navigateToThuDetails(shipitId: string) {
-    this.router.navigate(['/', 'thu', shipitId]);
+  navigateToThuDetails(line: TbrLine, shipitId: string) {
+    this.router.navigate(['/', shipitId, line.articleNumber]);
   }
 }

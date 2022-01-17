@@ -1,6 +1,85 @@
-<div fxLayout="column" style="height: 100%" *ngIf="details | async as tbrDetails">
+<div fxLayout="column" style="height: 100%" *ngIf="line$ | async as line">
   <ui5-bar design="Header" slot="header">
-    <ui5-button slot="startContent" design="Transparent" icon="close-command-field"
-                (click)="goBack(tbrDetails.shipitId)"></ui5-button>
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"></ui5-button>
   </ui5-bar>
+
+  <ui5-page>
+    <div fxLayout fxLayoutAlign="space-between" style="padding: 2rem 3rem; background-color: var(--sapPageHeader_Background)">
+      <div fxFlex="60" fxLayout="column" fxLayoutGap="1rem">
+        <ui5-label> {{ line.articleNumber }} </ui5-label>
+        <div fxLayout>
+          <img style="max-height: 3rem; max-width: 3rem; margin-right: 0.5rem" src="assets/volvo-logo.png" />
+          <ui5-title level="H2">{{ line.articleName }}</ui5-title>
+        </div>
+        <ui5-label> {{ line.weightSUL }} {{ line.weightSULUom }} </ui5-label>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="center end">
+        <ui5-title level="H2" style="color: #2b7c2b">{{ line.requestedQuantity }}</ui5-title>
+        <ui5-label style="color: #2b7c2b"> PCE</ui5-label>
+        <ui5-label> Length: <span> {{line.length}} </span></ui5-label>
+        <ui5-label> Width: <span> {{line.width}} </span></ui5-label>
+        <ui5-label> Height: <span> {{line.height}} </span></ui5-label>
+        <ui5-label>
+          Stackable:
+          <span> {{ line.stackable ? "Yes" : "No" }} </span> </ui5-label
+        >
+      </div>
+    </div>
+    <ui5-panel [attr.header-text]="'Transport Handling Unit'">
+      <ui5-bar style="background-color: transparent;">
+        <div slot="startContent">
+          <ui5-label style="margin-right: 1rem"> THU ID: <b> {{line.type}} </b> </ui5-label>
+          <ui5-label> Quantity pr. THU: <b> {{line.quantity}} </b> </ui5-label>
+        </div>
+        <div slot="endContent">
+          <ui5-label style="margin-right: 1rem"> Weight pr THU: <b> {{line.weightSUL}} </b> {{line.volumeSULUom}} </ui5-label>
+          <ui5-label> Volume pr. THU: <b> {{line.volumeSUL}} </b> {{line.volumeSULUom}} </ui5-label>
+        </div>
+      </ui5-bar>
+      <ui5-table data-ui5-compact-size>
+        <ui5-table-column slot="columns" style="width: 100px">
+          <span>Package Material</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span> </span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>Qty/Layer</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>Layers</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>Length (MM)</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>Width(MM)</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>Height(MM)</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>Contains Part/Qty oer unit</span>
+        </ui5-table-column>
+
+        <ng-container *ngIf="thuList$ | async as thu">
+          <ui5-table-row *ngFor="let packMack of thu.packMaterialLayer">
+            <ui5-table-cell style="width: 100px">
+              <div>{{ packMack.packMaterial[0].oldMaterialNumber }}</div>
+              <div>{{ packMack.packMaterial[0].materialDescription }}</div>
+            </ui5-table-cell>
+            <ui5-table-cell>
+              <img width="50" height="50" [src]="packMack.packMaterial[0].imgUrl"/>
+            </ui5-table-cell>
+            <ui5-table-cell>{{packMack.maxPackMaterialPerLayer}}</ui5-table-cell>
+            <ui5-table-cell>{{packMack.numberOfLayers}}</ui5-table-cell>
+            <ui5-table-cell>{{packMack.packMaterial[0].length}}</ui5-table-cell>
+            <ui5-table-cell>{{packMack.packMaterial[0].width}}</ui5-table-cell>
+            <ui5-table-cell>{{packMack.packMaterial[0].height}}</ui5-table-cell>
+            <ui5-table-cell>{{packMack.packMaterial[0].articleQuantityPerPackageMaterial === 0 ? '' : packMack.packMaterial[0].articleQuantityPerPackageMaterial}}</ui5-table-cell>
+          </ui5-table-row>
+        </ng-container>
+      </ui5-table>
+    </ui5-panel>
+  </ui5-page>
 </div>
