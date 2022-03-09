@@ -8,3 +8,23 @@ body {
 .ui5-panel-content {
   padding: 0 !important;
 }
+
+app-tbr-network-form {
+  .network-form {
+    margin-top: 3rem;
+
+    div {
+      width: 600px;
+    }
+  }
+
+  ui5-input, ui5-date-picker {
+    width: 400px;
+  }
+}
+
+.custom-address-form {
+  div {
+    width: 600px;
+  }
+}

@@ -1,0 +1,88 @@
+<div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="network-form">
+  <app-input
+    placeholder="Consignor"
+    label="Consignor"
+    [formControl]="networkForm.controls.consignor"
+    [required]="true"
+    [showColon]="true"
+    [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
+  ></app-input>
+  <app-input
+    placeholder="Consignee"
+    label="Consignee"
+    [required]="true"
+    [showColon]="true"
+    [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
+  ></app-input>
+  <app-input
+    placeholder="Ship from"
+    label="Ship from"
+    [required]="true"
+    [showColon]="true"
+    [icons]="[
+      { icon: 'add-contact', action: openCustomAddressDialogBound },
+      { icon: 'value-help', action: openShipListDialogBound }
+    ]"
+  ></app-input>
+  <app-input
+    placeholder="Ship to"
+    label="Ship to"
+    [required]="true"
+    [showColon]="true"
+    [icons]="[
+      { icon: 'add-contact', action: openCustomAddressDialogBound },
+      { icon: 'value-help', action: openShipListDialogBound }
+    ]"
+  ></app-input>
+  <app-input
+    placeholder="Unloading point"
+    label="Unloading point"
+    [required]="true"
+    [showColon]="true"
+    [icons]="[{ icon: 'value-help', action: openUnloadingPointDialog }]"
+  ></app-input>
+
+  <app-datepicker [required]="true" label="Pickup date"></app-datepicker>
+</div>
+
+<ui5-dialog #consignorDialog accessible-name="Consignor Value Help">
+  <div slot="header">
+    <div>
+      <h2>Consignors</h2>
+    </div>
+    <ui5-input placeholder="Search">
+      <ui5-icon slot="icon" name="clear"></ui5-icon>
+    </ui5-input>
+  </div>
+
+  <ui5-list no-data-text="No data">
+    <ui5-li *ngFor="let consignor of consignors" [description]="consignor.info" [additionalText]="consignor.parma">
+      {{ consignor.name }}
+    </ui5-li>
+  </ui5-list>
+
+  <div slot="footer">
+    <ui5-button design="Transparent" (click)="closeConsignorDialog()">Cancel</ui5-button>
+  </div>
+</ui5-dialog>
+
+<ui5-dialog #shipListDialog accessible-name="Ship list">
+  <div slot="header">
+    <h2>Ship list</h2>
+  </div>
+  <div></div>
+  <div slot="footer">
+    <ui5-button design="Transparent" (click)="saveCustomDialog()">Save</ui5-button>
+    <ui5-button design="Transparent" (click)="closeCustomAddressDialog()">Cancel</ui5-button>
+  </div>
+</ui5-dialog>
+
+<app-dialog #customAddressDialog dialogHeader="Custom Address" (close)="customDialogClose()">
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form">
+    <app-input placeholder="Name" label="Name"></app-input>
+    <app-input placeholder="Country" label="Country"></app-input>
+    <app-input placeholder="Postal code" label="Postal code"></app-input>
+    <app-input placeholder="City" label="City"></app-input>
+    <app-input placeholder="Street" label="Street"></app-input>
+  </div>
+</app-dialog>

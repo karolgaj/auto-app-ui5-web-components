@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TbrService } from '../../services/tbr.service';
 import { TbrType } from '../../models/tbr-type.model';
 import { TbrLightDetails } from '../../models/tbr-light.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tbr-list',
@@ -13,11 +13,15 @@ export class TbrListComponent implements OnInit {
   public tbrList = this.tbrService.getTbrList();
   public readonly tbrTypes: TbrType[] = ['Drafts', 'For Approval', 'Approved', 'Rejected', 'Planning', 'Confirmed', 'Planned'];
 
-  constructor(private tbrService: TbrService, private router: Router, private route: ActivatedRoute) {}
+  constructor(private tbrService: TbrService, private router: Router) {}
 
   ngOnInit(): void {}
 
   selectTbr(data: TbrLightDetails) {
     this.router.navigate([data.shipitId]);
+  }
+
+  goToNetworkForm() {
+    this.router.navigate(['network']);
   }
 }

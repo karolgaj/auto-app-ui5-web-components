@@ -1,0 +1,14 @@
+<ui5-dialog #dialog [accessibleName]="accessibleName">
+  <div slot="header">
+    <ng-content select="[header]"></ng-content>
+    <h2 *ngIf="dialogHeader">{{ dialogHeader }}</h2>
+  </div>
+  <ng-content></ng-content>
+  <div slot="footer">
+    <ng-content select="[footer]"></ng-content>
+    <ng-container *ngIf="!hideDefaultFooter">
+      <ui5-button design="Transparent" (click)="save.emit()">Save</ui5-button>
+      <ui5-button design="Transparent" (click)="close.emit()">Cancel</ui5-button>
+    </ng-container>
+  </div>
+</ui5-dialog>
