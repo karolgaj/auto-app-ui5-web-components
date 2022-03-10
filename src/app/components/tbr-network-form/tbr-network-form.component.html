@@ -1,8 +1,13 @@
-<div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="network-form">
+<ui5-bar design="Header" slot="header">
+  <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> Close
+  </ui5-button>
+</ui5-bar>
+
+<div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="network-form" *ngIf="initFinish">
   <app-input
     placeholder="Consignor"
     label="Consignor"
-    [formControl]="networkForm.controls.consignor"
+    [control]="networkForm.controls.consignor"
     [required]="true"
     [showColon]="true"
     [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
@@ -10,6 +15,7 @@
   <app-input
     placeholder="Consignee"
     label="Consignee"
+    [control]="networkForm.controls.consignee"
     [required]="true"
     [showColon]="true"
     [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
@@ -17,6 +23,7 @@
   <app-input
     placeholder="Ship from"
     label="Ship from"
+    [control]="networkForm.controls.shipFrom"
     [required]="true"
     [showColon]="true"
     [icons]="[
@@ -27,6 +34,7 @@
   <app-input
     placeholder="Ship to"
     label="Ship to"
+    [control]="networkForm.controls.shipTo"
     [required]="true"
     [showColon]="true"
     [icons]="[
@@ -37,26 +45,27 @@
   <app-input
     placeholder="Unloading point"
     label="Unloading point"
+    [control]="networkForm.controls.unloadingPoint"
     [required]="true"
     [showColon]="true"
-    [icons]="[{ icon: 'value-help', action: openUnloadingPointDialog }]"
+    [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"
   ></app-input>
 
-  <app-datepicker [required]="true" label="Pickup date"></app-datepicker>
+  <app-datepicker
+    [control]="networkForm.controls.pickupDate"
+    [required]="true" label="Pickup date"></app-datepicker>
 </div>
 
-<ui5-dialog #consignorDialog accessible-name="Consignor Value Help">
-  <div slot="header">
-    <div>
-      <h2>Consignors</h2>
-    </div>
-    <ui5-input placeholder="Search">
-      <ui5-icon slot="icon" name="clear"></ui5-icon>
-    </ui5-input>
-  </div>
+<app-dialog #consignorDialog dialogHeader="Consignors" [hideDefaultFooter]="true" accessibleName="Consignor Value Help">
+  <app-input placeholder="Search" [control]="networkForm.controls.pickupDate" [icons]="[{ icon: 'clear' }]"></app-input>
 
   <ui5-list no-data-text="No data">
-    <ui5-li *ngFor="let consignor of consignors" [description]="consignor.info" [additionalText]="consignor.parma">
+    <ui5-li
+      *ngFor="let consignor of consignors"
+      [description]="consignor.info"
+      [additionalText]="consignor.parma"
+      (click)="selectUnlaodingPoint(consignor)"
+    >
       {{ consignor.name }}
     </ui5-li>
   </ui5-list>
@@ -64,20 +73,51 @@
   <div slot="footer">
     <ui5-button design="Transparent" (click)="closeConsignorDialog()">Cancel</ui5-button>
   </div>
-</ui5-dialog>
+</app-dialog>
 
-<ui5-dialog #shipListDialog accessible-name="Ship list">
-  <div slot="header">
-    <h2>Ship list</h2>
-  </div>
-  <div></div>
+<app-dialog #unloadingPointDialog dialogHeader="Unloading point" [hideDefaultFooter]="true" accessibleName="Unloading point value help">
+  <ui5-list no-data-text="No data">
+    <ui5-li
+      *ngFor="let consignor of consignors"
+      [description]="consignor.info"
+      [additionalText]="consignor.parma"
+      (click)="selectUnlaodingPoint(consignor)"
+    >
+      {{ consignor.name }}
+    </ui5-li>
+  </ui5-list>
+
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="saveCustomDialog()">Save</ui5-button>
-    <ui5-button design="Transparent" (click)="closeCustomAddressDialog()">Cancel</ui5-button>
+    <ui5-button design="Transparent" (click)="closeUnloadingPointDialog()">Cancel</ui5-button>
   </div>
-</ui5-dialog>
+</app-dialog>
 
-<app-dialog #customAddressDialog dialogHeader="Custom Address" (close)="customDialogClose()">
+<app-dialog
+  #shipListDialog
+  dialogHeader="Ship list"
+  accessibleName="Ship list dialog"
+  (close)="closeShipListDialog()"
+  (save)="saveShipListDialog()"
+>
+  <ui5-list no-data-text="No data">
+    <ui5-li
+      *ngFor="let consignor of consignors"
+      [description]="consignor.info"
+      [additionalText]="consignor.parma"
+      (click)="selectShipItem(consignor)"
+    >
+      {{ consignor.name }}
+    </ui5-li>
+  </ui5-list>
+</app-dialog>
+
+<app-dialog
+  #customAddressDialog
+  dialogHeader="Custom Address"
+  accessibleName="Custom address dialog"
+  (close)="closeCustomAddressDialog()"
+  (save)="saveCustomAddress()"
+>
   <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form">
     <app-input placeholder="Name" label="Name"></app-input>
     <app-input placeholder="Country" label="Country"></app-input>

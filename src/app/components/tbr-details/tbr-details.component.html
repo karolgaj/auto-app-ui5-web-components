@@ -1,7 +1,6 @@
 <div fxLayout="column" style="height: 100%" *ngIf="details | async as tbrDetails">
   <ui5-bar design="Header" slot="header">
-    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> Close
-    </ui5-button>
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> Close </ui5-button>
   </ui5-bar>
 
   <app-tbr-network [tbrDetails]="tbrDetails"></app-tbr-network>
@@ -10,8 +9,7 @@
     <ui5-bar design="Subheader">
       <div slot="startContent">
         <ui5-button style="margin-right: 0.5rem; border-left: 1px solid grey" icon="group-2"></ui5-button>
-        <ui5-button style="margin-right: 0.5rem; margin-left: 0.5rem" icon="add" (click)="openAddDialog()">Add line
-        </ui5-button>
+        <ui5-button style="margin-right: 0.5rem; margin-left: 0.5rem" icon="add" (click)="openAddDialog()">Add line </ui5-button>
         <ui5-button style="margin-right: 0.5rem" icon="increase-line-height">Split</ui5-button>
         <ui5-button style="margin-right: 0.5rem" icon="duplicate">Split lines</ui5-button>
         <ui5-button (click)="openAddRefDialog()">Reference</ui5-button>
@@ -75,8 +73,7 @@
         <span>Wh. loc</span>
       </ui5-table-column>
 
-      <ui5-table-row data-ui5-compact-size *ngFor="let row of tbrDetails.lines"
-                     (click)="navigateToThuDetails(row, tbrDetails.shipitId)">
+      <ui5-table-row data-ui5-compact-size *ngFor="let row of tbrDetails.lines" (selectionChange)="log($event)">
         <ui5-table-cell>{{ row.articleNumber }}</ui5-table-cell>
         <ui5-table-cell>{{ row.articleName }}</ui5-table-cell>
         <ui5-table-cell>{{ row.requestedQuantity }}</ui5-table-cell>
@@ -104,8 +101,7 @@
   </div>
 
   <ui5-bar design="Footer">
-    <ui5-button slot="startContent" icon="delete" design="Negative" (click)="goBack()">Do not deliver full shipment
-    </ui5-button>
+    <ui5-button slot="startContent" icon="delete" design="Negative" (click)="goBack()">Do not deliver full shipment </ui5-button>
     <ui5-switch text-on="Imperial" text-off="Metric"></ui5-switch>
     <div slot="endContent">
       <ui5-button design="Positive" icon="save" style="margin-right: 1rem"> Save draft </ui5-button>
@@ -129,10 +125,8 @@
       <ui5-input #poNumber id="poNumber" type="Number" style="width: 100%"></ui5-input>
     </div>
   </form>
-  <div slot="footer"
-       style="justify-content: end; padding: 4px 7px 2px; background-color: #2f3c48; width: 100%; display: flex">
-    <ui5-button icon="cancel" design="Negative" style="margin-right: 1rem"
-                (click)="cancelAddLine()"></ui5-button>
+  <div slot="footer" style="justify-content: end; padding: 4px 7px 2px; background-color: #2f3c48; width: 100%; display: flex">
+    <ui5-button icon="cancel" design="Negative" style="margin-right: 1rem" (click)="cancelAddLine()"></ui5-button>
     <ui5-button icon="save" (click)="saveAddLine()" [disabled]="addLineFormGroup.invalid"></ui5-button>
   </div>
 </ui5-dialog>
@@ -148,10 +142,8 @@
       <ui5-input #pickupRef id="pickupRef" style="width: 100%"></ui5-input>
     </div>
   </form>
-  <div slot="footer"
-       style="justify-content: end; padding: 4px 7px 2px; background-color: #2f3c48; width: 100%; display: flex">
-    <ui5-button icon="cancel" design="Negative" style="margin-right: 1rem"
-                (click)="cancelAddRef()"></ui5-button>
+  <div slot="footer" style="justify-content: end; padding: 4px 7px 2px; background-color: #2f3c48; width: 100%; display: flex">
+    <ui5-button icon="cancel" design="Negative" style="margin-right: 1rem" (click)="cancelAddRef()"></ui5-button>
     <ui5-button icon="save" (click)="saveAddRef()"></ui5-button>
   </div>
 </ui5-dialog>

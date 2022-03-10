@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TbrService } from '../../services/tbr.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
+import { selectedTbr } from '../../state/tbr.selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-thu-details',
@@ -12,21 +14,19 @@ export class ThuDetailsComponent implements OnInit {
   public line$;
   public thuList$;
 
-  constructor(private tbrService: TbrService, private router: Router, private route: ActivatedRoute) {
+  constructor(private tbrService: TbrService, private router: Router, private route: ActivatedRoute, private store: Store) {
     this.line$ = this.route.paramMap.pipe(
       switchMap((paramMap) => {
         const articleNumber = paramMap.get('articleNumber');
-        return this.tbrService.getTbrDetails().pipe(map((tbr) => tbr.lines.find((line) => line.articleNumber === articleNumber)));
-      }),
-      tap(console.log)
+        return this.store.select(selectedTbr).pipe(map((tbr) => tbr!.lines.find((line) => line.articleNumber === articleNumber)));
+      })
     );
 
-    this.thuList$ = this.tbrService.getTbrDetails().pipe(
+    this.thuList$ = this.store.select(selectedTbr).pipe(
       map((tbrDetails) => {
-        const thus = tbrDetails.shipUnitLines.map(slu => slu.transportHandlingUnits).reduce((acc, curr) => acc.concat(curr));
-        return thus[0]
-      }),
-      tap(console.log)
+        const thus = tbrDetails!.shipUnitLines.map((slu) => slu.transportHandlingUnits).reduce((acc, curr) => acc.concat(curr));
+        return thus[0];
+      })
     );
 
     this.thuList$.subscribe();

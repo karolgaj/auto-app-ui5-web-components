@@ -53,6 +53,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TbrNetworkFormComponent } from './components/tbr-network-form/tbr-network-form.component';
 import { DatepickerComponent, InputComponent } from './ui/input';
 import { DialogComponent } from './ui/dialog/dialog.component';
+import { StateModule } from './state/state.module';
+import { EffectsModule } from '@ngrx/effects';
 
 setTheme('sap_belize');
 
@@ -94,6 +96,7 @@ export function createTranslateLoader(http: HttpClient) {
       },
     }),
     StoreModule.forRoot([]),
+    EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: !environment.production,
@@ -102,6 +105,7 @@ export function createTranslateLoader(http: HttpClient) {
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
+    StateModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

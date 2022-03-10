@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { IAbstractControl } from '@rxweb/types/reactive-form/i-abstract-control';
+import { AbstractControl } from '@angular/forms';
 
 type IconActions = {
   icon: string;
-  action: () => void;
+  action?: () => void;
 };
 
 let id = 0;
@@ -48,7 +49,7 @@ export class InputComponent implements AfterViewInit {
   showColon = false;
 
   @Input()
-  control!: IAbstractControl<any>;
+  control!: AbstractControl | IAbstractControl<any>;
 
   get id(): string {
     return `custom-input-${id}`;

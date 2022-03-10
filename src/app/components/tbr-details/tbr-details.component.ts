@@ -4,6 +4,8 @@ import { TbrService } from '../../services/tbr.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { fromEvent } from 'rxjs';
 import { TbrLine } from '../../models/tbr-line.model';
+import { Store } from '@ngrx/store';
+import { selectedTbr } from '../../state/tbr.selectors';
 
 @Component({
   selector: 'app-tbr-details',
@@ -11,7 +13,7 @@ import { TbrLine } from '../../models/tbr-line.model';
   styleUrls: ['./tbr-details.component.scss'],
 })
 export class TbrDetailsComponent implements OnInit, AfterViewInit {
-  public details = this.tbrService.getTbrDetails();
+  public details = this.store.select(selectedTbr);
   public addLineFormGroup = this.fb.group({
     partNo: this.fb.control(null, Validators.required),
     plannedQty: this.fb.control(null, Validators.required),
@@ -38,7 +40,7 @@ export class TbrDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('pickupRef')
   public pickupRef!: ElementRef;
 
-  constructor(private router: Router, private tbrService: TbrService, private fb: FormBuilder) {}
+  constructor(private router: Router, private tbrService: TbrService, private fb: FormBuilder, private store: Store) {}
 
   ngOnInit(): void {}
 
@@ -83,19 +85,23 @@ export class TbrDetailsComponent implements OnInit, AfterViewInit {
   }
 
   openAddRefDialog() {
-    this.addLineDialog.nativeElement.show();
+    this.addReferencesDialog.nativeElement.show();
   }
 
   saveAddRef() {
-    console.log(this.addLineFormGroup.getRawValue());
+    console.log(this.addRefFormGroup.getRawValue());
     this.cancelAddRef();
   }
 
   cancelAddRef() {
-    this.addLineDialog.nativeElement.close();
+    this.addReferencesDialog.nativeElement.close();
   }
 
   navigateToThuDetails(line: TbrLine, shipitId: string) {
     this.router.navigate(['/', shipitId, line.articleNumber]);
+  }
+
+  log(e: any) {
+    console.log(e);
   }
 }

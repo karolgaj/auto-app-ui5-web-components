@@ -1,7 +1,8 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { FormBuilder } from '@angular/forms';
 import { IFormBuilder, IFormGroup } from '@rxweb/types';
+import { Router } from '@angular/router';
 
 interface NetworkForm {
   consignor: string;
@@ -9,6 +10,7 @@ interface NetworkForm {
   shipFrom: string;
   shipTo: string;
   unloadingPoint: string;
+  pickupDate: string;
   customs: boolean;
 }
 
@@ -17,15 +19,18 @@ interface NetworkForm {
   templateUrl: './tbr-network-form.component.html',
   styleUrls: ['./tbr-network-form.component.scss'],
 })
-export class TbrNetworkFormComponent implements OnInit {
+export class TbrNetworkFormComponent implements AfterViewInit {
   @ViewChild('consignorDialog')
-  consignorDialog!: ElementRef;
+  consignorDialog!: DialogComponent;
 
   @ViewChild('customAddressDialog')
   customAddressDialog!: DialogComponent;
 
   @ViewChild('shipListDialog')
-  shipListDialog!: ElementRef;
+  shipListDialog!: DialogComponent;
+
+  @ViewChild('unloadingPointDialog')
+  unloadingPointDialog!: DialogComponent;
 
   consignors: any[] = [
     {
@@ -35,14 +40,16 @@ export class TbrNetworkFormComponent implements OnInit {
     },
   ];
 
-  openCustomAddressDialogBound = this.openCustomAddressDialog.bind(this);
-  openConsignorDialogBound = this.openConsignorDialog.bind(this);
-  openShipListDialogBound = this.openShipListDialog.bind(this);
+  openCustomAddressDialogBound!: () => void;
+  openConsignorDialogBound!: () => void;
+  openShipListDialogBound!: () => void;
+  openUnloadingPointDialogBound!: () => void;
 
   private fb: IFormBuilder;
   networkForm: IFormGroup<NetworkForm>;
+  initFinish = false;
 
-  constructor(fb: FormBuilder) {
+  constructor(fb: FormBuilder, private router: Router) {
     this.fb = fb;
     this.networkForm = this.fb.group<NetworkForm>({
       consignor: [null],
@@ -50,35 +57,57 @@ export class TbrNetworkFormComponent implements OnInit {
       shipFrom: [null],
       shipTo: [null],
       unloadingPoint: [null],
+      pickupDate: [null],
       customs: [false],
     });
   }
 
-  ngOnInit(): void {}
+  ngAfterViewInit(): void {
+    this.openCustomAddressDialogBound = this.openDialog.bind(this, this.customAddressDialog);
+    this.openConsignorDialogBound = this.openDialog.bind(this, this.consignorDialog);
+    this.openShipListDialogBound = this.openDialog.bind(this, this.shipListDialog);
+    this.openUnloadingPointDialogBound = this.openDialog.bind(this, this.unloadingPointDialog);
 
-  private openConsignorDialog() {
-    this.consignorDialog.nativeElement.show();
+    setTimeout(() => {
+      this.initFinish = true;
+    });
   }
 
-  closeConsignorDialog() {
-    this.consignorDialog.nativeElement.close();
+  openDialog(dialog: DialogComponent): void {
+    dialog.openDialog();
   }
 
-  private openShipListDialog() {
-    this.shipListDialog.nativeElement.show();
-  }
-
-  openUnloadingPointDialog() {}
-
-  private openCustomAddressDialog() {
-    this.customAddressDialog.openDialog();
-  }
-
-  closeCustomAddressDialog() {
+  closeCustomAddressDialog(): void {
     this.customAddressDialog.closeDialog();
   }
 
-  saveCustomDialog() {}
+  saveCustomAddress(): void {
+    this.customAddressDialog.closeDialog();
+  }
 
-  customDialogClose() {}
+  closeShipListDialog(): void {
+    this.shipListDialog.closeDialog();
+  }
+
+  saveShipListDialog(): void {
+    this.shipListDialog.closeDialog();
+  }
+
+  closeConsignorDialog(): void {
+    this.consignorDialog.closeDialog();
+  }
+
+  closeUnloadingPointDialog(): void {
+    this.unloadingPointDialog.closeDialog();
+  }
+
+  selectUnlaodingPoint($event: any): void {
+    console.log($event);
+  }
+
+  selectShipItem(consignor: any): void {}
+
+  goBack() {
+    this.router.navigate(['../']);
+  }
 }

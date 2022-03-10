@@ -57,6 +57,7 @@ export interface Tbr {
   createdBy: AtedBy;
   updatedBy: AtedBy;
   crossDock: null;
+  lines: any[];
 }
 
 export interface Consignee {

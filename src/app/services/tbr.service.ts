@@ -20,7 +20,7 @@ export class TbrService {
     return of(tbrsList.details as TbrLightDetails[]);
   }
 
-  getTbrDetails(): Observable<Tbr & { lines: any[] }> {
+  getTbrDetails(shipitId: string): Observable<Tbr> {
     return of(tbrDetails as Tbr).pipe(
       map((tbr) => {
         return {
