@@ -19,7 +19,7 @@
         <ui5-date-picker [value]="tbrDetails.deliveryDate"></ui5-date-picker>
       </div>
     </ui5-bar>
-    <ui5-table mode="MultiSelect">
+    <ui5-table mode="MultiSelect" (selectionChange)="log($event)">
       <!-- Columns -->
       <ui5-table-column slot="columns">
         <span>Part</span>
@@ -73,7 +73,7 @@
         <span>Wh. loc</span>
       </ui5-table-column>
 
-      <ui5-table-row data-ui5-compact-size *ngFor="let row of tbrDetails.lines" (selectionChange)="log($event)">
+      <ui5-table-row data-ui5-compact-size [data-line]="row" *ngFor="let row of tbrDetails.lines" >
         <ui5-table-cell>{{ row.articleNumber }}</ui5-table-cell>
         <ui5-table-cell>{{ row.articleName }}</ui5-table-cell>
         <ui5-table-cell>{{ row.requestedQuantity }}</ui5-table-cell>

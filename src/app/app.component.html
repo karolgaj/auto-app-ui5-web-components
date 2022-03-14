@@ -1,9 +1,9 @@
 <div>
-  <ui5-shellbar [primary-title]="'HELLO' | translate" secondary-title="secondary title">
+  <ui5-shellbar [primaryTitle]="'HELLO' | translate" secondary-title="secondary title">
     <ui5-avatar slot="profile" icon="customer"></ui5-avatar>
   </ui5-shellbar>
 
-  <main fxLayout style="height: calc(100vh - 44px)">
+  <main fxLayout style="height: calc(100vh - 44px); max-height: calc(100vh - 44px)">
     <div fxFlex="20rem">
       <app-tbr-list></app-tbr-list>
     </div>

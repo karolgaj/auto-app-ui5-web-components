@@ -1,17 +1,10 @@
+<div fxLayout="column" fxLayoutAlign="space-between" style="height: 100%">
 <ui5-bar design="Header" slot="header">
   <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> Close
   </ui5-button>
 </ui5-bar>
 
-<div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="network-form" *ngIf="initFinish">
-  <app-input
-    placeholder="Consignor"
-    label="Consignor"
-    [control]="networkForm.controls.consignor"
-    [required]="true"
-    [showColon]="true"
-    [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
-  ></app-input>
+<div fxLayout="column" fxFlex fxLayoutAlign="stetch center" fxLayoutGap="1rem" class="network-form" *ngIf="initFinish">
   <app-input
     placeholder="Consignee"
     label="Consignee"
@@ -20,6 +13,14 @@
     [showColon]="true"
     [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
   ></app-input>
+  <app-input
+    placeholder="Consignor"
+    label="Consignor"
+    [control]="networkForm.controls.consignor"
+    [showColon]="true"
+    [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
+  ></app-input>
+
   <app-input
     placeholder="Ship from"
     label="Ship from"
@@ -54,6 +55,14 @@
   <app-datepicker
     [control]="networkForm.controls.pickupDate"
     [required]="true" label="Pickup date"></app-datepicker>
+
+
+</div>
+<ui5-bar design="Footer">
+  <div slot="endContent">
+    <ui5-button design="Emphasized"> Create </ui5-button>
+  </div>
+</ui5-bar>
 </div>
 
 <app-dialog #consignorDialog dialogHeader="Consignors" [hideDefaultFooter]="true" accessibleName="Consignor Value Help">
