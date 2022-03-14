@@ -55,6 +55,7 @@ import { DatepickerComponent, InputComponent } from './ui/input';
 import { DialogComponent } from './ui/dialog/dialog.component';
 import { StateModule } from './state/state.module';
 import { EffectsModule } from '@ngrx/effects';
+import { CheckboxComponent } from './ui/input/checkbox/checkbox.component';
 
 setTheme('sap_belize');
 
@@ -81,6 +82,7 @@ export function createTranslateLoader(http: HttpClient) {
     InputComponent,
     DatepickerComponent,
     DialogComponent,
+    CheckboxComponent,
   ],
   imports: [
     BrowserModule,

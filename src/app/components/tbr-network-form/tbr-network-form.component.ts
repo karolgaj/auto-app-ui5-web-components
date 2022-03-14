@@ -157,6 +157,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       if (!data) {
         return;
       }
+      console.log(data);
       this.store.dispatch(loadAvailableNetworks({ data }));
       this.store.dispatch(loadUnloadingPoints({ data }));
     });
