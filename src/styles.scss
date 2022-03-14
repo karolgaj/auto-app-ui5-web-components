@@ -13,8 +13,20 @@ app-tbr-network-form {
   .network-form {
     margin-top: 4rem;
 
+    .after-icon {
+      div {
+        padding-right: calc(50px - 1.5rem);
+      }
+    }
+
     div {
       width: 600px;
+      padding-right: 50px;
+
+      &.table-container {
+        width: 900px;
+        padding-right: 0;
+      }
     }
   }
 
@@ -27,4 +39,8 @@ app-tbr-network-form {
   div {
     width: 600px;
   }
+}
+
+ui5-icon {
+  cursor: pointer;
 }

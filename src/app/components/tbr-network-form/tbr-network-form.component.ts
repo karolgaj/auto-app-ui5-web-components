@@ -3,6 +3,8 @@ import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { FormBuilder } from '@angular/forms';
 import { IFormBuilder, IFormGroup } from '@rxweb/types';
 import { Router } from '@angular/router';
+import { TbrNetwork } from '../../models/tbr-network.model';
+import { TbrService } from '../../services/tbr.service';
 
 interface NetworkForm {
   consignor: string;
@@ -39,6 +41,8 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       name: 'VOLVO',
     },
   ];
+  showAvailableNetwork = false;
+  availableNetworks: TbrNetwork[] = [];
 
   openCustomAddressDialogBound!: () => void;
   openConsignorDialogBound!: () => void;
@@ -49,7 +53,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   networkForm: IFormGroup<NetworkForm>;
   initFinish = false;
 
-  constructor(fb: FormBuilder, private router: Router) {
+  constructor(fb: FormBuilder, private router: Router, private tbrService: TbrService) {
     this.fb = fb;
     this.networkForm = this.fb.group<NetworkForm>({
       consignor: [null],
@@ -70,7 +74,11 @@ export class TbrNetworkFormComponent implements AfterViewInit {
 
     setTimeout(() => {
       this.initFinish = true;
-    });
+      this.tbrService.getTbrNetworks().subscribe((data) => {
+        // console.log(data);
+        this.availableNetworks = data;
+      });
+    }, 100);
   }
 
   openDialog(dialog: DialogComponent): void {
@@ -109,5 +117,9 @@ export class TbrNetworkFormComponent implements AfterViewInit {
 
   goBack() {
     this.router.navigate(['../']);
+  }
+
+  chooseNetwork($event: any) {
+    console.log($event);
   }
 }

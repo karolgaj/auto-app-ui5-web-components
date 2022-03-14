@@ -1,0 +1,633 @@
+[
+  {
+    "consigneeId": "1001",
+    "consigneeName": "Volvo Lastvagnar AB",
+    "consigneeCountryCode": "SE",
+    "consignorId": "238",
+    "consignorName": "Akwel Sweden AB",
+    "consignorCountryCode": "SE",
+    "shipFromId": "2491",
+    "shipFromName": "Falk Lack AB",
+    "shipFromCity": "Mora",
+    "shipFromCountryCode": "SE",
+    "shipFromTimeZone": "UTC+1",
+    "shipToId": "1001VTC",
+    "shipToName": "Volvo Lastvagnar AB",
+    "shipToCity": "Goteborg",
+    "shipToCountryCode": "SE",
+    "unloadingPoint": "020",
+    "validFrom": "2019-10-09T00:00:00.000+00:00",
+    "validTo": null,
+    "trpType": "LTL",
+    "category": null,
+    "trpOrderType": "DELFORTBR",
+    "incoTerm": "",
+    "collectionDays": "MO_TU_TH_FR",
+    "networkRel": 2000001587,
+    "leadTimeWeekdays": "1",
+    "altCollectionDays": [
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20190529",
+        "collectionDay": 4,
+        "defaultDay": 5,
+        "week": "201922",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20190605",
+        "collectionDay": 4,
+        "defaultDay": 5,
+        "week": "201923",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20190620",
+        "collectionDay": 5,
+        "defaultDay": 5,
+        "week": "201925",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20191220",
+        "collectionDay": 1,
+        "defaultDay": 5,
+        "week": "201951",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20191223",
+        "collectionDay": 2,
+        "defaultDay": 2,
+        "week": "201952",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20200103",
+        "collectionDay": 1,
+        "defaultDay": 1,
+        "week": "202001",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20200409",
+        "collectionDay": 5,
+        "defaultDay": 5,
+        "week": "202015",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20200430",
+        "collectionDay": 5,
+        "defaultDay": 5,
+        "week": "202018",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20200520",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202021",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20200618",
+        "collectionDay": 5,
+        "defaultDay": 5,
+        "week": "202025",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20201223",
+        "collectionDay": 4,
+        "defaultDay": 5,
+        "week": "202052",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20201224",
+        "collectionDay": 5,
+        "defaultDay": 5,
+        "week": "202052",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20201230",
+        "collectionDay": 4,
+        "defaultDay": 5,
+        "week": "202053",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20210401",
+        "collectionDay": 5,
+        "defaultDay": 5,
+        "week": "202113",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20210512",
+        "collectionDay": 4,
+        "defaultDay": 5,
+        "week": "202119",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20210624",
+        "collectionDay": 5,
+        "defaultDay": 5,
+        "week": "202125",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20211001",
+        "collectionDay": 1,
+        "defaultDay": 1,
+        "week": "202139",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20211013",
+        "collectionDay": 4,
+        "defaultDay": 5,
+        "week": "202141",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20211014",
+        "collectionDay": 5,
+        "defaultDay": 5,
+        "week": "202141",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20211018",
+        "collectionDay": 2,
+        "defaultDay": 2,
+        "week": "202142",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20211020",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202142",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20211223",
+        "collectionDay": 5,
+        "defaultDay": 5,
+        "week": "202151",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000001587",
+        "collectionDate": "20211230",
+        "collectionDay": 5,
+        "defaultDay": 5,
+        "week": "202152",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      }
+    ]
+  },
+  {
+    "consigneeId": "1001",
+    "consigneeName": "Volvo Lastvagnar AB",
+    "consigneeCountryCode": "SE",
+    "consignorId": "238",
+    "consignorName": "Akwel Sweden AB",
+    "consignorCountryCode": "SE",
+    "shipFromId": "25909",
+    "shipFromName": "AB ZINKANO",
+    "shipFromCity": "Hova",
+    "shipFromCountryCode": "SE",
+    "shipFromTimeZone": "UTC+1",
+    "shipToId": "1001VTC",
+    "shipToName": "Volvo Lastvagnar AB",
+    "shipToCity": "Goteborg",
+    "shipToCountryCode": "SE",
+    "unloadingPoint": "020",
+    "validFrom": "2019-12-11T00:00:00.000+00:00",
+    "validTo": null,
+    "trpType": "LTL",
+    "category": null,
+    "trpOrderType": "DELFORTBR",
+    "incoTerm": "",
+    "collectionDays": "WE",
+    "networkRel": 2000020121,
+    "leadTimeWeekdays": "0",
+    "altCollectionDays": [
+      {
+        "networkRelation": "2000020121",
+        "collectionDate": "20191220",
+        "collectionDay": 1,
+        "defaultDay": 3,
+        "week": "201951",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000020121",
+        "collectionDate": "20191223",
+        "collectionDay": 2,
+        "defaultDay": 3,
+        "week": "201952",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000020121",
+        "collectionDate": "20191231",
+        "collectionDay": 3,
+        "defaultDay": 3,
+        "week": "202001",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000020121",
+        "collectionDate": "20210105",
+        "collectionDay": 3,
+        "defaultDay": 3,
+        "week": "202101",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000020121",
+        "collectionDate": "20211005",
+        "collectionDay": 3,
+        "defaultDay": 3,
+        "week": "202140",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      }
+    ]
+  },
+  {
+    "consigneeId": "1001",
+    "consigneeName": "Volvo Lastvagnar AB",
+    "consigneeCountryCode": "SE",
+    "consignorId": "238",
+    "consignorName": "Akwel Sweden AB",
+    "consignorCountryCode": "SE",
+    "shipFromId": "10375",
+    "shipFromName": "Proton Finishing Forsheda AB",
+    "shipFromCity": "Forsheda",
+    "shipFromCountryCode": "SE",
+    "shipFromTimeZone": "UTC+1",
+    "shipToId": "1001VTC",
+    "shipToName": "Volvo Lastvagnar AB",
+    "shipToCity": "Goteborg",
+    "shipToCountryCode": "SE",
+    "unloadingPoint": "020",
+    "validFrom": "2019-12-11T00:00:00.000+00:00",
+    "validTo": null,
+    "trpType": "LTL",
+    "category": null,
+    "trpOrderType": "DELFORTBR",
+    "incoTerm": "",
+    "collectionDays": "MO",
+    "networkRel": 2000021030,
+    "leadTimeWeekdays": "1",
+    "altCollectionDays": [
+      {
+        "networkRelation": "2000021030",
+        "collectionDate": "20191220",
+        "collectionDay": 1,
+        "defaultDay": 1,
+        "week": "201951",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000021030",
+        "collectionDate": "20200103",
+        "collectionDay": 1,
+        "defaultDay": 1,
+        "week": "202001",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000021030",
+        "collectionDate": "20200409",
+        "collectionDay": 5,
+        "defaultDay": 1,
+        "week": "202015",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000021030",
+        "collectionDate": "20210401",
+        "collectionDay": 5,
+        "defaultDay": 1,
+        "week": "202113",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000021030",
+        "collectionDate": "20211001",
+        "collectionDay": 1,
+        "defaultDay": 1,
+        "week": "202139",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      }
+    ]
+  },
+  {
+    "consigneeId": "1001",
+    "consigneeName": "Volvo Lastvagnar AB",
+    "consigneeCountryCode": "SE",
+    "consignorId": "238",
+    "consignorName": "Akwel Sweden AB",
+    "consignorCountryCode": "SE",
+    "shipFromId": "510",
+    "shipFromName": "SPECMA AB",
+    "shipFromCity": "Tranemo",
+    "shipFromCountryCode": "SE",
+    "shipFromTimeZone": "UTC+1",
+    "shipToId": "1001VTC",
+    "shipToName": "Volvo Lastvagnar AB",
+    "shipToCity": "Goteborg",
+    "shipToCountryCode": "SE",
+    "unloadingPoint": "020",
+    "validFrom": "2019-12-11T00:00:00.000+00:00",
+    "validTo": null,
+    "trpType": "LTL",
+    "category": null,
+    "trpOrderType": "DELFORTBR",
+    "incoTerm": "",
+    "collectionDays": "TH",
+    "networkRel": 2000022164,
+    "leadTimeWeekdays": "0",
+    "altCollectionDays": [
+      {
+        "networkRelation": "2000022164",
+        "collectionDate": "20190529",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "201922",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000022164",
+        "collectionDate": "20190605",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "201923",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000022164",
+        "collectionDate": "20191220",
+        "collectionDay": 1,
+        "defaultDay": 4,
+        "week": "201951",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000022164",
+        "collectionDate": "20191223",
+        "collectionDay": 2,
+        "defaultDay": 4,
+        "week": "201952",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000022164",
+        "collectionDate": "20200520",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202021",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000022164",
+        "collectionDate": "20201223",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202052",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000022164",
+        "collectionDate": "20201230",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202053",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000022164",
+        "collectionDate": "20210512",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202119",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000022164",
+        "collectionDate": "20211013",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202141",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000022164",
+        "collectionDate": "20211020",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202142",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      }
+    ]
+  },
+  {
+    "consigneeId": "1001",
+    "consigneeName": "Volvo Lastvagnar AB",
+    "consigneeCountryCode": "SE",
+    "consignorId": "238",
+    "consignorName": "Akwel Sweden AB",
+    "consignorCountryCode": "SE",
+    "shipFromId": "1269836",
+    "shipFromName": "AKWEL SWEDEN AB / AUTOTUBE AB",
+    "shipFromCity": "Timmele",
+    "shipFromCountryCode": "SE",
+    "shipFromTimeZone": "UTC+1",
+    "shipToId": "1001VTC",
+    "shipToName": "Volvo Lastvagnar AB",
+    "shipToCity": "Goteborg",
+    "shipToCountryCode": "SE",
+    "unloadingPoint": "020",
+    "validFrom": "2020-01-29T00:00:00.000+00:00",
+    "validTo": null,
+    "trpType": "LTL",
+    "category": null,
+    "trpOrderType": "DELFORTBR",
+    "incoTerm": "",
+    "collectionDays": "TU_TH",
+    "networkRel": 2000036822,
+    "leadTimeWeekdays": "0",
+    "altCollectionDays": [
+      {
+        "networkRelation": "2000036822",
+        "collectionDate": "20190529",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "201922",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000036822",
+        "collectionDate": "20190605",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "201923",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000036822",
+        "collectionDate": "20191220",
+        "collectionDay": 1,
+        "defaultDay": 2,
+        "week": "201951",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000036822",
+        "collectionDate": "20191223",
+        "collectionDay": 2,
+        "defaultDay": 2,
+        "week": "201952",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000036822",
+        "collectionDate": "20200520",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202021",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000036822",
+        "collectionDate": "20201223",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202052",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000036822",
+        "collectionDate": "20201230",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202053",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000036822",
+        "collectionDate": "20210512",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202119",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000036822",
+        "collectionDate": "20211013",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202141",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000036822",
+        "collectionDate": "20211018",
+        "collectionDay": 2,
+        "defaultDay": 2,
+        "week": "202142",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      },
+      {
+        "networkRelation": "2000036822",
+        "collectionDate": "20211020",
+        "collectionDay": 4,
+        "defaultDay": 4,
+        "week": "202142",
+        "countryCode": "SE",
+        "updateMethod": "A"
+      }
+    ]
+  }
+]

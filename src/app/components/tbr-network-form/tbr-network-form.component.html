@@ -1,68 +1,93 @@
 <div fxLayout="column" fxLayoutAlign="space-between" style="height: 100%">
-<ui5-bar design="Header" slot="header">
-  <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> Close
-  </ui5-button>
-</ui5-bar>
+  <ui5-bar design="Header" slot="header">
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> Close </ui5-button>
+  </ui5-bar>
 
-<div fxLayout="column" fxFlex fxLayoutAlign="stetch center" fxLayoutGap="1rem" class="network-form" *ngIf="initFinish">
-  <app-input
-    placeholder="Consignee"
-    label="Consignee"
-    [control]="networkForm.controls.consignee"
-    [required]="true"
-    [showColon]="true"
-    [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
-  ></app-input>
-  <app-input
-    placeholder="Consignor"
-    label="Consignor"
-    [control]="networkForm.controls.consignor"
-    [showColon]="true"
-    [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
-  ></app-input>
+  <div fxLayout="column" fxFlex fxLayoutAlign="stetch center" fxLayoutGap="1rem" class="network-form" *ngIf="initFinish">
+    <app-input
+      placeholder="Consignee"
+      label="Consignee"
+      [control]="networkForm.controls.consignee"
+      [required]="true"
+      [showColon]="true"
+      [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
+    ></app-input>
+    <app-input
+      class="after-icon"
+      placeholder="Consignor"
+      label="Consignor"
+      [control]="networkForm.controls.consignor"
+      [showColon]="true"
+      [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
+    >
+      <ui5-icon name="question-mark" after (click)="showAvailableNetwork = !showAvailableNetwork"></ui5-icon>
+    </app-input>
 
-  <app-input
-    placeholder="Ship from"
-    label="Ship from"
-    [control]="networkForm.controls.shipFrom"
-    [required]="true"
-    [showColon]="true"
-    [icons]="[
-      { icon: 'add-contact', action: openCustomAddressDialogBound },
-      { icon: 'value-help', action: openShipListDialogBound }
-    ]"
-  ></app-input>
-  <app-input
-    placeholder="Ship to"
-    label="Ship to"
-    [control]="networkForm.controls.shipTo"
-    [required]="true"
-    [showColon]="true"
-    [icons]="[
-      { icon: 'add-contact', action: openCustomAddressDialogBound },
-      { icon: 'value-help', action: openShipListDialogBound }
-    ]"
-  ></app-input>
-  <app-input
-    placeholder="Unloading point"
-    label="Unloading point"
-    [control]="networkForm.controls.unloadingPoint"
-    [required]="true"
-    [showColon]="true"
-    [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"
-  ></app-input>
+    <div class="table-container">
+      <ui5-table mode="SingleSelect" *ngIf="showAvailableNetwork" (selectionChange)="chooseNetwork($event)">
+        <ui5-table-column slot="columns">
+          <span>Consignor</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>Ship From</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>Unload point</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>Street address</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>Valid from - to</span>
+        </ui5-table-column>
 
-  <app-datepicker
-    [control]="networkForm.controls.pickupDate"
-    [required]="true" label="Pickup date"></app-datepicker>
+        <ui5-table-row *ngFor="let row of availableNetworks">
+          <ui5-table-cell>{{ row.consignorId }}</ui5-table-cell>
+          <ui5-table-cell>{{ row.shipFromId }}</ui5-table-cell>
+          <ui5-table-cell>{{ row.unloadingPoint }}</ui5-table-cell>
+          <ui5-table-cell></ui5-table-cell>
+          <ui5-table-cell>{{ row.validFrom }} - {{ row.validTo }}</ui5-table-cell>
+        </ui5-table-row>
+      </ui5-table>
+    </div>
+    <app-input
+      placeholder="Ship from"
+      label="Ship from"
+      [control]="networkForm.controls.shipFrom"
+      [required]="true"
+      [showColon]="true"
+      [icons]="[
+        { icon: 'add-contact', action: openCustomAddressDialogBound },
+        { icon: 'value-help', action: openShipListDialogBound }
+      ]"
+    ></app-input>
+    <app-input
+      placeholder="Ship to"
+      label="Ship to"
+      [control]="networkForm.controls.shipTo"
+      [required]="true"
+      [showColon]="true"
+      [icons]="[
+        { icon: 'add-contact', action: openCustomAddressDialogBound },
+        { icon: 'value-help', action: openShipListDialogBound }
+      ]"
+    ></app-input>
+    <app-input
+      placeholder="Unloading point"
+      label="Unloading point"
+      [control]="networkForm.controls.unloadingPoint"
+      [required]="true"
+      [showColon]="true"
+      [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"
+    ></app-input>
 
-
-</div>
-<ui5-bar design="Footer">
-  <div slot="endContent">
-    <ui5-button design="Emphasized"> Create </ui5-button>
+    <app-datepicker [control]="networkForm.controls.pickupDate" [required]="true" label="Pickup date"></app-datepicker>
   </div>
-</ui5-bar>
+  <ui5-bar design="Footer">
+    <div slot="endContent">
+      <ui5-button design="Emphasized"> Create </ui5-button>
+    </div>
+  </ui5-bar>
 </div>
 
 <app-dialog #consignorDialog dialogHeader="Consignors" [hideDefaultFooter]="true" accessibleName="Consignor Value Help">
