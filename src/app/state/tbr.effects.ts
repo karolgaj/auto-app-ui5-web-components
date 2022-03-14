@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, concatMap, exhaustMap, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import * as TbrActions from './tbr.actions';
 import { TbrService } from '../services/tbr.service';
-import { Router } from '@angular/router';
 
 @Injectable()
 export class TbrEffects {
@@ -16,6 +16,54 @@ export class TbrEffects {
         this.tbrService.getTbrList().pipe(
           map((data) => TbrActions.loadTbrsSuccess({ data })),
           catchError((error) => of(TbrActions.loadTbrsFailure({ error })))
+        )
+      )
+    );
+  });
+
+  loadNetworks$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.loadAvailableNetworks),
+      concatMap(({ data }) =>
+        this.tbrService.getTbrNetworks().pipe(
+          map((data) => TbrActions.loadAvailableNetworksSuccess({ data })),
+          catchError((error) => of(TbrActions.loadAvailableNetworksFailure({ error })))
+        )
+      )
+    );
+  });
+
+  loadConsignors$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.loadConsignors),
+      concatMap(({ data }) =>
+        this.tbrService.getConsignors().pipe(
+          map((data) => TbrActions.loadConsignorsSuccess({ data })),
+          catchError((error) => of(TbrActions.loadConsignorsFailure({ error })))
+        )
+      )
+    );
+  });
+
+  loadShipItems$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.loadShipItems),
+      concatMap(() =>
+        this.tbrService.getShipItems().pipe(
+          map((data) => TbrActions.loadShipItemsSuccess({ data })),
+          catchError((error) => of(TbrActions.loadShipItemsFailure({ error })))
+        )
+      )
+    );
+  });
+
+  loadUnloadingPoints$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.loadUnloadingPoints),
+      concatMap(({ data }) =>
+        this.tbrService.getUnloadingPoints(data).pipe(
+          map((data) => TbrActions.loadUnloadingPointsSuccess({ data })),
+          catchError((error) => of(TbrActions.loadUnloadingPointsFailure({ error })))
         )
       )
     );

@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular
 import { fromEvent } from 'rxjs';
 import { IAbstractControl } from '@rxweb/types/reactive-form/i-abstract-control';
 import { AbstractControl } from '@angular/forms';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 type IconActions = {
   icon: string;
@@ -12,6 +13,7 @@ let id = 0;
 
 type NgClasses = string[] | { [key: string]: boolean };
 
+@UntilDestroy()
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
@@ -67,5 +69,9 @@ export class InputComponent implements AfterViewInit {
     fromEvent(this.customInput.nativeElement, 'change').subscribe((e: InputEvent) =>
       this.control.setValue((e.target as HTMLInputElement).value)
     );
+
+    this.control.valueChanges.pipe(untilDestroyed(this)).subscribe((value) => {
+      this.customInput.nativeElement.value = value;
+    });
   }
 }

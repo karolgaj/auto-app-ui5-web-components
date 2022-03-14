@@ -11,6 +11,7 @@ import { OrderReleaseLine, ShipUnitLine, Tbr } from '../models/tbr.model';
 import { map } from 'rxjs/operators';
 import { TbrLine } from '../models/tbr-line.model';
 import { TbrNetwork } from '../models/tbr-network.model';
+import { NetworkForm } from '../models/network-form.model';
 
 const tbrsList = tbrList;
 const tbrDetails = details;
@@ -175,5 +176,50 @@ export class TbrService {
       oTBRline,
       aSubHU,
     };
+  }
+
+  getConsignors() {
+    return of([
+      {
+        info: 'some info',
+        parma: '1234',
+        name: 'VOLVO',
+      },
+      {
+        info: 'some info',
+        parma: '1234',
+        name: 'VOLVO',
+      },
+    ]);
+  }
+
+  getUnloadingPoints(data: NetworkForm) {
+    return of([
+      {
+        info: 'some info',
+        parma: 'asd',
+        name: 'Name2',
+      },
+      {
+        info: 'some info',
+        parma: 'sdfsd',
+        name: 'Name1',
+      },
+    ]);
+  }
+
+  getShipItems() {
+    return of([
+      {
+        info: 'ship item 1',
+        parma: 'ship parma 1',
+        name: 'Name1',
+      },
+      {
+        info: 'ship item 2',
+        parma: 'ship Parma 2',
+        name: 'Name2',
+      },
+    ]);
   }
 }
