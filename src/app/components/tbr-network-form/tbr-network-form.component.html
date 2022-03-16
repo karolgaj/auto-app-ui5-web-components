@@ -24,7 +24,7 @@
     </app-input>
 
     <div class="table-container">
-      <ui5-table mode="SingleSelect" *ngIf="showAvailableNetwork" (selectionChange)="chooseNetwork($event)">
+      <ui5-table mode="SingleSelect" *ngIf="showAvailableNetwork">
         <ui5-table-column slot="columns">
           <span>Consignor</span>
         </ui5-table-column>
@@ -41,7 +41,7 @@
           <span>Valid from - to</span>
         </ui5-table-column>
 
-        <ui5-table-row *ngFor="let row of availableNetworks$ | async">
+        <ui5-table-row (row-click)="chooseNetwork(row)" *ngFor="let row of availableNetworks$ | async">
           <ui5-table-cell>{{ row.consignorId }}</ui5-table-cell>
           <ui5-table-cell>{{ row.shipFromId }}</ui5-table-cell>
           <ui5-table-cell>{{ row.unloadingPoint }}</ui5-table-cell>

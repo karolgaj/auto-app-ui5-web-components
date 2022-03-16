@@ -51,11 +51,10 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TbrNetworkFormComponent } from './components/tbr-network-form/tbr-network-form.component';
-import { DatepickerComponent, InputComponent } from './ui/input';
+import { CheckboxComponent, DatepickerComponent, InputComponent } from './ui/input';
 import { DialogComponent } from './ui/dialog/dialog.component';
 import { StateModule } from './state/state.module';
 import { EffectsModule } from '@ngrx/effects';
-import { CheckboxComponent } from './ui/input/checkbox/checkbox.component';
 
 setTheme('sap_belize');
 
