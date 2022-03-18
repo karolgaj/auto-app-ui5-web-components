@@ -10,6 +10,7 @@ import { TbrLightDetails } from '../../models/tbr-light.model';
 import { NetworkForm } from '../../models/network-form.model';
 import { selectConsignors, selectNetworks, selectShipItems, selectUnloadingPoints } from '../../state/tbr.selectors';
 import { CustomAddress } from '../../models/custom-address.model';
+import { TbrNetwork } from '../../models/tbr-network.model';
 
 @UntilDestroy()
 @Component({
@@ -139,6 +140,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       shipFrom: [null],
       shipTo: [null],
       unloadingPoint: [null],
+      loadingPoint: [null],
       pickupDate: [null],
       customs: [false],
     });
@@ -211,8 +213,14 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     this.router.navigate(['../']);
   }
 
-  chooseNetwork($event: any) {
-    console.log($event);
+  chooseNetwork(tbrNetwork: TbrNetwork) {
+    this.networkForm.patchValue({
+      consignor: tbrNetwork.consignorId,
+      consignee: tbrNetwork.consigneeId,
+      shipTo: tbrNetwork.shipToId,
+      shipFrom: tbrNetwork.shipFromId,
+      unloadingPoint: tbrNetwork.unloadingPoint,
+    });
   }
 
   createTbr(): void {

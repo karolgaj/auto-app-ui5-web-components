@@ -4,6 +4,7 @@ export interface NetworkForm {
   shipFrom: string;
   shipTo: string;
   unloadingPoint: string;
+  loadingPoint: string;
   pickupDate: string;
   customs: boolean;
 }

@@ -41,12 +41,12 @@
           <span>Valid from - to</span>
         </ui5-table-column>
 
-        <ui5-table-row (row-click)="chooseNetwork(row)" *ngFor="let row of availableNetworks$ | async">
+        <ui5-table-row (click)="chooseNetwork(row)" *ngFor="let row of availableNetworks$ | async">
           <ui5-table-cell>{{ row.consignorId }}</ui5-table-cell>
           <ui5-table-cell>{{ row.shipFromId }}</ui5-table-cell>
           <ui5-table-cell>{{ row.unloadingPoint }}</ui5-table-cell>
           <ui5-table-cell></ui5-table-cell>
-          <ui5-table-cell>{{ row.validFrom }} - {{ row.validTo }}</ui5-table-cell>
+          <ui5-table-cell>{{ row.validFrom | date }} - {{ row.validTo }}</ui5-table-cell>
         </ui5-table-row>
       </ui5-table>
     </div>
@@ -61,6 +61,13 @@
         { icon: 'add-contact', action: openCustomShipFromAddressDialogBound },
         { icon: 'value-help', action: openShipFromListDialogBound }
       ]"
+    ></app-input>
+    <app-input
+      placeholder="Loading point"
+      label="Loading point"
+      [control]="networkForm.controls.loadingPoint"
+      [showColon]="true"
+      [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"
     ></app-input>
     <app-input
       placeholder="Ship to"
