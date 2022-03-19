@@ -3,11 +3,11 @@
     <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> Close </ui5-button>
   </ui5-bar>
 
-  <div fxLayout="column" fxFlex fxLayoutAlign="stetch center" fxLayoutGap="1rem" class="network-form" *ngIf="initFinish">
+  <div fxLayout="column" fxFlex fxLayoutAlign="stetch center" fxLayoutGap="1rem" class="network-form" [formGroup]="networkForm">
     <app-input
       placeholder="Consignee"
       label="Consignee"
-      [control]="networkForm.controls.consignee"
+      formControlName="consignee"
       [required]="true"
       [showColon]="true"
       [icons]="[{ icon: 'value-help', action: openConsigneeDialogBound }]"
@@ -16,7 +16,7 @@
       class="after-icon"
       placeholder="Consignor"
       label="Consignor"
-      [control]="networkForm.controls.consignor"
+      formControlName="consignor"
       [showColon]="true"
       [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
     >
@@ -54,7 +54,7 @@
     <app-input
       placeholder="Ship from"
       label="Ship from"
-      [control]="networkForm.controls.shipFrom"
+      formControlName="shipFrom"
       [required]="true"
       [showColon]="true"
       [icons]="[
@@ -65,14 +65,14 @@
     <app-input
       placeholder="Loading point"
       label="Loading point"
-      [control]="networkForm.controls.loadingPoint"
+      formControlName="loadingPoint"
       [showColon]="true"
       [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"
     ></app-input>
     <app-input
       placeholder="Ship to"
       label="Ship to"
-      [control]="networkForm.controls.shipTo"
+      formControlName="shipTo"
       [required]="true"
       [showColon]="true"
       [icons]="[
@@ -83,15 +83,15 @@
     <app-input
       placeholder="Unloading point"
       label="Unloading point"
-      [control]="networkForm.controls.unloadingPoint"
+      formControlName="unloadingPoint"
       [required]="true"
       [showColon]="true"
       [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"
     ></app-input>
 
-    <app-datepicker [control]="networkForm.controls.pickupDate" [required]="true" label="Pickup date"></app-datepicker>
+    <app-datepicker formControlName="pickupDate" [required]="true" label="Pickup date"></app-datepicker>
 
-    <app-checkbox [control]="networkForm.controls.customs" label="Customs"></app-checkbox>
+    <app-checkbox formControlName="customs" label="Customs"></app-checkbox>
   </div>
   <ui5-bar design="Footer">
     <div slot="endContent">
@@ -101,7 +101,7 @@
 </div>
 
 <app-dialog #parmaDialog [dialogHeader]="parmaDialogHeader" [hideDefaultFooter]="true" [accessibleName]="parmaDialogAccessibleName">
-  <app-input placeholder="Search" [control]="networkForm.controls.pickupDate" [icons]="[{ icon: 'clear' }]"></app-input>
+<!--  <app-input placeholder="Search" [control]="networkForm.controls.pickupDate" [icons]="[{ icon: 'clear' }]"></app-input>-->
 
   <ui5-list no-data-text="No data">
     <ui5-li

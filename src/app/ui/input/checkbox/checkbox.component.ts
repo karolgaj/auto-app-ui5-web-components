@@ -1,14 +1,21 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { fromEvent } from 'rxjs';
-import { untilDestroyed } from '@ngneat/until-destroy';
+import { Component, forwardRef } from '@angular/core';
 import { CustomInputAbstract } from '../custom-input.abstract';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-checkbox',
   templateUrl: './checkbox.component.html',
   styleUrls: ['./checkbox.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: forwardRef(() => CheckboxComponent),
+    },
+  ],
 })
-export class CheckboxComponent extends CustomInputAbstract implements AfterViewInit {
+export class CheckboxComponent extends CustomInputAbstract {
   constructor() {
     super();
   }
@@ -18,16 +25,10 @@ export class CheckboxComponent extends CustomInputAbstract implements AfterViewI
   }
 
   ngAfterViewInit() {
-    if (!this.control) {
-      return;
-    }
     // @ts-ignore
-    fromEvent(this.customInput.nativeElement, 'change').subscribe((e: InputEvent) =>
-      this.control.setValue((e.target as HTMLInputElement).checked)
-    );
-
-    this.control.valueChanges.pipe(untilDestroyed(this)).subscribe((value) => {
-      this.customInput.nativeElement.checked = value;
+    fromEvent(this.customInput.nativeElement, 'change').subscribe((e: InputEvent) => {
+      this.value = (e.target as HTMLInputElement).checked;
+      this.onChange(this.value);
     });
   }
 }

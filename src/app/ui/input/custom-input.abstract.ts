@@ -1,8 +1,7 @@
 import { AfterViewInit, Directive, ElementRef, Input, ViewChild } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
-import { IAbstractControl } from '@rxweb/types/reactive-form/i-abstract-control';
+import { ControlValueAccessor } from '@angular/forms';
 import { fromEvent } from 'rxjs';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
 let id = 0;
 
@@ -10,7 +9,7 @@ type NgClasses = string[] | { [key: string]: boolean };
 
 @UntilDestroy()
 @Directive()
-export abstract class CustomInputAbstract implements AfterViewInit {
+export abstract class CustomInputAbstract implements ControlValueAccessor, AfterViewInit {
   @ViewChild('customInput')
   customInput!: ElementRef;
 
@@ -32,9 +31,11 @@ export abstract class CustomInputAbstract implements AfterViewInit {
   @Input()
   required = false;
 
-  @Input()
-  control!: AbstractControl | IAbstractControl<any>;
+  onChange: any = () => {};
+  onTouched: any = () => {};
+  disabled = false;
 
+  value: any;
   protected _id: number;
 
   protected constructor() {
@@ -43,17 +44,25 @@ export abstract class CustomInputAbstract implements AfterViewInit {
 
   abstract getId(): string;
 
-  ngAfterViewInit(): void {
-    if (!this.control) {
-      return;
-    }
-    // @ts-ignore
-    fromEvent(this.customInput.nativeElement, 'change').subscribe((e: InputEvent) =>
-      this.control.setValue((e.target as HTMLInputElement).value)
-    );
+  writeValue(value: any): void {
+    this.value = value;
+  }
+  registerOnChange(onChange: any): void {
+    this.onChange = onChange;
+  }
+  registerOnTouched(onTouched: any): void {
+    this.onTouched = onTouched;
+  }
 
-    this.control.valueChanges.pipe(untilDestroyed(this)).subscribe((value) => {
-      this.customInput.nativeElement.value = value;
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
+  ngAfterViewInit(): void {
+    // @ts-ignore
+    fromEvent(this.customInput.nativeElement, 'change').subscribe((e: InputEvent) => {
+      this.value = (e.target as HTMLInputElement).value;
+      this.onChange(this.value);
     });
   }
 }

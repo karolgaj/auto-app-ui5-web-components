@@ -102,47 +102,49 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.openConsigneeDialogBound = () => {
-      this.parmaSelection = 'consignee';
-      this.openDialog.call(this, this.parmaDialog);
-    };
-    this.openConsignorDialogBound = () => {
-      this.parmaSelection = 'consignor';
-      this.openDialog.call(this, this.parmaDialog);
-    };
-    this.openShipToListDialogBound = () => {
-      this.addressSelection = 'shipTo';
-      this.openDialog.call(this, this.shipListDialog);
-    };
-    this.openShipFromListDialogBound = () => {
-      this.addressSelection = 'shipFrom';
-      this.openDialog.call(this, this.shipListDialog);
-    };
-    this.openCustomShipToAddressDialogBound = () => {
-      this.addressSelection = 'shipTo';
-      this.openDialog.call(this, this.customAddressDialog);
-    };
-    this.openCustomShipFromAddressDialogBound = () => {
-      this.addressSelection = 'shipFrom';
-      this.openDialog.call(this, this.customAddressDialog);
-    };
-    this.openUnloadingPointDialogBound = this.openDialog.bind(this, this.unloadingPointDialog);
+    setTimeout(() => {
+      this.openConsigneeDialogBound = () => {
+        this.parmaSelection = 'consignee';
+        this.openDialog.call(this, this.parmaDialog);
+      };
+      this.openConsignorDialogBound = () => {
+        this.parmaSelection = 'consignor';
+        this.openDialog.call(this, this.parmaDialog);
+      };
+      this.openShipToListDialogBound = () => {
+        this.addressSelection = 'shipTo';
+        this.openDialog.call(this, this.shipListDialog);
+      };
+      this.openShipFromListDialogBound = () => {
+        this.addressSelection = 'shipFrom';
+        this.openDialog.call(this, this.shipListDialog);
+      };
+      this.openCustomShipToAddressDialogBound = () => {
+        this.addressSelection = 'shipTo';
+        this.openDialog.call(this, this.customAddressDialog);
+      };
+      this.openCustomShipFromAddressDialogBound = () => {
+        this.addressSelection = 'shipFrom';
+        this.openDialog.call(this, this.customAddressDialog);
+      };
+      this.openUnloadingPointDialogBound = this.openDialog.bind(this, this.unloadingPointDialog);
+    });
 
     setTimeout(() => {
       this.initFinish = true;
-    }, 100);
+    }, 500);
   }
 
   private createForms(): void {
     this.networkForm = this.fb.group<NetworkForm>({
       consignor: [null],
-      consignee: [null],
+      consignee: ['test'],
       shipFrom: [null],
       shipTo: [null],
       unloadingPoint: [null],
       loadingPoint: [null],
       pickupDate: [null],
-      customs: [false],
+      customs: [true],
     });
 
     this.customAddressForm = this.fb.group<CustomAddress>({
@@ -159,7 +161,6 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       if (!data) {
         return;
       }
-      console.log(data);
       this.store.dispatch(loadAvailableNetworks({ data }));
       this.store.dispatch(loadUnloadingPoints({ data }));
     });
