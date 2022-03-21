@@ -5,13 +5,14 @@ import { catchError, concatMap, exhaustMap, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import * as TbrActions from './tbr.actions';
+import { selectTbr } from './tbr.actions';
 import { TbrService } from '../services/tbr.service';
 
 @Injectable()
 export class TbrEffects {
   loadTbrs$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(TbrActions.loadTbrs),
+      ofType(TbrActions.loadTbrs, TbrActions.refreshTbrList),
       concatMap(() =>
         this.tbrService.getTbrList().pipe(
           map((data) => TbrActions.loadTbrsSuccess({ data })),
@@ -92,6 +93,25 @@ export class TbrEffects {
       );
     },
     { dispatch: false }
+  );
+
+  createTbr$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.createTbr),
+      concatMap(({ data }) =>
+        this.tbrService.createTbr(data).pipe(
+          map((data) => TbrActions.createTbrSuccess({ data })),
+          catchError((error) => of(TbrActions.createTbrFailure({ error })))
+        )
+      )
+    )
+  );
+
+  createTbrSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.createTbrSuccess),
+      map(({ data }) => selectTbr({ data: data.shipitId }))
+    )
   );
 
   constructor(private actions$: Actions, private tbrService: TbrService, private router: Router) {}

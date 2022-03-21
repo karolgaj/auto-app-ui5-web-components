@@ -20,7 +20,7 @@
       [showColon]="true"
       [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
     >
-      <ui5-icon name="question-mark" after (click)="showAvailableNetwork = !showAvailableNetwork"></ui5-icon>
+      <ui5-icon name="question-mark" after (click)="toggleAvailableNetwork()"></ui5-icon>
     </app-input>
 
     <div class="table-container">
@@ -46,7 +46,7 @@
           <ui5-table-cell>{{ row.shipFromId }}</ui5-table-cell>
           <ui5-table-cell>{{ row.unloadingPoint }}</ui5-table-cell>
           <ui5-table-cell></ui5-table-cell>
-          <ui5-table-cell>{{ row.validFrom | date }} - {{ row.validTo }}</ui5-table-cell>
+          <ui5-table-cell>{{ row.validFrom | date }} - {{ row.validTo | date }}</ui5-table-cell>
         </ui5-table-row>
       </ui5-table>
     </div>
@@ -67,7 +67,7 @@
       label="Loading point"
       formControlName="loadingPoint"
       [showColon]="true"
-      [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"
+      [icons]="[{ icon: 'value-help', action: openLoadingPointDialogBound }]"
     ></app-input>
     <app-input
       placeholder="Ship to"
@@ -91,7 +91,26 @@
 
     <app-datepicker formControlName="pickupDate" [required]="true" label="Pickup date"></app-datepicker>
 
+    <app-select
+      placeholder="Service level"
+      label="Service level"
+      [selectionOptions]="serviceLevelOptions"
+      formControlName="serviceLevel"
+    ></app-select>
+    <app-select
+      placeholder="Planning type"
+      label="Planning type"
+      [selectionOptions]="planningTypesOptions"
+      formControlName="planningType"></app-select>
+    <app-select
+      placeholder="Transport type"
+      label="Transport type"
+      [selectionOptions]="transportTypeOptions"
+      formControlName="transportType"></app-select>
+
     <app-checkbox formControlName="customs" label="Customs"></app-checkbox>
+    <app-checkbox formControlName="useLoadingMeters" label="Use loading meters"></app-checkbox>
+    <app-checkbox formControlName="doNotMerge" label="Do not merge"></app-checkbox>
   </div>
   <ui5-bar design="Footer">
     <div slot="endContent">
@@ -125,7 +144,7 @@
       *ngFor="let consignor of unloadingPoints$ | async"
       [description]="consignor.info"
       [additionalText]="consignor.parma"
-      (click)="selectUnloadingPoint(consignor)"
+      (click)="selectLoadingPoint(consignor.parma)"
     >
       {{ consignor.name }}
     </ui5-li>

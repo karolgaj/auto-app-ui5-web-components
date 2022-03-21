@@ -19,6 +19,7 @@ import '@ui5/webcomponents/dist/features/InputSuggestions';
 import '@ui5/webcomponents/dist/DatePicker';
 import '@ui5/webcomponents/dist/Switch';
 import '@ui5/webcomponents/dist/Dialog';
+import '@ui5/webcomponents/dist/Select';
 
 import '@ui5/webcomponents-fiori/dist/Bar';
 import '@ui5/webcomponents-fiori/dist/ShellBar';
@@ -55,6 +56,7 @@ import { CheckboxComponent, DatepickerComponent, InputComponent } from './ui/inp
 import { DialogComponent } from './ui/dialog/dialog.component';
 import { StateModule } from './state/state.module';
 import { EffectsModule } from '@ngrx/effects';
+import { SelectComponent } from './ui/input/select/select.component';
 
 setTheme('sap_belize');
 
@@ -82,6 +84,7 @@ export function createTranslateLoader(http: HttpClient) {
     DatepickerComponent,
     DialogComponent,
     CheckboxComponent,
+    SelectComponent,
   ],
   imports: [
     BrowserModule,

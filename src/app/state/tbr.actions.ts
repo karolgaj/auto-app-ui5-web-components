@@ -11,6 +11,8 @@ export const loadTbrs = createAction('[Tbr] Load Tbrs');
 export const loadTbrsSuccess = createAction('[Tbr] Load Tbrs Success', props<{ data: TbrLightDetails[] }>());
 export const loadTbrsFailure = createAction('[Tbr] Load Tbrs Failure', props<{ error: any }>());
 
+export const refreshTbrList = createAction('[Tbr] Refresh Tbr List');
+
 export const createTbr = createAction('[Tbr] Create new Tbr', props<{ data: Partial<TbrLightDetails> }>());
 export const createTbrSuccess = createAction('[Tbr] Create new Tbr Success', props<{ data: any }>());
 export const createTbrFailure = createAction('[Tbr] Create new Tbr Failure', props<{ error: any }>());

@@ -222,4 +222,8 @@ export class TbrService {
       },
     ]);
   }
+
+  createTbr(data: any) {
+    return of(data);
+  }
 }

@@ -1,0 +1,10 @@
+<div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem" [ngClass]="inputContainerClasses">
+  <ng-content [before]></ng-content>
+  <ui5-label *ngIf="label" [ngClass]="labelClasses" [for]="getId()" [required]="required" [showColon]="showColon"> {{ label }} </ui5-label>
+  <ui5-select #customInput [valueState]="valueState" class="select">
+    <ui5-option *ngFor="let option of selectionOptions" [icon]="option.icon" [value]="option.value" [selected]="option.value === value"> {{option.text}} </ui5-option>
+    <!--   sanitize innerHTML pipe with DOM sanitizer  -->
+    <div *ngIf="valueStateMessage" slot="valueStateMessage" [innerHTML]="valueStateMessage"></div>
+  </ui5-select>
+  <ng-content [after]></ng-content>
+</div>

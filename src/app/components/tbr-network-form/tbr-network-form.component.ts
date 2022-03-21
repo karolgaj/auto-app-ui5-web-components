@@ -7,10 +7,12 @@ import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { createTbr, loadAvailableNetworks, loadConsignors, loadShipItems, loadUnloadingPoints } from '../../state/tbr.actions';
 import { TbrLightDetails } from '../../models/tbr-light.model';
-import { NetworkForm } from '../../models/network-form.model';
+import { NetworkForm, PlanningType, ServiceLevel, TransportType } from '../../models/network-form.model';
 import { selectConsignors, selectNetworks, selectShipItems, selectUnloadingPoints } from '../../state/tbr.selectors';
 import { CustomAddress } from '../../models/custom-address.model';
 import { TbrNetwork } from '../../models/tbr-network.model';
+import { SelectionOption } from '../../models/selection-option.model';
+import { filter, take } from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
@@ -22,6 +24,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   private fb: IFormBuilder;
   private parmaSelection?: 'consignor' | 'consignee';
   private addressSelection?: 'shipFrom' | 'shipTo';
+  private loadingPointSelection?: 'loadingPoint' | 'unloadingPoint';
 
   @ViewChild('parmaDialog')
   parmaDialog!: DialogComponent;
@@ -48,10 +51,58 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   openCustomShipToAddressDialogBound!: () => void;
   openCustomShipFromAddressDialogBound!: () => void;
   openUnloadingPointDialogBound!: () => void;
+  openLoadingPointDialogBound!: () => void;
 
   networkForm!: IFormGroup<NetworkForm>;
   customAddressForm!: IFormGroup<CustomAddress>;
   initFinish = false;
+
+  serviceLevelOptions: SelectionOption<ServiceLevel>[] = [
+    {
+      text: 'Standard Inbound',
+      value: 'STD_INB',
+    },
+    {
+      text: 'Closed Loop',
+      value: 'CLOSED_LOOP',
+    },
+  ];
+  transportTypeOptions: SelectionOption<TransportType>[] = [
+    {
+      text: 'FCL',
+      value: 'FCL',
+    },
+    {
+      text: 'FTL',
+      value: 'FTL',
+    },
+    {
+      text: 'LCL',
+      value: 'LCL',
+    },
+    {
+      text: 'LTL',
+      value: 'LTL',
+    },
+    {
+      text: 'MIX',
+      value: 'MIX',
+    },
+  ];
+  planningTypesOptions: SelectionOption<PlanningType>[] = [
+    {
+      text: 'Express',
+      value: 'EXPRESS',
+    },
+    {
+      text: 'Inbound',
+      value: 'INBOUND',
+    },
+    {
+      text: 'Outbound',
+      value: 'OUTBOUND',
+    },
+  ];
 
   get parmaDialogAccessibleName(): string {
     if (this.parmaSelection === 'consignor') {
@@ -62,7 +113,6 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     }
     return '';
   }
-
   get parmaDialogHeader(): string {
     if (this.parmaSelection === 'consignor') {
       return 'Consignors';
@@ -72,7 +122,6 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     }
     return '';
   }
-
   get addressDialogHeader(): string {
     if (this.addressSelection === 'shipFrom') {
       return 'Custom Ship From Address';
@@ -82,7 +131,6 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     }
     return '';
   }
-
   get shipListDialogHeader(): string {
     if (this.addressSelection === 'shipFrom') {
       return 'Ship From';
@@ -105,29 +153,36 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     setTimeout(() => {
       this.openConsigneeDialogBound = () => {
         this.parmaSelection = 'consignee';
-        this.openDialog.call(this, this.parmaDialog);
+        TbrNetworkFormComponent.openDialog.call(this, this.parmaDialog);
       };
       this.openConsignorDialogBound = () => {
         this.parmaSelection = 'consignor';
-        this.openDialog.call(this, this.parmaDialog);
+        TbrNetworkFormComponent.openDialog.call(this, this.parmaDialog);
       };
       this.openShipToListDialogBound = () => {
         this.addressSelection = 'shipTo';
-        this.openDialog.call(this, this.shipListDialog);
+        TbrNetworkFormComponent.openDialog.call(this, this.shipListDialog);
       };
       this.openShipFromListDialogBound = () => {
         this.addressSelection = 'shipFrom';
-        this.openDialog.call(this, this.shipListDialog);
+        TbrNetworkFormComponent.openDialog.call(this, this.shipListDialog);
       };
       this.openCustomShipToAddressDialogBound = () => {
         this.addressSelection = 'shipTo';
-        this.openDialog.call(this, this.customAddressDialog);
+        TbrNetworkFormComponent.openDialog.call(this, this.customAddressDialog);
       };
       this.openCustomShipFromAddressDialogBound = () => {
         this.addressSelection = 'shipFrom';
-        this.openDialog.call(this, this.customAddressDialog);
+        TbrNetworkFormComponent.openDialog.call(this, this.customAddressDialog);
       };
-      this.openUnloadingPointDialogBound = this.openDialog.bind(this, this.unloadingPointDialog);
+      this.openUnloadingPointDialogBound = () => {
+        this.loadingPointSelection = 'unloadingPoint';
+        TbrNetworkFormComponent.openDialog.call(this, this.unloadingPointDialog);
+      };
+      this.openLoadingPointDialogBound = () => {
+        this.loadingPointSelection = 'loadingPoint';
+        TbrNetworkFormComponent.openDialog.call(this, this.unloadingPointDialog);
+      };
     });
 
     setTimeout(() => {
@@ -135,16 +190,109 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     }, 500);
   }
 
+  closeCustomAddressDialog(): void {
+    this.customAddressDialog.closeDialog();
+  }
+
+  closeShipListDialog(): void {
+    this.shipListDialog.closeDialog();
+  }
+
+  closeParmaDialog(): void {
+    this.parmaDialog.closeDialog();
+  }
+
+  closeUnloadingPointDialog(): void {
+    this.unloadingPointDialog.closeDialog();
+  }
+
+  selectLoadingPoint(loadingPoint: string): void {
+    if (this.loadingPointSelection === 'unloadingPoint') {
+      this.networkForm.controls.unloadingPoint.setValue(loadingPoint);
+    } else {
+      this.networkForm.controls.loadingPoint.setValue(loadingPoint);
+    }
+    this.closeUnloadingPointDialog();
+  }
+
+  saveCustomAddress(): void {
+    if (this.addressSelection === 'shipFrom') {
+      this.networkForm.controls.shipFrom.setValue('CUSTOM');
+    } else {
+      this.networkForm.controls.shipTo.setValue('CUSTOM');
+    }
+    // UPDATE TBR WITH CUSTOM ADDRESS
+    this.closeCustomAddressDialog();
+  }
+
+  selectShipItem(shipItem: any): void {
+    if (this.addressSelection === 'shipFrom') {
+      this.networkForm.controls.shipFrom.setValue(shipItem.parma);
+    } else {
+      this.networkForm.controls.shipTo.setValue(shipItem.parma);
+    }
+    this.closeShipListDialog();
+  }
+
+  goBack() {
+    this.router.navigate(['../']);
+  }
+
+  chooseNetwork(tbrNetwork: TbrNetwork) {
+    this.networkForm.patchValue({
+      ...tbrNetwork,
+      consignor: tbrNetwork.consignorId,
+      consignee: tbrNetwork.consigneeId,
+      shipTo: tbrNetwork.shipToId,
+      shipFrom: tbrNetwork.shipFromId,
+    });
+  }
+
+  createTbr(): void {
+    const payload: Partial<TbrLightDetails> = {
+      ...this.networkForm.getRawValue(),
+    };
+
+    this.store.dispatch(createTbr({ data: payload }));
+  }
+
+  selectParma(parma: { parma: string }) {
+    if (this.parmaSelection === 'consignor') {
+      this.networkForm.controls.consignor.setValue(parma.parma);
+    } else if (this.parmaSelection === 'consignee') {
+      this.networkForm.controls.consignee.setValue(parma.parma);
+    }
+
+    this.closeParmaDialog();
+  }
+
+  toggleAvailableNetwork() {
+    this.availableNetworks$
+      .pipe(
+        take(1),
+        filter((value) => !!value?.length)
+      )
+      .subscribe(() => {
+        this.showAvailableNetwork = !this.showAvailableNetwork;
+      });
+  }
+
   private createForms(): void {
     this.networkForm = this.fb.group<NetworkForm>({
       consignor: [null],
-      consignee: ['test'],
+      consignee: [null],
       shipFrom: [null],
       shipTo: [null],
       unloadingPoint: [null],
       loadingPoint: [null],
       pickupDate: [null],
-      customs: [true],
+      freightClass: [null],
+      planningType: ['INBOUND'],
+      serviceLevel: ['STD_INB'],
+      transportType: ['FTL'],
+      customs: [false],
+      doNotMerge: [false],
+      useLoadingMeters: [false],
     });
 
     this.customAddressForm = this.fb.group<CustomAddress>({
@@ -166,79 +314,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     });
   }
 
-  openDialog(dialog: DialogComponent): void {
+  private static openDialog(dialog: DialogComponent): void {
     dialog.openDialog();
-  }
-
-  closeCustomAddressDialog(): void {
-    this.customAddressDialog.closeDialog();
-  }
-
-  closeShipListDialog(): void {
-    this.shipListDialog.closeDialog();
-  }
-
-  closeParmaDialog(): void {
-    this.parmaDialog.closeDialog();
-  }
-
-  closeUnloadingPointDialog(): void {
-    this.unloadingPointDialog.closeDialog();
-  }
-
-  selectUnloadingPoint(unloadingPoint: string): void {
-    this.networkForm.controls.shipFrom.setValue(unloadingPoint);
-    this.closeUnloadingPointDialog();
-  }
-
-  saveCustomAddress(): void {
-    if (this.addressSelection === 'shipFrom') {
-      this.networkForm.controls.shipFrom.setValue('CUSTOM');
-    } else if (this.addressSelection === 'shipTo') {
-      this.networkForm.controls.shipTo.setValue('CUSTOM');
-    }
-    // UPDATE TBR WITH CUSTOM ADDRESS
-    this.closeCustomAddressDialog();
-  }
-
-  selectShipItem(shipItem: any): void {
-    if (this.addressSelection === 'shipFrom') {
-      this.networkForm.controls.shipFrom.setValue(shipItem.parma);
-    } else if (this.addressSelection === 'shipTo') {
-      this.networkForm.controls.shipTo.setValue(shipItem.parma);
-    }
-    this.closeShipListDialog();
-  }
-
-  goBack() {
-    this.router.navigate(['../']);
-  }
-
-  chooseNetwork(tbrNetwork: TbrNetwork) {
-    this.networkForm.patchValue({
-      consignor: tbrNetwork.consignorId,
-      consignee: tbrNetwork.consigneeId,
-      shipTo: tbrNetwork.shipToId,
-      shipFrom: tbrNetwork.shipFromId,
-      unloadingPoint: tbrNetwork.unloadingPoint,
-    });
-  }
-
-  createTbr(): void {
-    const payload: Partial<TbrLightDetails> = {
-      ...this.networkForm.getRawValue(),
-    };
-
-    this.store.dispatch(createTbr({ data: payload }));
-  }
-
-  selectParma(parma: any) {
-    if (this.parmaSelection === 'consignor') {
-      this.networkForm.controls.consignor.setValue(parma.parma);
-    } else if (this.parmaSelection === 'consignee') {
-      this.networkForm.controls.consignee.setValue(parma.parma);
-    }
-
-    this.closeParmaDialog();
   }
 }

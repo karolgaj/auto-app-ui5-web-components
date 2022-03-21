@@ -5,7 +5,7 @@ import { TbrLightDetails } from '../../models/tbr-light.model';
 import { Router } from '@angular/router';
 import { selectTbrs } from '../../state/tbr.selectors';
 import { Store } from '@ngrx/store';
-import { loadTbrs, selectTbr } from '../../state/tbr.actions';
+import { loadTbrs, refreshTbrList, selectTbr } from '../../state/tbr.actions';
 
 @Component({
   selector: 'app-tbr-list',
@@ -28,5 +28,9 @@ export class TbrListComponent implements OnInit {
 
   goToNetworkForm() {
     this.router.navigate(['network']);
+  }
+
+  refreshList() {
+    this.store.dispatch(refreshTbrList());
   }
 }
