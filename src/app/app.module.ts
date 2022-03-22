@@ -20,13 +20,14 @@ import '@ui5/webcomponents/dist/DatePicker';
 import '@ui5/webcomponents/dist/Switch';
 import '@ui5/webcomponents/dist/Dialog';
 import '@ui5/webcomponents/dist/Select';
+import '@ui5/webcomponents/dist/Title';
 
 import '@ui5/webcomponents-fiori/dist/Bar';
 import '@ui5/webcomponents-fiori/dist/ShellBar';
 import '@ui5/webcomponents-fiori/dist/illustrations/NoData';
 import '@ui5/webcomponents-fiori/dist/IllustratedMessage';
-
-import '@ui5/webcomponents-icons/dist/AllIcons.js';
+import '@ui5/webcomponents-fiori/dist/Wizard';
+import '@ui5/webcomponents-icons/dist/AllIcons';
 
 import '@ui5/webcomponents/dist/Assets';
 import '@ui5/webcomponents-fiori/dist/Assets';
@@ -57,6 +58,15 @@ import { DialogComponent } from './ui/dialog/dialog.component';
 import { StateModule } from './state/state.module';
 import { EffectsModule } from '@ngrx/effects';
 import { SelectComponent } from './ui/input/select/select.component';
+import { TbrWorkflowComponent } from './components/tbr-workflow/tbr-workflow.component';
+import { WizardStepPickupInfoComponent } from './components/tbr-workflow/components/wizard-step-pickup-info/wizard-step-pickup-info.component';
+import { WizardStepTransportTypeComponent } from './components/tbr-workflow/components/wizard-step-transport-type/wizard-step-transport-type.component';
+import { WizardStepContactComponent } from './components/tbr-workflow/components/wizard-step-contact/wizard-step-contact.component';
+import { WizardStepCostOwnerComponent } from './components/tbr-workflow/components/wizard-step-cost-owner/wizard-step-cost-owner.component';
+import { WizardStepReasonCodeComponent } from './components/tbr-workflow/components/wizard-step-reason-code/wizard-step-reason-code.component';
+import { WizardStepNoteComponent } from './components/tbr-workflow/components/wizard-step-note/wizard-step-note.component';
+import { WizardStepAdditionalContactsComponent } from './components/tbr-workflow/components/wizard-step-additional-contacts/wizard-step-additional-contacts.component';
+import { WizardSummaryComponent } from './components/tbr-workflow/components/wizard-summary/wizard-summary.component';
 
 setTheme('sap_belize');
 
@@ -85,6 +95,15 @@ export function createTranslateLoader(http: HttpClient) {
     DialogComponent,
     CheckboxComponent,
     SelectComponent,
+    TbrWorkflowComponent,
+    WizardStepPickupInfoComponent,
+    WizardStepTransportTypeComponent,
+    WizardStepContactComponent,
+    WizardStepCostOwnerComponent,
+    WizardStepReasonCodeComponent,
+    WizardStepNoteComponent,
+    WizardStepAdditionalContactsComponent,
+    WizardSummaryComponent,
   ],
   imports: [
     BrowserModule,

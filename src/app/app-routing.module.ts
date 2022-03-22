@@ -4,6 +4,7 @@ import { TbrEmptyStateComponent } from './components/tbr-empty-state/tbr-empty-s
 import { TbrDetailsComponent } from './components/tbr-details/tbr-details.component';
 import { ThuDetailsComponent } from './components/thu-details/thu-details.component';
 import { TbrNetworkFormComponent } from './components/tbr-network-form/tbr-network-form.component';
+import { TbrWorkflowComponent } from './components/tbr-workflow/tbr-workflow.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: ':shipItId',
     component: TbrDetailsComponent,
+  },
+  {
+    path: 'workflow/:shipItId',
+    component: TbrWorkflowComponent,
   },
   {
     path: ':shipItId/:articleNumber',

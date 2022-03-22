@@ -44,3 +44,13 @@ app-tbr-network-form {
 ui5-icon {
   cursor: pointer;
 }
+
+ui5-wizard-step {
+  ui5-title {
+    margin-bottom: 1rem;
+  }
+}
+
+.wizard-step-content {
+  padding-inline: 2rem;
+}

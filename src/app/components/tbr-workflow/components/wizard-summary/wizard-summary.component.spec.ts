@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TbrEmptyStateComponent } from './tbr-empty-state.component';
+import { WizardSummaryComponent } from './wizard-summary.component';
 
-describe('TbrEmptyStateComponent', () => {
-  let component: TbrEmptyStateComponent;
-  let fixture: ComponentFixture<TbrEmptyStateComponent>;
+describe('WizardSummaryComponent', () => {
+  let component: WizardSummaryComponent;
+  let fixture: ComponentFixture<WizardSummaryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TbrEmptyStateComponent],
+      declarations: [WizardSummaryComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TbrEmptyStateComponent);
+    fixture = TestBed.createComponent(WizardSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

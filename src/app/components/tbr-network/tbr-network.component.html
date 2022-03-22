@@ -3,7 +3,7 @@
     <div fxFlex="60" fxLayout="column" fxLayoutGap="1rem">
       <ui5-label> {{ tbrDetails.shipitId }} </ui5-label>
       <div fxLayout>
-        <img style="max-height: 3rem; max-width: 3rem; margin-right: 0.5rem" src="assets/volvo-logo.png"/>
+        <img style="max-height: 3rem; max-width: 3rem; margin-right: 0.5rem" src="assets/volvo-logo.png" />
         <ui5-title level="H2">{{ tbrDetails.consignee | consignorText }}</ui5-title>
       </div>
       <ui5-label> Ship from: {{ tbrDetails.shipFrom | address }} </ui5-label>
@@ -13,8 +13,9 @@
       <ui5-label> Customs: {{ tbrDetails.transportNetwork.customs }} </ui5-label>
     </div>
     <div fxLayout="column" fxLayoutGap="1rem" fxLayoutAlign="center end">
-      <ui5-label
-        style="font-size: 1.375rem; font-weight: normal; color: {{tbrDetails.shipitStatus | shipitStatus:'color'}}"> {{ tbrDetails.shipitStatus | shipitStatus }} </ui5-label>
+      <ui5-label style="font-size: 1.375rem; font-weight: normal; color: {{ tbrDetails.shipitStatus | shipitStatus: 'color' }}">
+        {{ tbrDetails.shipitStatus | shipitStatus }}
+      </ui5-label>
       <ui5-label> Total Weight: {{ tbrDetails.orderWeight }} </ui5-label>
       <ui5-label> Total Volume: {{ tbrDetails.orderVolume }} </ui5-label>
       <ui5-label> #THU: {{ tbrDetails | thuAmount }} </ui5-label>

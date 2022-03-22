@@ -1,0 +1,35 @@
+<ui5-bar design="Header" slot="header">
+  <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> Close </ui5-button>
+</ui5-bar>
+
+<ui5-wizard #wizard (stepChange)="stepChange($event)">
+  <ui5-wizard-step style="padding: 2rem" title-text="Product type" selected>
+    <app-wizard-step-pickup-info title="Product type" [stepIndex]="0" (nextStep)="goToStep($event)"></app-wizard-step-pickup-info>
+  </ui5-wizard-step>
+  <ui5-wizard-step title-text="Contact person at pickup point at time of pickup" disabled>
+    <app-wizard-step-contact
+      title="Contact person at pickup point at time of pickup"
+      [stepIndex]="1"
+      (nextStep)="goToStep($event)"
+    ></app-wizard-step-contact>
+  </ui5-wizard-step>
+  <ui5-wizard-step title-text="Transport type" disabled>
+    <app-wizard-step-transport-type title="Transport type" [stepIndex]="2" (nextStep)="goToStep($event)"></app-wizard-step-transport-type>
+  </ui5-wizard-step>
+  <ui5-wizard-step title-text="Cost owner" disabled>
+    <app-wizard-step-cost-owner title="Cost owner" [stepIndex]="3" (nextStep)="goToStep($event)"></app-wizard-step-cost-owner>
+  </ui5-wizard-step>
+  <ui5-wizard-step title-text="Reason code" disabled>
+    <app-wizard-step-reason-code title="Reason code" [stepIndex]="4" (nextStep)="goToStep($event)"></app-wizard-step-reason-code>
+  </ui5-wizard-step>
+  <ui5-wizard-step title-text="Note" disabled>
+    <app-wizard-step-note title="Note" [stepIndex]="5" (nextStep)="goToStep($event)"></app-wizard-step-note>
+  </ui5-wizard-step>
+  <ui5-wizard-step title-text="Additional contacts" disabled>
+    <app-wizard-step-additional-contacts
+      title="Additional contacts"
+      [stepIndex]="6"
+      (nextStep)="goToStep($event)"
+    ></app-wizard-step-additional-contacts>
+  </ui5-wizard-step>
+</ui5-wizard>

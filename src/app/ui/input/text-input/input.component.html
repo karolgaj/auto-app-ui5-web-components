@@ -1,7 +1,14 @@
 <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem" [ngClass]="inputContainerClasses">
   <ng-content [before]></ng-content>
   <ui5-label *ngIf="label" [ngClass]="labelClasses" [for]="getId()" [required]="required" [showColon]="showColon"> {{ label }} </ui5-label>
-  <ui5-input [ngClass]="inputClasses" #customInput [id]="getId()" [placeholder]="placeholder" [showSuggestions]="showSuggestions" [value]="value">
+  <ui5-input
+    [ngClass]="inputClasses"
+    #customInput
+    [id]="getId()"
+    [placeholder]="placeholder"
+    [showSuggestions]="showSuggestions"
+    [value]="value"
+  >
     <ui5-icon *ngFor="let icon of icons" slot="icon" [name]="icon.icon" (click)="icon.action && icon.action()"></ui5-icon>
   </ui5-input>
   <ng-content [after]></ng-content>

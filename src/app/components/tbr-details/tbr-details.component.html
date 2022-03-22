@@ -76,7 +76,7 @@
       <ui5-table-row data-ui5-compact-size [data-line]="row" *ngFor="let row of tbrDetails.lines">
         <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.articleNumber }}</ui5-table-cell>
         <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.articleName }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)" >{{ row.requestedQuantity }}</ui5-table-cell>
+        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.requestedQuantity }}</ui5-table-cell>
         <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">
           <ui5-input style="width: 140px !important" [value]="row.packagedQuantity"></ui5-input>
         </ui5-table-cell>
@@ -105,7 +105,9 @@
     <ui5-switch text-on="Imperial" text-off="Metric"></ui5-switch>
     <div slot="endContent">
       <ui5-button design="Positive" icon="save" style="margin-right: 1rem"> Save draft </ui5-button>
-      <ui5-button design="Emphasized" icon="accounting-document-verification"> Continue to details</ui5-button>
+      <ui5-button design="Emphasized" icon="accounting-document-verification" (click)="goToWorkflow(tbrDetails.shipitId)">
+        Continue to details</ui5-button
+      >
     </div>
   </ui5-bar>
 </div>

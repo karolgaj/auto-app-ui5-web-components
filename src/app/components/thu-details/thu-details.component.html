@@ -16,24 +16,38 @@
       <div fxLayout="column" fxLayoutAlign="center end">
         <ui5-title level="H2" style="color: #2b7c2b">{{ line.requestedQuantity }}</ui5-title>
         <ui5-label style="color: #2b7c2b"> PCE</ui5-label>
-        <ui5-label> Length: <span> {{line.length}} </span></ui5-label>
-        <ui5-label> Width: <span> {{line.width}} </span></ui5-label>
-        <ui5-label> Height: <span> {{line.height}} </span></ui5-label>
+        <ui5-label>
+          Length: <span> {{ line.length }} </span></ui5-label
+        >
+        <ui5-label>
+          Width: <span> {{ line.width }} </span></ui5-label
+        >
+        <ui5-label>
+          Height: <span> {{ line.height }} </span></ui5-label
+        >
         <ui5-label>
           Stackable:
-          <span> {{ line.stackable ? "Yes" : "No" }} </span> </ui5-label
-        >
+          <span> {{ line.stackable ? "Yes" : "No" }} </span>
+        </ui5-label>
       </div>
     </div>
     <ui5-panel [attr.header-text]="'Transport Handling Unit'">
-      <ui5-bar style="background-color: transparent;">
+      <ui5-bar style="background-color: transparent">
         <div slot="startContent">
-          <ui5-label style="margin-right: 1rem"> THU ID: <b> {{line.type}} </b> </ui5-label>
-          <ui5-label> Quantity pr. THU: <b> {{line.quantity}} </b> </ui5-label>
+          <ui5-label style="margin-right: 1rem">
+            THU ID: <b> {{ line.type }} </b>
+          </ui5-label>
+          <ui5-label>
+            Quantity pr. THU: <b> {{ line.quantity }} </b>
+          </ui5-label>
         </div>
         <div slot="endContent">
-          <ui5-label style="margin-right: 1rem"> Weight pr THU: <b> {{line.weightSUL}} </b> {{line.volumeSULUom}} </ui5-label>
-          <ui5-label> Volume pr. THU: <b> {{line.volumeSUL}} </b> {{line.volumeSULUom}} </ui5-label>
+          <ui5-label style="margin-right: 1rem">
+            Weight pr THU: <b> {{ line.weightSUL }} </b> {{ line.volumeSULUom }}
+          </ui5-label>
+          <ui5-label>
+            Volume pr. THU: <b> {{ line.volumeSUL }} </b> {{ line.volumeSULUom }}
+          </ui5-label>
         </div>
       </ui5-bar>
       <ui5-table data-ui5-compact-size>
@@ -69,14 +83,18 @@
               <div>{{ packMack.packMaterial[0].materialDescription }}</div>
             </ui5-table-cell>
             <ui5-table-cell>
-              <img width="50" height="50" [src]="packMack.packMaterial[0].imgUrl"/>
+              <img width="50" height="50" [src]="packMack.packMaterial[0].imgUrl" />
             </ui5-table-cell>
-            <ui5-table-cell>{{packMack.maxPackMaterialPerLayer}}</ui5-table-cell>
-            <ui5-table-cell>{{packMack.numberOfLayers}}</ui5-table-cell>
-            <ui5-table-cell>{{packMack.packMaterial[0].length}}</ui5-table-cell>
-            <ui5-table-cell>{{packMack.packMaterial[0].width}}</ui5-table-cell>
-            <ui5-table-cell>{{packMack.packMaterial[0].height}}</ui5-table-cell>
-            <ui5-table-cell>{{packMack.packMaterial[0].articleQuantityPerPackageMaterial === 0 ? '' : packMack.packMaterial[0].articleQuantityPerPackageMaterial}}</ui5-table-cell>
+            <ui5-table-cell>{{ packMack.maxPackMaterialPerLayer }}</ui5-table-cell>
+            <ui5-table-cell>{{ packMack.numberOfLayers }}</ui5-table-cell>
+            <ui5-table-cell>{{ packMack.packMaterial[0].length }}</ui5-table-cell>
+            <ui5-table-cell>{{ packMack.packMaterial[0].width }}</ui5-table-cell>
+            <ui5-table-cell>{{ packMack.packMaterial[0].height }}</ui5-table-cell>
+            <ui5-table-cell>{{
+              packMack.packMaterial[0].articleQuantityPerPackageMaterial === 0
+                ? ""
+                : packMack.packMaterial[0].articleQuantityPerPackageMaterial
+            }}</ui5-table-cell>
           </ui5-table-row>
         </ng-container>
       </ui5-table>

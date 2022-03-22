@@ -76,7 +76,6 @@ export class TbrDetailsComponent implements OnInit, AfterViewInit {
   }
 
   saveAddLine() {
-    console.log(this.addLineFormGroup.getRawValue());
     this.cancelAddLine();
   }
 
@@ -103,5 +102,9 @@ export class TbrDetailsComponent implements OnInit, AfterViewInit {
 
   log(e: any) {
     console.log(e);
+  }
+
+  goToWorkflow(shipitId: string) {
+    this.router.navigate(['/workflow', shipitId]);
   }
 }

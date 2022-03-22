@@ -101,12 +101,14 @@
       placeholder="Planning type"
       label="Planning type"
       [selectionOptions]="planningTypesOptions"
-      formControlName="planningType"></app-select>
+      formControlName="planningType"
+    ></app-select>
     <app-select
       placeholder="Transport type"
       label="Transport type"
       [selectionOptions]="transportTypeOptions"
-      formControlName="transportType"></app-select>
+      formControlName="transportType"
+    ></app-select>
 
     <app-checkbox formControlName="customs" label="Customs"></app-checkbox>
     <app-checkbox formControlName="useLoadingMeters" label="Use loading meters"></app-checkbox>
@@ -120,7 +122,7 @@
 </div>
 
 <app-dialog #parmaDialog [dialogHeader]="parmaDialogHeader" [hideDefaultFooter]="true" [accessibleName]="parmaDialogAccessibleName">
-<!--  <app-input placeholder="Search" [control]="networkForm.controls.pickupDate" [icons]="[{ icon: 'clear' }]"></app-input>-->
+  <!--  <app-input placeholder="Search" [control]="networkForm.controls.pickupDate" [icons]="[{ icon: 'clear' }]"></app-input>-->
 
   <ui5-list no-data-text="No data">
     <ui5-li
