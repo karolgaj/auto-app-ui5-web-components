@@ -24,9 +24,6 @@ export class SelectComponent extends CustomInputAbstract {
   valueState?: 'Success' | 'Warning' | 'Error' | 'Information';
 
   @Input()
-  showColon = false;
-
-  @Input()
   valueStateMessage?: string;
 
   constructor() {

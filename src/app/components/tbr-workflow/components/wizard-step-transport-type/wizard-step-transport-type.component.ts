@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WizardStepAbstract } from '../wizard-step-abstract';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-wizard-step-transport-type',
@@ -7,13 +8,18 @@ import { WizardStepAbstract } from '../wizard-step-abstract';
   styleUrls: ['./wizard-step-transport-type.component.scss'],
 })
 export class WizardStepTransportTypeComponent extends WizardStepAbstract implements OnInit {
+  transportTypeForm = new FormGroup({});
+  selectedType?: string;
+
   constructor() {
     super();
   }
 
-  ngOnInit(): void {}
-
   isValid(): boolean {
     return true;
+  }
+
+  selectType(type: string) {
+    this.selectedType = type;
   }
 }

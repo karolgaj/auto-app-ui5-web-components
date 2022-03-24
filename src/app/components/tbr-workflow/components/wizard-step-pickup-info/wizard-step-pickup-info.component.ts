@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { WizardStepAbstract } from '../wizard-step-abstract';
 import { FormGroup } from '@angular/forms';
+import { Tbr } from '../../../../models/tbr.model';
 
 @Component({
   selector: 'app-wizard-step-pickup-info',
@@ -8,13 +9,14 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./wizard-step-pickup-info.component.scss'],
 })
 export class WizardStepPickupInfoComponent extends WizardStepAbstract implements OnInit {
-  private form!: FormGroup;
+  @Input()
+  tbrDetails!: Tbr;
+
+  pickupInfoForm: FormGroup = new FormGroup({});
 
   constructor() {
     super();
   }
-
-  ngOnInit(): void {}
 
   isValid(): boolean {
     return true;

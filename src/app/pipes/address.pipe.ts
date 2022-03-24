@@ -6,9 +6,15 @@ import { Consignee } from '../models/tbr.model';
   pure: true,
 })
 export class AddressPipe implements PipeTransform {
-  transform(value: Consignee): string {
+  transform(value: Consignee, withCountryCode = true): string {
     const name = value.name ?? 'N/A';
-    const countryCode = !value.countryCode || value.countryCode === '' ? 'N/A' : value.countryCode;
-    return `${value.parma} - ${name} - ${countryCode}`;
+    let address = `${value.parma} - ${name}`;
+
+    if (withCountryCode) {
+      const countryCode = !value.countryCode || value.countryCode === '' ? 'N/A' : value.countryCode;
+      address = `${address} - ${countryCode}`;
+    }
+
+    return address;
   }
 }

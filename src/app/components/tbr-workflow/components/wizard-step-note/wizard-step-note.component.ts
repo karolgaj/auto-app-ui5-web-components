@@ -11,8 +11,6 @@ export class WizardStepNoteComponent extends WizardStepAbstract implements OnIni
     super();
   }
 
-  ngOnInit(): void {}
-
   isValid(): boolean {
     return true;
   }

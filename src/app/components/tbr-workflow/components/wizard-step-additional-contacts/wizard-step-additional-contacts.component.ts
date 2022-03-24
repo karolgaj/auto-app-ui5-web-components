@@ -11,8 +11,6 @@ export class WizardStepAdditionalContactsComponent extends WizardStepAbstract im
     super();
   }
 
-  ngOnInit(): void {}
-
   isValid(): boolean {
     return true;
   }

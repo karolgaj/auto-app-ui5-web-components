@@ -9,7 +9,6 @@
       label="Consignee"
       formControlName="consignee"
       [required]="true"
-      [showColon]="true"
       [icons]="[{ icon: 'value-help', action: openConsigneeDialogBound }]"
     ></app-input>
     <app-input
@@ -56,7 +55,6 @@
       label="Ship from"
       formControlName="shipFrom"
       [required]="true"
-      [showColon]="true"
       [icons]="[
         { icon: 'add-contact', action: openCustomShipFromAddressDialogBound },
         { icon: 'value-help', action: openShipFromListDialogBound }
@@ -66,7 +64,6 @@
       placeholder="Loading point"
       label="Loading point"
       formControlName="loadingPoint"
-      [showColon]="true"
       [icons]="[{ icon: 'value-help', action: openLoadingPointDialogBound }]"
     ></app-input>
     <app-input
@@ -74,7 +71,6 @@
       label="Ship to"
       formControlName="shipTo"
       [required]="true"
-      [showColon]="true"
       [icons]="[
         { icon: 'add-contact', action: openCustomShipToAddressDialogBound },
         { icon: 'value-help', action: openShipToListDialogBound }
@@ -85,7 +81,6 @@
       label="Unloading point"
       formControlName="unloadingPoint"
       [required]="true"
-      [showColon]="true"
       [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"
     ></app-input>
 

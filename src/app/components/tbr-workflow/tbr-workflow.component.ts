@@ -13,7 +13,7 @@ export class TbrWorkflowComponent implements OnInit, AfterViewInit {
 
   activeStep = 0;
 
-  details = this.store.select(selectedTbr);
+  details$ = this.store.select(selectedTbr);
 
   constructor(private store: Store) {}
 

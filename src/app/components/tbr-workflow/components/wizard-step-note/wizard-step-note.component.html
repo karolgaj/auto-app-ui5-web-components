@@ -1,4 +1,8 @@
-<div class="wizard-step-content">
+<div class="wizard-step">
   <ui5-title>{{ title }}</ui5-title>
-  <ui5-button (click)="goToNextStep()">Step {{ stepIndex + 1 }}</ui5-button>
+  <div class="wizard-step__content" style="width: 100%">
+    <ui5-label>Note (will not be sent to carrier)</ui5-label>
+    <ui5-textarea rows="10"></ui5-textarea>
+  </div>
+  <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
 </div>

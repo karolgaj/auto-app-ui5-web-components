@@ -1,5 +1,43 @@
-<div class="wizard-step-content">
+<div class="wizard-step">
   <ui5-title>{{ title }}</ui5-title>
 
-  <ui5-button (click)="goToNextStep()">Step {{ stepIndex + 1 }}</ui5-button>
+  <div fxLayout fxLayoutGap="1rem" style="width: 100%">
+    <ui5-card class="medium" fxFlex>
+      <ui5-card-header
+        slot="header"
+        title-text="Partial Express to X-Dock"
+        subtitle-text="Give latest delivery time at X-Dock"
+        (click)="selectType('dock')"
+      >
+        <ui5-icon name="group" slot="avatar"></ui5-icon>
+      </ui5-card-header>
+    </ui5-card>
+
+    <ui5-card class="medium" fxFlex>
+      <ui5-card-header
+        slot="header"
+        title-text="Express"
+        subtitle-text="Give latest time at final receiver"
+        (click)="selectType('express')"
+      >
+        <ui5-icon name="group" slot="avatar"></ui5-icon>
+      </ui5-card-header>
+    </ui5-card>
+  </div>
+
+  <div
+    fxLayout="column"
+    fxFlex
+    fxLayoutAlign="stretch end"
+    class="wizard-step__content"
+    fxLayoutGap="0.5rem"
+    [formGroup]="transportTypeForm"
+  >
+    <app-datepicker [required]="true" label="Must arrive date"></app-datepicker>
+    <app-timepicker [required]="true" label="Must arrive time"></app-timepicker>
+    <app-timepicker label="Opening hour at delivery place"></app-timepicker>
+    <app-timepicker label="Closing hour at delivery place"></app-timepicker>
+  </div>
+
+  <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
 </div>

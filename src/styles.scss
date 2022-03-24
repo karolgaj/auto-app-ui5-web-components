@@ -51,6 +51,20 @@ ui5-wizard-step {
   }
 }
 
-.wizard-step-content {
+.wizard-step {
   padding-inline: 2rem;
+  flex-direction: column;
+  align-items: flex-start;
+
+  & > *:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  &__content {
+    align-self: center;
+  }
+
+  ui5-input, ui5-date-picker, ui5-time-picker, ui5-select {
+    width: 400px;
+  }
 }

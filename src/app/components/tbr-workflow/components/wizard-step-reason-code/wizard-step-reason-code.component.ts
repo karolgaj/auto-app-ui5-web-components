@@ -11,7 +11,6 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
     super();
   }
 
-  ngOnInit(): void {}
   isValid(): boolean {
     return true;
   }

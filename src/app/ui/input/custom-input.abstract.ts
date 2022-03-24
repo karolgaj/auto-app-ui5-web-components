@@ -31,6 +31,9 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   @Input()
   required = false;
 
+  @Input()
+  showColon = true;
+
   onChange: any = () => {};
   onTouched: any = () => {};
   disabled = false;

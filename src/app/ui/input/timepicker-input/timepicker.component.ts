@@ -3,18 +3,18 @@ import { CustomInputAbstract } from '../custom-input.abstract';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: 'app-datepicker',
-  templateUrl: './datepicker.component.html',
-  styleUrls: ['./datepicker.component.scss'],
+  selector: 'app-timepicker',
+  templateUrl: './timepicker.component.html',
+  styleUrls: ['./timepicker.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       multi: true,
-      useExisting: forwardRef(() => DatepickerComponent),
+      useExisting: forwardRef(() => TimepickerComponent),
     },
   ],
 })
-export class DatepickerComponent extends CustomInputAbstract {
+export class TimepickerComponent extends CustomInputAbstract {
   constructor() {
     super();
   }

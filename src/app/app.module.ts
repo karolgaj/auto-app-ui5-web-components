@@ -6,31 +6,6 @@ import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import '@ui5/webcomponents/dist/Button';
-import '@ui5/webcomponents/dist/Label';
-import '@ui5/webcomponents/dist/Table';
-import '@ui5/webcomponents/dist/TableColumn';
-import '@ui5/webcomponents/dist/TableRow';
-import '@ui5/webcomponents/dist/TableCell';
-import '@ui5/webcomponents/dist/Avatar';
-import '@ui5/webcomponents/dist/Panel';
-import '@ui5/webcomponents/dist/Input';
-import '@ui5/webcomponents/dist/features/InputSuggestions';
-import '@ui5/webcomponents/dist/DatePicker';
-import '@ui5/webcomponents/dist/Switch';
-import '@ui5/webcomponents/dist/Dialog';
-import '@ui5/webcomponents/dist/Select';
-import '@ui5/webcomponents/dist/Title';
-
-import '@ui5/webcomponents-fiori/dist/Bar';
-import '@ui5/webcomponents-fiori/dist/ShellBar';
-import '@ui5/webcomponents-fiori/dist/illustrations/NoData';
-import '@ui5/webcomponents-fiori/dist/IllustratedMessage';
-import '@ui5/webcomponents-fiori/dist/Wizard';
-import '@ui5/webcomponents-icons/dist/AllIcons';
-
-import '@ui5/webcomponents/dist/Assets';
-import '@ui5/webcomponents-fiori/dist/Assets';
 // @ts-ignore
 import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
 import { TbrListComponent } from './components/tbr-list/tbr-list.component';
@@ -53,7 +28,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TbrNetworkFormComponent } from './components/tbr-network-form/tbr-network-form.component';
-import { CheckboxComponent, DatepickerComponent, InputComponent } from './ui/input';
+import { CheckboxComponent, DatepickerComponent, InputComponent, TimepickerComponent } from './ui/input';
 import { DialogComponent } from './ui/dialog/dialog.component';
 import { StateModule } from './state/state.module';
 import { EffectsModule } from '@ngrx/effects';
@@ -91,6 +66,7 @@ export function createTranslateLoader(http: HttpClient) {
     ThuDetailsComponent,
     TbrNetworkFormComponent,
     InputComponent,
+    TimepickerComponent,
     DatepickerComponent,
     DialogComponent,
     CheckboxComponent,

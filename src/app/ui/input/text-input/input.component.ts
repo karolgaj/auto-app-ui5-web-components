@@ -26,9 +26,6 @@ export class InputComponent extends CustomInputAbstract {
   @Input()
   showSuggestions = false;
 
-  @Input()
-  showColon = false;
-
   constructor() {
     super();
   }
