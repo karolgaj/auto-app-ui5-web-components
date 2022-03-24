@@ -291,7 +291,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       serviceLevel: ['STD_INB'],
       transportType: ['FTL'],
       customs: [false],
-      doNotMerge: [false],
+      doNotMerge: [true],
       useLoadingMeters: [false],
     });
 

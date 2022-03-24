@@ -1,3 +1,17 @@
 {
   "HELLO": "Hello",
+  "COMMON": {
+    "CONSIGNEE": "consignee",
+    "CONSIGNOR": "consignor",
+    "SHIP_FROM": "ship from",
+    "SHIP_TO": "ship to",
+    "UNLOAD_POINT": "unload point",
+    "UNLOADING_POINT": "unloading point",
+    "STREET_ADDRESS": "street address",
+    "PICKUP_DATE": "Pickup date"
+  },
+  "NETWORK_FORM": {
+    "VALID_FROM_TO": "valid from - to",
+    "LOADING_POINT": "loading point"
+  }
 }

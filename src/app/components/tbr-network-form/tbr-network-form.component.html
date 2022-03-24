@@ -5,16 +5,16 @@
 
   <div fxLayout="column" fxFlex fxLayoutAlign="stetch center" fxLayoutGap="1rem" class="network-form" [formGroup]="networkForm">
     <app-input
-      placeholder="Consignee"
-      label="Consignee"
+      [placeholder]="'COMMON.CONSIGNEE' | translate | titlecase"
+      [label]="'COMMON.CONSIGNEE' | translate | titlecase"
       formControlName="consignee"
       [required]="true"
       [icons]="[{ icon: 'value-help', action: openConsigneeDialogBound }]"
     ></app-input>
     <app-input
       class="after-icon"
-      placeholder="Consignor"
-      label="Consignor"
+      [placeholder]="'COMMON.CONSIGNOR' | translate | titlecase"
+      [label]="'COMMON.CONSIGNOR' | translate | titlecase"
       formControlName="consignor"
       [showColon]="true"
       [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
@@ -25,19 +25,19 @@
     <div class="table-container">
       <ui5-table mode="SingleSelect" *ngIf="showAvailableNetwork">
         <ui5-table-column slot="columns">
-          <span>Consignor</span>
+          <span>{{ 'COMMON.CONSIGNOR' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>Ship From</span>
+          <span>{{ 'COMMON.SHIP_FROM' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>Unload point</span>
+          <span>{{ 'COMMON.UNLOAD_POINT' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>Street address</span>
+          <span>{{ 'COMMON.STREET_ADDRESS' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>Valid from - to</span>
+          <span>{{ 'NETWORK_FORM.VALID_FROM_TO' | translate | titlecase }}</span>
         </ui5-table-column>
 
         <ui5-table-row (click)="chooseNetwork(row)" *ngFor="let row of availableNetworks$ | async">
@@ -51,8 +51,8 @@
     </div>
 
     <app-input
-      placeholder="Ship from"
-      label="Ship from"
+      [placeholder]="'COMMON.SHIP_FROM' | translate | titlecase"
+      [label]="'COMMON.SHIP_FROM' | translate | titlecase"
       formControlName="shipFrom"
       [required]="true"
       [icons]="[
@@ -61,14 +61,14 @@
       ]"
     ></app-input>
     <app-input
-      placeholder="Loading point"
-      label="Loading point"
+      [placeholder]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"
+      [label]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"
       formControlName="loadingPoint"
       [icons]="[{ icon: 'value-help', action: openLoadingPointDialogBound }]"
     ></app-input>
     <app-input
-      placeholder="Ship to"
-      label="Ship to"
+      [placeholder]="'COMMON.SHIP_FROM' | translate | titlecase"
+      [label]="'COMMON.SHIP_FROM' | translate | titlecase"
       formControlName="shipTo"
       [required]="true"
       [icons]="[
@@ -77,14 +77,14 @@
       ]"
     ></app-input>
     <app-input
-      placeholder="Unloading point"
-      label="Unloading point"
+      [placeholder]="'COMMON.UNLOADING_POINT' | translate | titlecase"
+      [label]="'COMMON.UNLOADING_POINT' | translate | titlecase"
       formControlName="unloadingPoint"
       [required]="true"
       [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"
     ></app-input>
 
-    <app-datepicker formControlName="pickupDate" [required]="true" label="Pickup date"></app-datepicker>
+    <app-datepicker formControlName="pickupDate" [required]="true" [label]="'COMMON.PICKUP_DATE' | translate | titlecase"></app-datepicker>
 
     <app-select
       placeholder="Service level"
@@ -107,7 +107,6 @@
 
     <app-checkbox formControlName="customs" label="Customs"></app-checkbox>
     <app-checkbox formControlName="useLoadingMeters" label="Use loading meters"></app-checkbox>
-    <app-checkbox formControlName="doNotMerge" label="Do not merge"></app-checkbox>
   </div>
   <ui5-bar design="Footer">
     <div slot="endContent">
