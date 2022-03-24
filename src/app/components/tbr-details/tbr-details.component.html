@@ -9,44 +9,44 @@
     <ui5-bar design="Subheader">
       <div slot="startContent">
         <ui5-button style="margin-right: 0.5rem; border-left: 1px solid grey" icon="group-2"></ui5-button>
-        <ui5-button style="margin-right: 0.5rem; margin-left: 0.5rem" icon="add" (click)="openAddDialog()">Add line </ui5-button>
-        <ui5-button style="margin-right: 0.5rem" icon="increase-line-height">Split</ui5-button>
-        <ui5-button style="margin-right: 0.5rem" icon="duplicate">Split lines</ui5-button>
-        <ui5-button (click)="openAddRefDialog()">Reference</ui5-button>
+        <ui5-button style="margin-right: 0.5rem; margin-left: 0.5rem" icon="add" (click)="openAddDialog()">{{'TBR_DETAILS.ADD_LINE' | translate | titlecase}} </ui5-button>
+        <ui5-button style="margin-right: 0.5rem" icon="increase-line-height">{{'TBR_DETAILS.SPLIT' | translate | titlecase}}</ui5-button>
+        <ui5-button style="margin-right: 0.5rem" icon="duplicate">{{'TBR_DETAILS.SPLIT_LINES' | translate | titlecase}}</ui5-button>
+        <ui5-button icon="add" (click)="openAddRefDialog()">{{'TBR_DETAILS.ADD_REFERENCES' | translate | titlecase}}</ui5-button>
       </div>
       <div slot="endContent">
-        <ui5-label style="margin-right: 0.25rem">Pick-Up Date:</ui5-label>
+        <ui5-label style="margin-right: 0.25rem">{{'COMMON.PICKUP_DATE' | translate | titlecase }}:</ui5-label>
         <ui5-date-picker [value]="tbrDetails.deliveryDate"></ui5-date-picker>
       </div>
     </ui5-bar>
     <ui5-table mode="MultiSelect" (selectionChange)="log($event)">
       <!-- Columns -->
       <ui5-table-column slot="columns">
-        <span>Part</span>
+        <span>{{'COMMON.PART' | translate | titlecase }}</span>
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
-        <span>Name</span>
+        <span>{{'COMMON.PART_NAME' | translate | titlecase }}</span>
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
-        <span>Req. Qty</span>
+        <span>{{'COMMON.REQUESTED_QTY' | translate | titlecase }}</span>
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
-        <span>Ship Qty</span>
+        <span>{{'COMMON.SHIPPED_QTY' | translate | titlecase }}</span>
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
-        <span>PO</span>
+        <span>{{'COMMON.PO_NUMBER' | translate | titlecase }}</span>
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
-        <span>Weight</span>
+        <span>{{'COMMON.WEIGHT' | translate | titlecase }}</span>
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
-        <span>Volume</span>
+        <span>{{'COMMON.VOLUME' | translate | titlecase }}</span>
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
@@ -54,23 +54,23 @@
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
-        <span>THU</span>
+        <span>{{'COMMON.THU' | translate  }}</span>
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
-        <span>Sub HU</span>
+        <span>{{'COMMON.SUB_HU' | translate | titlecase }}</span>
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
-        <span>No Del</span>
+        <span>{{'TBR_DETAILS.NO_DELIVERY' | translate | titlecase}}</span>
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
-        <span>Mix</span>
+        <span>{{'TBR_DETAILS.MIX' | translate | titlecase}}</span>
       </ui5-table-column>
 
       <ui5-table-column slot="columns">
-        <span>Wh. loc</span>
+        <span>{{'TBR_DETAILS.WH_LOCATION' | translate | titlecase}}</span>
       </ui5-table-column>
 
       <ui5-table-row data-ui5-compact-size [data-line]="row" *ngFor="let row of tbrDetails.lines">
@@ -101,29 +101,29 @@
   </div>
 
   <ui5-bar design="Footer">
-    <ui5-button slot="startContent" icon="delete" design="Negative" (click)="goBack()">Do not deliver full shipment </ui5-button>
-    <ui5-switch text-on="Imperial" text-off="Metric"></ui5-switch>
+    <ui5-button slot="startContent" icon="delete" design="Negative" (click)="goBack()">{{'TBR_DETAILS.BUTTON_DO_NOT_DELIVER_FULL' | translate }}</ui5-button>
+    <ui5-switch [textOn]="'COMMON.IMPERIAL' | translate" [textOff]="'COMMON.METRIC' | translate"></ui5-switch>
     <div slot="endContent">
-      <ui5-button design="Positive" icon="save" style="margin-right: 1rem"> Save draft </ui5-button>
+      <ui5-button design="Positive" icon="save" style="margin-right: 1rem"> {{'COMMON.BUTTON_SAVE_DRAFT' | translate | titlecase }}</ui5-button>
       <ui5-button design="Emphasized" icon="accounting-document-verification" (click)="goToWorkflow(tbrDetails.shipitId)">
-        Continue to details</ui5-button
+        {{'TBR_DETAILS.BUTTON_CONTINUE_TO_DETAILS' | translate }}</ui5-button
       >
     </div>
   </ui5-bar>
 </div>
 
-<ui5-dialog #addLineDialog header-text="Add Line">
+<ui5-dialog #addLineDialog [headerText]="'TBR_DETAILS.ADD_LINE' | translate | titlecase">
   <form fxLayout="column" fxLayoutGap="1rem">
     <div fxLayout="column" fxLayoutGap="0.25rem">
-      <ui5-label for="partNo" required>Part Number:</ui5-label>
+      <ui5-label for="partNo" required>{{'COMMON.PART_NUMBER' | translate | titlecase }}:</ui5-label>
       <ui5-input #partNo id="partNo" style="width: 100%"></ui5-input>
     </div>
     <div fxLayout="column" fxLayoutGap="0.25rem">
-      <ui5-label for="plannedQty" required>Planned Qty:</ui5-label>
+      <ui5-label for="plannedQty" required>{{'COMMON.REQUESTED_QTY' | translate | titlecase }}:</ui5-label>
       <ui5-input #plannedQty id="plannedQty" type="Number" style="width: 100%"></ui5-input>
     </div>
     <div fxLayout="column" fxLayoutGap="0.25rem">
-      <ui5-label for="poNumber" required>PO Number:</ui5-label>
+      <ui5-label for="poNumber" required>{{'COMMON.PO_NUMBER' | translate | titlecase }}:</ui5-label>
       <ui5-input #poNumber id="poNumber" type="Number" style="width: 100%"></ui5-input>
     </div>
   </form>
@@ -133,14 +133,14 @@
   </div>
 </ui5-dialog>
 
-<ui5-dialog #addReferencesDialog header-text="Add References">
+<ui5-dialog #addReferencesDialog [headerText]="'TBR_DETAILS.ADD_REFERENCES' | translate | titlecase">
   <form fxLayout="column" fxLayoutGap="1rem">
     <div fxLayout="column" fxLayoutGap="0.25rem">
-      <ui5-label for="msgToCarrier" required>Message to carrier:</ui5-label>
+      <ui5-label for="msgToCarrier" required>{{'COMMON.MESSAGE_TO_CARRIER' | translate | titlecase }}:</ui5-label>
       <ui5-input #msgToCarrier id="msgToCarrier" style="width: 100%"></ui5-input>
     </div>
     <div fxLayout="column" fxLayoutGap="0.25rem">
-      <ui5-label for="pickupRef" required>Pickup reference:</ui5-label>
+      <ui5-label for="pickupRef" required>{{'COMMON.PICKUP_REFERENCE' | translate | titlecase }}:</ui5-label>
       <ui5-input #pickupRef id="pickupRef" style="width: 100%"></ui5-input>
     </div>
   </form>

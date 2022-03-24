@@ -9,6 +9,7 @@
     "UNLOADING_POINT": "unloading point",
     "STREET_ADDRESS": "street address",
     "PICKUP_DATE": "Pickup date",
+    "ORIGINAL_PICKUP_DATE": "Original Pickup Date",
     "SERVICE_LEVEL": "Service level",
     "PLANNING_TYPE": "Planning type",
     "TRANSPORT_TYPE": "Transport type",
@@ -17,15 +18,44 @@
     "BUTTON_CREATE": "Create", 
     "BUTTON_CANCEL": "Cancel",
     "BUTTON_SAVE": "Save",
+    "BUTTON_SAVE_DRAFT": "Save draft",
     "NO_DATA": "No data", 
     "ADDRESS_NAME": "Name",
     "ADDRESS_COUNTRY": "Country",
     "ADDRESS_CITY": "City",
     "ADDRESS_POSTAL_CODE": "Postal Code",
-    "ADDRESS_STREET": "Street"
+    "ADDRESS_STREET": "Street",
+    "WEIGHT": "Weight", 
+    "VOLUME": "Volume",
+    "TOTAL_WEIGHT": "Total Weight", 
+    "TOTAL_VOLUME": "Total Volume", 
+    "NUMBER_OF_THU": "#THU",
+    "THU": "THU",
+    "SUB_HU": "Sub HU",
+    "MESSAGE_TO_CARRIER": "Message to carrier",
+    "PICKUP_REFERENCE": "Pickup reference",
+    "PART": "Part",
+    "PART_NUMBER": "Part Number", 
+    "PART_NAME": "Name",
+    "REQUESTED_QTY": "Requested Qty",
+    "SHIPPED_QTY": "Ship Qty",
+    "PO_NUMBER": "PO Number",
+    "METRIC": "Metric",
+    "IMPERIAL": "Imperial"
   },
   "NETWORK_FORM": {
     "VALID_FROM_TO": "valid from - to",
     "LOADING_POINT": "loading point"
+  }, 
+  "TBR_DETAILS":{
+    "ADD_REFERENCES": "Add References",
+    "ADD_LINE": "Add Line", 
+    "SPLIT": "Split", 
+    "SPLIT_LINES": "Split Lines",
+    "NO_DELIVERY": "No Del",
+    "WH_LOCATION": "WH Loc",
+    "MIX": "MIX",
+    "BUTTON_DO_NOT_DELIVER_FULL": "Do not deliver full shipment",
+    "BUTTON_CONTINUE_TO_DETAILS": "Continue to details"
   }
 }
