@@ -24,9 +24,9 @@
               </div>
               <ui5-label style="cursor: pointer"> {{ tbr.shipFromId }} - {{ tbr.shipFromName }} </ui5-label>
               <ui5-label style="cursor: pointer"> {{ tbr.consignorId }} - {{ tbr.consignorName }} </ui5-label>
-              <ui5-label style="cursor: pointer"> Pick-up date: {{ tbr.deliveryDate | parseDate }} </ui5-label>
+              <ui5-label style="cursor: pointer"> {{'COMMON.PICKUP_DATE' | translate}}: {{ tbr.deliveryDate | parseDate }} </ui5-label>
               <ui5-label style="cursor: pointer">
-                Status: <span style="color: {{ tbr.shipitStatus | shipitStatus: 'color' }}"> {{ tbr.shipitStatus | shipitStatus }} </span>
+                {{'COMMON.STATUS' | translate}}: <span style="color: {{ tbr.shipitStatus | shipitStatus: 'color' }}"> {{ tbr.shipitStatus | shipitStatus }} </span>
               </ui5-label>
             </div>
           </ui5-li-custom>

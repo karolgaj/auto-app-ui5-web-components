@@ -31,7 +31,10 @@
     "TOTAL_VOLUME": "Total Volume", 
     "NUMBER_OF_THU": "#THU",
     "THU": "THU",
+    "THU_LONG": "Transport Handling Unit", 
+    "THU_ID": "THU ID", 
     "SUB_HU": "Sub HU",
+    "QUANTITY": "Quantity",
     "MESSAGE_TO_CARRIER": "Message to carrier",
     "PICKUP_REFERENCE": "Pickup reference",
     "PART": "Part",
@@ -41,7 +44,16 @@
     "SHIPPED_QTY": "Ship Qty",
     "PO_NUMBER": "PO Number",
     "METRIC": "Metric",
-    "IMPERIAL": "Imperial"
+    "IMPERIAL": "Imperial",
+    "LENGTH": "Length", 
+    "WIDTH": "Width", 
+    "HIGHT": "Hight",
+    "STACKABLE": "Stackable",
+    "PACKAGE_MATERIAL": "Package Material",
+    "QTY_PER_LAYER": "Qty/Layer",
+    "LAYERS": "Layers", 
+    "PARTS_PER_UNIT": "Contains Part/Qty per unit",
+    "STATUS": "Status"
   },
   "NETWORK_FORM": {
     "VALID_FROM_TO": "valid from - to",
