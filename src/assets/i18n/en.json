@@ -8,7 +8,21 @@
     "UNLOAD_POINT": "unload point",
     "UNLOADING_POINT": "unloading point",
     "STREET_ADDRESS": "street address",
-    "PICKUP_DATE": "Pickup date"
+    "PICKUP_DATE": "Pickup date",
+    "SERVICE_LEVEL": "Service level",
+    "PLANNING_TYPE": "Planning type",
+    "TRANSPORT_TYPE": "Transport type",
+    "CUSTOMS": "Customs", 
+    "USE_LOADING_METERS": "Use loading meters", 
+    "BUTTON_CREATE": "Create", 
+    "BUTTON_CANCEL": "Cancel",
+    "BUTTON_SAVE": "Save",
+    "NO_DATA": "No data", 
+    "ADDRESS_NAME": "Name",
+    "ADDRESS_COUNTRY": "Country",
+    "ADDRESS_CITY": "City",
+    "ADDRESS_POSTAL_CODE": "Postal Code",
+    "ADDRESS_STREET": "Street"
   },
   "NETWORK_FORM": {
     "VALID_FROM_TO": "valid from - to",

@@ -87,30 +87,30 @@
     <app-datepicker formControlName="pickupDate" [required]="true" [label]="'COMMON.PICKUP_DATE' | translate | titlecase"></app-datepicker>
 
     <app-select
-      placeholder="Service level"
-      label="Service level"
+      [placeholder]="'COMMON.SERVICE_LEVEL' | translate | titlecase"
+      [label]="'COMMON.SERVICE_LEVEL' | translate | titlecase"
       [selectionOptions]="serviceLevelOptions"
       formControlName="serviceLevel"
     ></app-select>
     <app-select
-      placeholder="Planning type"
-      label="Planning type"
+      [placeholder]="'COMMON.PLANNING_TYPE' | translate"
+      [label]="'COMMON.PLANNING_TYPE' | translate | titlecase"
       [selectionOptions]="planningTypesOptions"
       formControlName="planningType"
     ></app-select>
     <app-select
-      placeholder="Transport type"
-      label="Transport type"
+      [placeholder]="'COMMON.TRANSPORT_TYPE' | translate"
+      [label]="'COMMON.TRANSPORT_TYPE' | translate | titlecase"
       [selectionOptions]="transportTypeOptions"
       formControlName="transportType"
     ></app-select>
 
-    <app-checkbox formControlName="customs" label="Customs"></app-checkbox>
-    <app-checkbox formControlName="useLoadingMeters" label="Use loading meters"></app-checkbox>
+    <app-checkbox formControlName="customs" [label]="'COMMON.CUSTOMS' | translate"></app-checkbox>
+    <app-checkbox formControlName="useLoadingMeters" [label]="'COMMON.USE_LOADING_METERS' | translate | titlecase "></app-checkbox>
   </div>
   <ui5-bar design="Footer">
     <div slot="endContent">
-      <ui5-button design="Emphasized" (click)="createTbr()"> Create </ui5-button>
+      <ui5-button design="Emphasized" (click)="createTbr()"> {{'COMMON.BUTTON_CREATE' | translate}} </ui5-button>
     </div>
   </ui5-bar>
 </div>
@@ -118,7 +118,7 @@
 <app-dialog #parmaDialog [dialogHeader]="parmaDialogHeader" [hideDefaultFooter]="true" [accessibleName]="parmaDialogAccessibleName">
   <!--  <app-input placeholder="Search" [control]="networkForm.controls.pickupDate" [icons]="[{ icon: 'clear' }]"></app-input>-->
 
-  <ui5-list no-data-text="No data">
+  <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
       *ngFor="let parma of consignors$ | async"
       [description]="parma.info"
@@ -130,12 +130,12 @@
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeParmaDialog()"> Cancel </ui5-button>
+    <ui5-button design="Transparent" (click)="closeParmaDialog()"> {{'COMMON.BUTTON_CANCEL' | translate}} </ui5-button>
   </div>
 </app-dialog>
 
 <app-dialog #unloadingPointDialog dialogHeader="Unloading point" [hideDefaultFooter]="true" accessibleName="Unloading point value help">
-  <ui5-list no-data-text="No data">
+  <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
       *ngFor="let consignor of unloadingPoints$ | async"
       [description]="consignor.info"
@@ -147,12 +147,12 @@
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeUnloadingPointDialog()"> Cancel </ui5-button>
+    <ui5-button design="Transparent" (click)="closeUnloadingPointDialog()"> {{'COMMON.BUTTON_CANCEL' | translate}} </ui5-button>
   </div>
 </app-dialog>
 
 <app-dialog #shipListDialog [hideDefaultFooter]="true" [dialogHeader]="shipListDialogHeader">
-  <ui5-list no-data-text="No data">
+  <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
       *ngFor="let shipItem of shipItems$ | async"
       [description]="shipItem.info"
@@ -164,16 +164,16 @@
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeShipListDialog()"> Cancel </ui5-button>
+    <ui5-button design="Transparent" (click)="closeShipListDialog()"> {{'COMMON.BUTTON_CANCEL' | translate}} </ui5-button>
   </div>
 </app-dialog>
 
 <app-dialog #customAddressDialog [dialogHeader]="addressDialogHeader" (close)="closeCustomAddressDialog()" (save)="saveCustomAddress()">
   <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form">
-    <app-input placeholder="Name" label="Name"></app-input>
-    <app-input placeholder="Country" label="Country"></app-input>
-    <app-input placeholder="Postal code" label="Postal code"></app-input>
-    <app-input placeholder="City" label="City"></app-input>
-    <app-input placeholder="Street" label="Street"></app-input>
+    <app-input [placeholder]="'COMMON.ADDRESS_NAME' | translate | titlecase" [label]="'COMMON.ADDRESS_NAME' | translate | titlecase"></app-input>
+    <app-input [placeholder]="'COMMON.ADDRESS_COUNTRY' | translate | titlecase" [label]="'COMMON.ADDRESS_COUNTRY' | translate | titlecase"></app-input>
+    <app-input [placeholder]="'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase" [label]="'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase"></app-input>
+    <app-input [placeholder]="'COMMON.ADDRESS_CITY' | translate | titlecase" [label]="'COMMON.ADDRESS_CITY' | translate | titlecase"></app-input>
+    <app-input [placeholder]="'COMMON.ADDRESS_STREET' | translate | titlecase" [label]="'COMMON.ADDRESS_STREET' | translate | titlecase"></app-input>
   </div>
 </app-dialog>
