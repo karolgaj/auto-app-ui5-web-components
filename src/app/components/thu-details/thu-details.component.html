@@ -1,6 +1,6 @@
 <div fxLayout="column" style="height: 100%" *ngIf="line$ | async as line">
   <ui5-bar design="Header" slot="header">
-    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"></ui5-button>
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">{{'COMMON.BUTTON_CLOSE' | translate }}</ui5-button>
   </ui5-bar>
 
   <ui5-page>
@@ -43,7 +43,7 @@
         </div>
         <div slot="endContent">
           <ui5-label style="margin-right: 1rem">
-            {{'COMMON.WEIGHT' | translate }}/{{'COMMON.THU' | translate }}: <b> {{ line.weightSUL }} </b> {{ line.volumeSULUom }}
+            {{'COMMON.WEIGHT' | translate }}/{{'COMMON.THU' | translate }}: <b> {{ line.weightSUL }} </b> {{ line.weightSULUom }}
           </ui5-label>
           <ui5-label>
             {{'COMMON.VOLUME' | translate }}/{{'COMMON.THU' | translate }}: <b> {{ line.volumeSUL }} </b> {{ line.volumeSULUom }}
