@@ -78,7 +78,16 @@
     "PICKUP_READY_DATE": "Ready for collection date",
     "PICKUP_READY_TIME": "Ready for collection time",
     "PICKUP_OPENING_HOUR": "Opening hour at collection place",
-    "PICKUP_CLOSING_HOUR": "Closing hour at collection place"
+    "PICKUP_CLOSING_HOUR": "Closing hour at collection place",
+    "PARTIAL_EXPRESS": "Partial Express to X-Dock",
+    "PARTIAL_EXPRESS_TEXT": "Give latest delivery time at X-Dock",
+    "EXPRESS": "Express",
+    "EXPRESS_TEXT": "Give latest time at final receiver",
+    "MUST_ARRIVE_DATE": "Must arrive date",
+    "MUST_ARRIVE_TIME": "Must arrive time",
+    "DROPOF_OPENING_HOUR": "Opening hour at delivery place",
+    "DROPOF_CLOSING_HOUR": "Closing hour at delivery place",
+    "XDOCK": "Xdock"
   },
   "NETWORK_FORM": {
     "VALID_FROM_TO": "valid from - to",

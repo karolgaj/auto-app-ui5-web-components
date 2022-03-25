@@ -5,9 +5,9 @@
     <ui5-card class="medium" fxFlex>
       <ui5-card-header
         slot="header"
-        title-text="Partial Express to X-Dock"
-        subtitle-text="Give latest delivery time at X-Dock"
-        (click)="selectType('dock')"
+        [titleText]="'COMMON.PARTIAL_EXPRESS' | translate | titlecase"
+        [subtitleText]="'COMMON.PARTIAL_EXPRESS_TEXT' | translate "
+        (click)="selectType('xdock')"
       >
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
@@ -16,8 +16,8 @@
     <ui5-card class="medium" fxFlex>
       <ui5-card-header
         slot="header"
-        title-text="Express"
-        subtitle-text="Give latest time at final receiver"
+        [titleText]="'COMMON.EXPRESS' | translate | titlecase"
+        [subtitleText]="'COMMON.EXPRESS_TEXT' | translate "
         (click)="selectType('express')"
       >
         <ui5-icon name="group" slot="avatar"></ui5-icon>
@@ -33,10 +33,11 @@
     fxLayoutGap="0.5rem"
     [formGroup]="transportTypeForm"
   >
-    <app-datepicker [required]="true" label="Must arrive date"></app-datepicker>
-    <app-timepicker [required]="true" label="Must arrive time"></app-timepicker>
-    <app-timepicker label="Opening hour at delivery place"></app-timepicker>
-    <app-timepicker label="Closing hour at delivery place"></app-timepicker>
+    <app-datepicker [required]="true" label="{{'COMMON.MUST_ARRIVE_DATE' | translate | titlecase }}"></app-datepicker>
+    <app-timepicker [required]="true" label="{{'COMMON.MUST_ARRIVE_TIME' | translate | titlecase }}"></app-timepicker>
+    <app-timepicker label="{{'COMMON.DROPOF_OPENING_HOUR' | translate  }}"></app-timepicker>
+    <app-timepicker label="{{'COMMON.DROPOF_CLOSING_HOUR' | translate  }}"></app-timepicker>
+    <app-input label="{{'COMMON.XDOCK' | translate  }}"></app-input>
   </div>
 
   <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
