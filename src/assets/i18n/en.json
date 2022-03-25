@@ -65,6 +65,7 @@
     "COST_OWNER": "Cost owner",
     "REASON_CODE": "Reason code",
     "NOTE": "Note",
+    "NOTE_DETAILS": "Note (will not be sent to carrier)",
     "ADDITIONAL_CONTACTS": "Additional contacts",
     "COST_OWNER_VOLVO": "Volvo",
     "COST_OWNER_VOLVO_TEXT": "100% of costs on Consignee",
@@ -73,7 +74,11 @@
     "COST_OWNER_SHARED_COST_TEXT": "50% costs on Consignor and 50% on Consignee",
     "COST_OWNER_NOT_AGREED": "Not agreed",
     "COST_OWNER_CONSIGNOR_COST": "Consignor cost",
-    "COST_OWNER_CONSIGNEE_COST": "Consignee cost"
+    "COST_OWNER_CONSIGNEE_COST": "Consignee cost",
+    "PICKUP_READY_DATE": "Ready for collection date",
+    "PICKUP_READY_TIME": "Ready for collection time",
+    "PICKUP_OPENING_HOUR": "Opening hour at collection place",
+    "PICKUP_CLOSING_HOUR": "Closing hour at collection place"
   },
   "NETWORK_FORM": {
     "VALID_FROM_TO": "valid from - to",
