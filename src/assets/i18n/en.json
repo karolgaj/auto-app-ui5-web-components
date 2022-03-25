@@ -19,6 +19,7 @@
     "BUTTON_CANCEL": "Cancel",
     "BUTTON_SAVE": "Save",
     "BUTTON_SAVE_DRAFT": "Save draft",
+    "BUTTON_CLOSE": "Close",
     "NO_DATA": "No data", 
     "ADDRESS_NAME": "Name",
     "ADDRESS_COUNTRY": "Country",
@@ -53,7 +54,15 @@
     "QTY_PER_LAYER": "Qty/Layer",
     "LAYERS": "Layers", 
     "PARTS_PER_UNIT": "Contains Part/Qty per unit",
-    "STATUS": "Status"
+    "STATUS": "Status", 
+    "PICKUP_INFO": "Pickup Info",
+    "CONTACT_PERSON": "Contact person",
+    "CONTACT_PERSON_FULL": "Contact person at pickup point at time of pickup",
+    "TRANSPORT_TYPE": "Transport type",
+    "COST_OWNER": "Cost owner",
+    "REASON_CODE": "Reason code",
+    "NOTE": "Note",
+    "ADDITIONAL_CONTACTS": "Additional contacts"
   },
   "NETWORK_FORM": {
     "VALID_FROM_TO": "valid from - to",
