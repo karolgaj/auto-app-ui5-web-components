@@ -1,6 +1,7 @@
 {
   "HELLO": "Hello",
   "COMMON": {
+    "TBRS": "TBRs",
     "CONSIGNEE": "Consignee",
     "CONSIGNOR": "Consignor",
     "SHIP_FROM": "Ship from",
