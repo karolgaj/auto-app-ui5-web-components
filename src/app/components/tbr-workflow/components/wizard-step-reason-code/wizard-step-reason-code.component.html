@@ -1,5 +1,99 @@
 <div class="wizard-step">
   <ui5-title>{{ title }}</ui5-title>
 
+  <ui5-button icon="add" (click)="addReasonCode()"> Add Reason Code </ui5-button>
+  <div fxLayout="column" fxFlex fxLayoutAlign="stretch end" class="wizard-step__content" style="width: 100%">
+    <ui5-table>
+      <ui5-table-column slot="columns">
+        <span> {{ "Couse" }} </span>
+      </ui5-table-column>
+      <ui5-table-column slot="columns">
+        <span> {{ "Reason Code" }} </span>
+      </ui5-table-column>
+      <ui5-table-column slot="columns">
+        <span> {{ "Sub-Reason Code" }} </span>
+      </ui5-table-column>
+      <ui5-table-column slot="columns">
+        <span> {{ "Reference" }} </span>
+      </ui5-table-column>
+
+      <ui5-table-row
+        data-ui5-compact-size
+        *ngFor="let rowForm of reasonCodesFormArray.controls; let i = index"
+        [formGroup]="getFormGroup(rowForm)"
+      >
+        <ui5-table-cell>
+          <app-input
+            [placeholder]="'Cause'"
+            formControlName="cause"
+            [icons]="[{ icon: 'value-help', action: openReasonCodesDialog }]"
+          ></app-input>
+        </ui5-table-cell>
+        <ui5-table-cell>
+          <app-input
+            [placeholder]="'Reason code'"
+            formControlName="reasonCode"
+            [icons]="[{ icon: 'value-help', action: openSubCodesDialog }]"
+          ></app-input>
+        </ui5-table-cell>
+        <ui5-table-cell>
+          <app-input
+            [placeholder]="'reason subcode'"
+            formControlName="reasonSubcode"
+            [icons]="[{ icon: 'value-help', action: openSecondSubCodesDialog }]"
+          ></app-input>
+        </ui5-table-cell>
+        <ui5-table-cell>
+          <app-input [placeholder]="'Reference'" formControlName="reference"></app-input>
+        </ui5-table-cell>
+      </ui5-table-row>
+    </ui5-table>
+  </div>
+
   <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
 </div>
+
+<app-dialog #reasonCodeDialog dialogHeader="Reason codes" [hideDefaultFooter]="true" accessibleName="Reason codes point value help">
+  <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
+    <ui5-li *ngFor="let reasonCode of reasonCodes$ | async" (click)="chooseReasonCode(reasonCode.cause)">
+      {{ reasonCode.cause }}
+    </ui5-li>
+  </ui5-list>
+
+  <div slot="footer">
+    <ui5-button design="Transparent" (click)="closeReasonCodesDialog()"> {{ "COMMON.BUTTON_CANCEL" | translate }} </ui5-button>
+  </div>
+</app-dialog>
+
+<app-dialog #subCodeDialog dialogHeader="Sub code" [hideDefaultFooter]="true" accessibleName="Sub code point value help">
+  <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
+    <ui5-li *ngFor="let subCode of subCodes$ | async" (click)="chooseSubCode(subCode)" [description]="subCode.description">
+      {{ subCode.code }}
+    </ui5-li>
+  </ui5-list>
+
+  <div slot="footer">
+    <ui5-button design="Transparent" (click)="closeSubCodesDialog()"> {{ "COMMON.BUTTON_CANCEL" | translate }} </ui5-button>
+  </div>
+</app-dialog>
+
+<app-dialog
+  #secondSubCodeDialog
+  dialogHeader="reason sub code"
+  [hideDefaultFooter]="true"
+  accessibleName="reason sub code point value help"
+>
+  <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
+    <ui5-li
+      *ngFor="let secondSubCode of secondSubCodes$ | async"
+      (click)="chooseSecondSubCode(secondSubCode)"
+      [description]="secondSubCode.description"
+    >
+      {{ secondSubCode.code }}
+    </ui5-li>
+  </ui5-list>
+
+  <div slot="footer">
+    <ui5-button design="Transparent" (click)="closeSecondSubCodesDialog()"> {{ "COMMON.BUTTON_CANCEL" | translate }} </ui5-button>
+  </div>
+</app-dialog>

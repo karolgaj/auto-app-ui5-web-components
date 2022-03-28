@@ -9,7 +9,9 @@
     [showSuggestions]="showSuggestions"
     [value]="value"
   >
-    <ui5-icon *ngFor="let icon of icons" slot="icon" [name]="icon.icon" (click)="icon.action && icon.action()"></ui5-icon>
+    <ng-container *ngFor="let icon of icons">
+      <ui5-icon *ngIf="icon.icon" slot="icon" [name]="icon.icon" (click)="icon.action && icon.action()"></ui5-icon>
+    </ng-container>
   </ui5-input>
   <ng-content [after]></ng-content>
 </div>

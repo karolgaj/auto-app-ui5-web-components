@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import { CustomInputAbstract } from '../custom-input.abstract';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -19,7 +19,7 @@ type IconActions = {
     },
   ],
 })
-export class InputComponent extends CustomInputAbstract {
+export class InputComponent extends CustomInputAbstract implements OnInit {
   @Input()
   icons: IconActions[] = [];
 
@@ -28,6 +28,9 @@ export class InputComponent extends CustomInputAbstract {
 
   constructor() {
     super();
+  }
+  ngOnInit() {
+    console.log(this.icons);
   }
 
   getId(): string {

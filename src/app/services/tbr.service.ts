@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 // @ts-ignore
-import * as tbrList from './tbr-list.mock-data.json';
+import * as tbrList from './mocks/tbr-list.mock-data.json';
 // @ts-ignore
-import * as details from './tbr-details.mock-data.json';
+import * as details from './mocks/tbr-details.mock-data.json';
 // @ts-ignore
-import * as tbrNetworks from './tbr-network.mock-data.json';
+import * as tbrNetworks from './mocks/tbr-network.mock-data.json';
+// @ts-ignore
+import * as reasonCodes from './mocks/reason-codes-data.json';
 import { Observable, of } from 'rxjs';
 import { TbrLightDetails } from '../models/tbr-light.model';
 import { OrderReleaseLine, ShipUnitLine, Tbr } from '../models/tbr.model';
@@ -12,6 +14,7 @@ import { map } from 'rxjs/operators';
 import { TbrLine } from '../models/tbr-line.model';
 import { TbrNetwork } from '../models/tbr-network.model';
 import { NetworkForm } from '../models/network-form.model';
+import { ReasonCodePayload } from '../models/reason-code.model';
 
 const tbrsList = tbrList;
 const tbrDetails = details;
@@ -19,6 +22,10 @@ const tbrDetails = details;
 @Injectable({ providedIn: 'root' })
 export class TbrService {
   constructor() {}
+
+  getReasonCodes(): Observable<ReasonCodePayload> {
+    return of(reasonCodes.default as ReasonCodePayload);
+  }
 
   getTbrNetworks(): Observable<TbrNetwork[]> {
     return of(tbrNetworks.default as TbrNetwork[]);

@@ -1,0 +1,175 @@
+{
+  "status": "FOUND",
+  "details": [
+    {
+      "payer": "SUPPLIER",
+      "reasonCodes": [
+        {
+          "generalCode": 1,
+          "cause": "Supplier",
+          "subCodes": [
+            { "code": 1, "description": "Capacity issues", "secondSubCodes": [] },
+            { "code": 2, "description": "2nd tier issues", "secondSubCodes": [] },
+            { "code": 3, "description": "Transport booking deviation", "secondSubCodes": [] },
+            { "code": 4, "description": "Tooling or Machining", "secondSubCodes": [] },
+            {
+              "code": 5,
+              "description": "Part discrepancy",
+              "secondSubCodes": [
+                { "code": 1, "description": "Wrong quantity" },
+                { "code": 2, "description": "Wrong partnumber in pallet" },
+                { "code": 1, "description": "Quality issues" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "payer": "VOLVO",
+      "reasonCodes": [
+        {
+          "generalCode": 2,
+          "cause": "Material Control",
+          "subCodes": [
+            {
+              "code": 1,
+              "description": "MRP System",
+              "secondSubCodes": [
+                { "code": 1, "description": "Delivery schedule" },
+                { "code": 2, "description": "Parameter issues" },
+                { "code": 3, "description": "Calendar issues" },
+                { "code": 4, "description": "Cumulative quantity" }
+              ]
+            },
+            {
+              "code": 2,
+              "description": "DCN",
+              "secondSubCodes": [
+                { "code": 1, "description": "Project" },
+                { "code": 2, "description": "Maintenance" }
+              ]
+            },
+            { "code": 3, "description": "VOR", "secondSubCodes": [] },
+            { "code": 4, "description": "One way emballage", "secondSubCodes": [] },
+            { "code": 5, "description": "Under Analysis", "secondSubCodes": [] }
+          ]
+        },
+        {
+          "generalCode": 3,
+          "cause": "Order Office (CKD)",
+          "subCodes": [
+            { "code": 1, "description": "Short schedule", "secondSubCodes": [] },
+            { "code": 2, "description": "Re-planning", "secondSubCodes": [] },
+            { "code": 3, "description": "Outbound rush", "secondSubCodes": [] },
+            { "code": 4, "description": "Extra orders", "secondSubCodes": [] },
+            { "code": 5, "description": "Extra orders - UCR", "secondSubCodes": [] }
+          ]
+        },
+        {
+          "generalCode": 4,
+          "cause": "Purchasing",
+          "subCodes": [
+            {
+              "code": 1,
+              "description": "Supplier",
+              "secondSubCodes": [
+                { "code": 1, "description": "Sourcing change" },
+                { "code": 2, "description": "Commercial issues" },
+                { "code": 3, "description": "IT issues" },
+                { "code": 4, "description": "Capacity" },
+                { "code": 5, "description": "Second/third tier issues" },
+                { "code": 6, "description": "Quality issues" }
+              ]
+            },
+            {
+              "code": 2,
+              "description": "Project",
+              "secondSubCodes": [
+                { "code": 1, "description": "Late Parma switch" },
+                { "code": 2, "description": "Prototype build" }
+              ]
+            },
+            { "code": 3, "description": "Business Decision", "secondSubCodes": [] },
+            { "code": 4, "description": "Late PPAP", "secondSubCodes": [] },
+            {
+              "code": 5,
+              "description": "Purchase orders",
+              "secondSubCodes": [
+                { "code": 1, "description": "Late" },
+                { "code": 2, "description": "POB" },
+                { "code": 3, "description": "Missing order" }
+              ]
+            }
+          ]
+        },
+        {
+          "generalCode": 5,
+          "cause": "Plant/Operation",
+          "subCodes": [
+            {
+              "code": 1,
+              "description": "Stock deviation",
+              "secondSubCodes": [
+                { "code": 1, "description": "Assembly" },
+                { "code": 2, "description": "Material handling" },
+                { "code": 3, "description": "Prototype build" }
+              ]
+            },
+            {
+              "code": 2,
+              "description": "Goods reception",
+              "secondSubCodes": [
+                { "code": 1, "description": "Registration error" },
+                { "code": 2, "description": "Received pallet but lost" }
+              ]
+            },
+            {
+              "code": 3,
+              "description": "Quality / Scrap",
+              "secondSubCodes": [
+                { "code": 1, "description": "Material handling" },
+                { "code": 2, "description": "Operation / Assembly" },
+                { "code": 3, "description": "Recall" }
+              ]
+            },
+            {
+              "code": 4,
+              "description": "Operation",
+              "secondSubCodes": [
+                { "code": 1, "description": "Wrong structure (BOM)" },
+                { "code": 2, "description": "Capacity issues" },
+                { "code": 3, "description": "Transport booking deviation" }
+              ]
+            },
+            { "code": 6, "description": "Indirect Material", "secondSubCodes": [] }
+          ]
+        },
+        {
+          "generalCode": 6,
+          "cause": "Production Logistics (PL)",
+          "subCodes": [
+            { "code": 1, "description": "Transport declined", "secondSubCodes": [] },
+            { "code": 2, "description": "Transport lost pallet", "secondSubCodes": [] },
+            { "code": 3, "description": "New Supplier without transport set-up", "secondSubCodes": [] },
+            { "code": 4, "description": "Standard Air", "secondSubCodes": [] },
+            { "code": 5, "description": "System down/error", "secondSubCodes": [] },
+            {
+              "code": 6,
+              "description": "Transport deviation",
+              "secondSubCodes": [
+                { "code": 1, "description": "Vessel" },
+                { "code": 2, "description": "Road" },
+                { "code": 3, "description": "Train" },
+                { "code": 4, "description": "Cross dock" }
+              ]
+            },
+            { "code": 7, "description": "Supplier with < 15 shipments / year", "secondSubCodes": [] },
+            { "code": 8, "description": "Volvo standard packaging", "secondSubCodes": [] },
+            { "code": 9, "description": "Volvo special packaging", "secondSubCodes": [] }
+          ]
+        }
+      ]
+    }
+  ]
+}
