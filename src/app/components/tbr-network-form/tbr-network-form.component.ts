@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { IFormBuilder, IFormGroup } from '@rxweb/types';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -279,7 +279,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
 
   private createForms(): void {
     this.networkForm = this.fb.group<NetworkForm>({
-      consignor: [null],
+      consignor: [null, [Validators.required]],
       consignee: [null],
       shipFrom: [null],
       shipTo: [null],

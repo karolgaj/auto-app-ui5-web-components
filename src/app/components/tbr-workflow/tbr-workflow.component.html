@@ -1,10 +1,17 @@
 <ui5-bar design="Header" slot="header">
-  <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> {{'COMMON.BUTTON_CLOSE' | translate | titlecase }} </ui5-button>
+  <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
+    {{ "COMMON.BUTTON_CLOSE" | translate | titlecase }}
+  </ui5-button>
 </ui5-bar>
 
 <ui5-wizard #wizard (stepChange)="stepChange($event)" *ngIf="details$ | async as tbrDetails">
   <ui5-wizard-step style="padding: 2rem" [titleText]="'COMMON.PICKUP_INFO' | translate | titlecase" selected>
-    <app-wizard-step-pickup-info [titleText]="'COMMON.PICKUP_INFO' | translate | titlecase" [stepIndex]="0" (nextStep)="goToStep($event)" [tbrDetails]="tbrDetails"></app-wizard-step-pickup-info>
+    <app-wizard-step-pickup-info
+      [titleText]="'COMMON.PICKUP_INFO' | translate | titlecase"
+      [stepIndex]="0"
+      (nextStep)="goToStep($event)"
+      [tbrDetails]="tbrDetails"
+    ></app-wizard-step-pickup-info>
   </ui5-wizard-step>
   <ui5-wizard-step [titleText]="'COMMON.CONTACT_PERSON' | translate | titlecase" disabled>
     <app-wizard-step-contact
@@ -14,16 +21,32 @@
     ></app-wizard-step-contact>
   </ui5-wizard-step>
   <ui5-wizard-step [titleText]="'COMMON.TRANSPORT_TYPE' | translate | titlecase" disabled>
-    <app-wizard-step-transport-type [titleText]="'COMMON.TRANSPORT_TYPE' | translate | titlecase" [stepIndex]="2" (nextStep)="goToStep($event)"></app-wizard-step-transport-type>
+    <app-wizard-step-transport-type
+      [titleText]="'COMMON.TRANSPORT_TYPE' | translate | titlecase"
+      [stepIndex]="2"
+      (nextStep)="goToStep($event)"
+    ></app-wizard-step-transport-type>
   </ui5-wizard-step>
   <ui5-wizard-step [titleText]="'COMMON.COST_OWNER' | translate | titlecase" disabled>
-    <app-wizard-step-cost-owner [titleText]="'COMMON.COST_OWNER' | translate | titlecase" [stepIndex]="3" (nextStep)="goToStep($event)"></app-wizard-step-cost-owner>
+    <app-wizard-step-cost-owner
+      [titleText]="'COMMON.COST_OWNER' | translate | titlecase"
+      [stepIndex]="3"
+      (nextStep)="goToStep($event)"
+    ></app-wizard-step-cost-owner>
   </ui5-wizard-step>
-  <ui5-wizard-step [titleText]="'COMMON.REASON_CODE' | translate | titlecase" >
-    <app-wizard-step-reason-code [titleText]="'COMMON.REASON_CODE' | translate | titlecase" [stepIndex]="4" (nextStep)="goToStep($event)"></app-wizard-step-reason-code>
+  <ui5-wizard-step [titleText]="'COMMON.REASON_CODE' | translate | titlecase">
+    <app-wizard-step-reason-code
+      [titleText]="'COMMON.REASON_CODE' | translate | titlecase"
+      [stepIndex]="4"
+      (nextStep)="goToStep($event)"
+    ></app-wizard-step-reason-code>
   </ui5-wizard-step>
   <ui5-wizard-step [titleText]="'COMMON.NOTE' | translate | titlecase" disabled>
-    <app-wizard-step-note [titleText]="'COMMON.NOTE' | translate | titlecase" [stepIndex]="5" (nextStep)="goToStep($event)"></app-wizard-step-note>
+    <app-wizard-step-note
+      [titleText]="'COMMON.NOTE' | translate | titlecase"
+      [stepIndex]="5"
+      (nextStep)="goToStep($event)"
+    ></app-wizard-step-note>
   </ui5-wizard-step>
   <ui5-wizard-step [titleText]="'COMMON.ADDITIONAL_CONTACTS' | translate | titlecase" disabled>
     <app-wizard-step-additional-contacts

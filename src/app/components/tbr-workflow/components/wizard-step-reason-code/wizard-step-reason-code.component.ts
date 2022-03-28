@@ -6,13 +6,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { IFormArray, IFormBuilder } from '@rxweb/types';
 import { loadReasonCodes } from '../../../../state/tbr.actions';
 import { DialogComponent } from '../../../../ui/dialog/dialog.component';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { SecondSubCode, SubCode } from '../../../../models/reason-code.model';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 
 interface ReasonCodeData {
   cause: string;
-  reasonCode: string;
-  reasonSubcode: string;
+  subCode: string;
+  secondSubCode: string;
   reference: string;
 }
 
@@ -32,18 +33,50 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
   secondSubCodeDialog!: DialogComponent;
 
   private fb: IFormBuilder;
+  private editingIndex = new BehaviorSubject<number | null>(null);
 
   reasonCodes$ = this.store.select(selectCauses());
-  subCodes$: Observable<SubCode[]> = of([]);
-  secondSubCodes$: Observable<SecondSubCode[]> = of([]);
+  subCodes$: Observable<SubCode[] | null | undefined> = this.editingIndex.pipe(
+    map((editingIndex) => {
+      console.log('editingIndex', editingIndex);
+      if (editingIndex == null) {
+        return null;
+      }
+      return this.reasonCodesFormArray.at(editingIndex).get('cause')?.value;
+    }),
+    switchMap((value) => {
+      if (value == null) {
+        return of([]);
+      }
+      return this.reasonCodes$.pipe(
+        map((reasonCodes) => {
+          return reasonCodes.find((reasonCode) => reasonCode.generalCode === value)?.subCodes;
+        })
+      );
+    })
+  );
+
+  secondSubCodes$: Observable<SecondSubCode[] | null | undefined> = this.subCodes$.pipe(
+    map((subCodes) => {
+      console.log(subCodes);
+      const editingIndex = this.editingIndex.value;
+      if (editingIndex != null) {
+        const subCode = this.reasonCodesFormArray.at(editingIndex).get('subCode')?.value;
+
+        if (subCode) {
+          return subCodes?.find((sc) => sc.code === subCode)?.secondSubCodes;
+        }
+      }
+
+      return [];
+    })
+  );
 
   reasonCodesFormArray!: IFormArray<ReasonCodeData>;
 
   openReasonCodesDialog!: () => void;
   openSecondSubCodesDialog!: () => void;
   openSubCodesDialog!: () => void;
-
-  private editingIndex?: number;
 
   constructor(private store: Store, fb: FormBuilder) {
     super();
@@ -53,13 +86,35 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
   }
 
   ngAfterViewInit() {
-    this.openReasonCodesDialog = () => {
-      this.openDialog.call(this, this.reasonCodeDialog);
+    this.openReasonCodesDialog = WizardStepReasonCodeComponent.openDialog.bind(this, this.reasonCodeDialog);
+
+    this.openSubCodesDialog = () => {
+      this.editingIndex
+        .pipe(
+          filter((value) => value != null),
+          take(1)
+        )
+        .subscribe((editingIndex) => {
+          if (editingIndex == null) {
+            return;
+          }
+          WizardStepReasonCodeComponent.openDialog.call(this, this.subCodeDialog);
+        });
     };
 
-    this.openSecondSubCodesDialog = this.openDialog.bind(this, this.subCodeDialog);
-
-    this.openSubCodesDialog = this.openDialog.bind(this, this.secondSubCodeDialog);
+    this.openSecondSubCodesDialog = () => {
+      this.editingIndex
+        .pipe(
+          filter((value) => value != null),
+          take(1)
+        )
+        .subscribe((editingIndex) => {
+          if (editingIndex == null) {
+            return;
+          }
+          WizardStepReasonCodeComponent.openDialog.call(this, this.secondSubCodeDialog);
+        });
+    };
   }
 
   createForm(): void {
@@ -74,8 +129,8 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
     this.reasonCodesFormArray.push(
       this.fb.group<ReasonCodeData>({
         cause: [null],
-        reasonCode: [null],
-        reasonSubcode: [null],
+        subCode: [null],
+        secondSubCode: [null],
         reference: [null],
       })
     );
@@ -86,39 +141,51 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
   }
 
   closeReasonCodesDialog() {
+    this.clearDataOnCLoseDialog();
     this.reasonCodeDialog.closeDialog();
   }
 
   closeSubCodesDialog() {
+    this.clearDataOnCLoseDialog();
     this.subCodeDialog.closeDialog();
   }
 
   closeSecondSubCodesDialog() {
+    this.clearDataOnCLoseDialog();
     this.secondSubCodeDialog.closeDialog();
   }
 
-  private openDialog(dialog: DialogComponent): void {
+  private clearDataOnCLoseDialog(): void {
+    this.editingIndex.next(null);
+  }
+
+  private static openDialog(dialog: DialogComponent): void {
     dialog.openDialog();
   }
 
-  chooseReasonCode(cause: string) {
-    if (this.editingIndex) {
-      this.reasonCodesFormArray.at(this.editingIndex).get('cause')?.setValue(cause);
+  chooseReasonCode(cause: number) {
+    if (this.editingIndex.value != null) {
+      this.reasonCodesFormArray.at(this.editingIndex.value).get('cause')?.setValue(cause);
     }
     this.closeReasonCodesDialog();
   }
 
   chooseSubCode(subCode: SubCode) {
-    if (this.editingIndex) {
-      this.reasonCodesFormArray.at(this.editingIndex).get('subCode')?.setValue(subCode.code);
+    if (this.editingIndex.value != null) {
+      this.reasonCodesFormArray.at(this.editingIndex.value).get('subCode')?.setValue(subCode.code);
     }
     this.closeSubCodesDialog();
   }
 
   chooseSecondSubCode(secondSubCode: SecondSubCode) {
-    if (this.editingIndex) {
-      this.reasonCodesFormArray.at(this.editingIndex).get('subCode')?.setValue(secondSubCode.code);
+    if (this.editingIndex.value != null) {
+      this.reasonCodesFormArray.at(this.editingIndex.value).get('subCode')?.setValue(secondSubCode.code);
     }
     this.closeSubCodesDialog();
+  }
+
+  assignEditingIndex(editingIndex: number) {
+    console.log(editingIndex);
+    this.editingIndex.next(editingIndex);
   }
 }

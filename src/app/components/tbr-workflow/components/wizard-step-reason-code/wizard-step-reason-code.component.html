@@ -20,6 +20,7 @@
       <ui5-table-row
         data-ui5-compact-size
         *ngFor="let rowForm of reasonCodesFormArray.controls; let i = index"
+        (click)="assignEditingIndex(i)"
         [formGroup]="getFormGroup(rowForm)"
       >
         <ui5-table-cell>
@@ -32,15 +33,17 @@
         <ui5-table-cell>
           <app-input
             [placeholder]="'Reason code'"
-            formControlName="reasonCode"
+            formControlName="subCode"
             [icons]="[{ icon: 'value-help', action: openSubCodesDialog }]"
+            [disabled]="!(reasonCodesFormArray.at(i)?.get('cause')?.value || (subCodes$ | async)?.length)"
           ></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
           <app-input
             [placeholder]="'reason subcode'"
-            formControlName="reasonSubcode"
+            formControlName="secondSubCode"
             [icons]="[{ icon: 'value-help', action: openSecondSubCodesDialog }]"
+            [disabled]="reasonCodesFormArray.at(i)?.get('subCode')?.value || (secondSubCodes$ | async)?.length"
           ></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
@@ -55,7 +58,7 @@
 
 <app-dialog #reasonCodeDialog dialogHeader="Reason codes" [hideDefaultFooter]="true" accessibleName="Reason codes point value help">
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
-    <ui5-li *ngFor="let reasonCode of reasonCodes$ | async" (click)="chooseReasonCode(reasonCode.cause)">
+    <ui5-li *ngFor="let reasonCode of reasonCodes$ | async" (click)="chooseReasonCode(reasonCode.generalCode)">
       {{ reasonCode.cause }}
     </ui5-li>
   </ui5-list>
@@ -67,8 +70,8 @@
 
 <app-dialog #subCodeDialog dialogHeader="Sub code" [hideDefaultFooter]="true" accessibleName="Sub code point value help">
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
-    <ui5-li *ngFor="let subCode of subCodes$ | async" (click)="chooseSubCode(subCode)" [description]="subCode.description">
-      {{ subCode.code }}
+    <ui5-li *ngFor="let subCode of subCodes$ | async" (click)="chooseSubCode(subCode)">
+      {{ subCode.description }}
     </ui5-li>
   </ui5-list>
 
@@ -87,9 +90,8 @@
     <ui5-li
       *ngFor="let secondSubCode of secondSubCodes$ | async"
       (click)="chooseSecondSubCode(secondSubCode)"
-      [description]="secondSubCode.description"
     >
-      {{ secondSubCode.code }}
+      {{ secondSubCode.description }}
     </ui5-li>
   </ui5-list>
 

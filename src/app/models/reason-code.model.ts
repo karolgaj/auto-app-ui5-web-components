@@ -14,7 +14,7 @@ export interface ReasonCode {
 export interface SubCode {
   code: number;
   description: string;
-  secondSubCodes?: (SecondSubCode | null)[] | null;
+  secondSubCodes?: SecondSubCode[] | null;
 }
 export interface SecondSubCode {
   code: number;
