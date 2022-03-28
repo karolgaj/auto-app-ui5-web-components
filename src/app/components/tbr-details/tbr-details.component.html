@@ -1,6 +1,6 @@
 <div fxLayout="column" style="height: 100%" *ngIf="details | async as tbrDetails">
   <ui5-bar design="Header" slot="header">
-    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> Close </ui5-button>
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> {{'COMMON.BUTTON_CLOSE' | translate }} </ui5-button>
   </ui5-bar>
 
   <app-tbr-network [tbrDetails]="tbrDetails"></app-tbr-network>
@@ -10,7 +10,7 @@
       <div slot="startContent">
         <ui5-button style="margin-right: 0.5rem; border-left: 1px solid grey" icon="group-2"></ui5-button>
         <ui5-button style="margin-right: 0.5rem; margin-left: 0.5rem" icon="add" (click)="openAddDialog()">{{'TBR_DETAILS.ADD_LINE' | translate | titlecase}} </ui5-button>
-        <ui5-button style="margin-right: 0.5rem" icon="increase-line-height">{{'TBR_DETAILS.SPLIT' | translate | titlecase}}</ui5-button>
+        <ui5-button style="margin-right: 0.5rem" icon="increase-line-height"(click)="split()">{{'TBR_DETAILS.SPLIT' | translate | titlecase}}</ui5-button>
         <ui5-button style="margin-right: 0.5rem" icon="duplicate">{{'TBR_DETAILS.SPLIT_LINES' | translate | titlecase}}</ui5-button>
         <ui5-button icon="add" (click)="openAddRefDialog()">{{'TBR_DETAILS.ADD_REFERENCES' | translate | titlecase}}</ui5-button>
       </div>
@@ -128,8 +128,8 @@
     </div>
   </form>
   <div slot="footer" style="justify-content: end; padding: 4px 7px 2px; background-color: #2f3c48; width: 100%; display: flex">
-    <ui5-button icon="cancel" design="Negative" style="margin-right: 1rem" (click)="cancelAddLine()"></ui5-button>
-    <ui5-button icon="save" (click)="saveAddLine()" [disabled]="addLineFormGroup.invalid"></ui5-button>
+    <ui5-button icon="cancel" design="Negative" style="margin-right: 1rem" (click)="cancelAddLine()">{{'COMMON.BUTTON_CANCEL' | translate }}</ui5-button>
+    <ui5-button icon="save" (click)="saveAddLine()" [disabled]="addLineFormGroup.invalid">{{'COMMON.BUTTON_SAVE' | translate }}</ui5-button>
   </div>
 </ui5-dialog>
 
@@ -145,7 +145,7 @@
     </div>
   </form>
   <div slot="footer" style="justify-content: end; padding: 4px 7px 2px; background-color: #2f3c48; width: 100%; display: flex">
-    <ui5-button icon="cancel" design="Negative" style="margin-right: 1rem" (click)="cancelAddRef()"></ui5-button>
-    <ui5-button icon="save" (click)="saveAddRef()"></ui5-button>
+    <ui5-button icon="cancel" design="Negative" style="margin-right: 1rem" (click)="cancelAddRef()">{{'COMMON.BUTTON_CANCEL' | translate }}</ui5-button>
+    <ui5-button icon="save" (click)="saveAddRef()">{{'COMMON.BUTTON_SAVE' | translate }}</ui5-button>
   </div>
 </ui5-dialog>

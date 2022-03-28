@@ -1,11 +1,11 @@
 <div fxLayout="column" style="height: 100%">
   <ui5-bar design="Header" slot="header">
-    <ui5-label>TBRs</ui5-label>
+    <ui5-label>{{'COMMON.TBRS' | translate}}</ui5-label>
   </ui5-bar>
   <div fxFlex>
     <div *ngFor="let type of tbrTypes">
       <ui5-panel [attr.header-text]="type" accessible-role="Complementary" style="width: 100%">
-        <ui5-list no-data-text="No data">
+        <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
           <ui5-li-custom
             mode="Single Select"
             style="height: 130px"
@@ -24,9 +24,9 @@
               </div>
               <ui5-label style="cursor: pointer"> {{ tbr.shipFromId }} - {{ tbr.shipFromName }} </ui5-label>
               <ui5-label style="cursor: pointer"> {{ tbr.consignorId }} - {{ tbr.consignorName }} </ui5-label>
-              <ui5-label style="cursor: pointer"> Pick-up date: {{ tbr.deliveryDate | parseDate }} </ui5-label>
+              <ui5-label style="cursor: pointer"> {{'COMMON.PICKUP_DATE' | translate}}: {{ tbr.deliveryDate | parseDate }} </ui5-label>
               <ui5-label style="cursor: pointer">
-                Status: <span style="color: {{ tbr.shipitStatus | shipitStatus: 'color' }}"> {{ tbr.shipitStatus | shipitStatus }} </span>
+                {{'COMMON.STATUS' | translate}}: <span style="color: {{ tbr.shipitStatus | shipitStatus: 'color' }}"> {{ tbr.shipitStatus | shipitStatus }} </span>
               </ui5-label>
             </div>
           </ui5-li-custom>

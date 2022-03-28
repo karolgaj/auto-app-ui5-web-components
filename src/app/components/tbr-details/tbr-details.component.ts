@@ -75,7 +75,8 @@ export class TbrDetailsComponent implements OnInit, AfterViewInit {
     this.addLineDialog.nativeElement.show();
   }
 
-  saveAddLine() {
+  saveAddLine() {    
+    console.log(this.addLineFormGroup.getRawValue());
     this.cancelAddLine();
   }
 
@@ -98,6 +99,10 @@ export class TbrDetailsComponent implements OnInit, AfterViewInit {
 
   navigateToThuDetails(line: TbrLine, shipitId: string) {
     this.router.navigate(['/', shipitId, line.articleNumber]);
+  }
+  split(){
+    //add logic
+    console.log("Split a line into two via an Interface in XTR MS")
   }
 
   log(e: any) {

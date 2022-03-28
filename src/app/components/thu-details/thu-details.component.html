@@ -1,6 +1,6 @@
 <div fxLayout="column" style="height: 100%" *ngIf="line$ | async as line">
   <ui5-bar design="Header" slot="header">
-    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"></ui5-button>
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">{{'COMMON.BUTTON_CLOSE' | translate }}</ui5-button>
   </ui5-bar>
 
   <ui5-page>
@@ -15,65 +15,65 @@
       </div>
       <div fxLayout="column" fxLayoutAlign="center end">
         <ui5-title level="H2" style="color: #2b7c2b">{{ line.requestedQuantity }}</ui5-title>
-        <ui5-label style="color: #2b7c2b"> PCE</ui5-label>
+        <ui5-label style="color: #2b7c2b"> {{'COMMON.SHIPPED_QTY' | translate | titlecase }}</ui5-label>
         <ui5-label>
-          Length: <span> {{ line.length }} </span></ui5-label
+          {{'COMMON.LENGTH' | translate}}: <span> {{ line.length }} </span></ui5-label
         >
         <ui5-label>
-          Width: <span> {{ line.width }} </span></ui5-label
+          {{'COMMON.WIDTH' | translate }}: <span> {{ line.width }} </span></ui5-label
         >
         <ui5-label>
-          Height: <span> {{ line.height }} </span></ui5-label
+          {{'COMMON.HIGHT' | translate }}: <span> {{ line.height }} </span></ui5-label
         >
         <ui5-label>
-          Stackable:
+          {{'COMMON.STACKABLE' | translate }}:
           <span> {{ line.stackable ? "Yes" : "No" }} </span>
         </ui5-label>
       </div>
     </div>
-    <ui5-panel [attr.header-text]="'Transport Handling Unit'">
+    <ui5-panel [attr.header-text]="'COMMON.THU_LONG' | translate | titlecase ">
       <ui5-bar style="background-color: transparent">
         <div slot="startContent">
           <ui5-label style="margin-right: 1rem">
-            THU ID: <b> {{ line.type }} </b>
+            {{'COMMON.THU_ID' | translate }}: <b> {{ line.type }} </b>
           </ui5-label>
           <ui5-label>
-            Quantity pr. THU: <b> {{ line.quantity }} </b>
+            {{'COMMON.QUANTITY' | translate }}/{{'COMMON.THU' | translate }}: <b> {{ line.quantity }} </b>
           </ui5-label>
         </div>
         <div slot="endContent">
           <ui5-label style="margin-right: 1rem">
-            Weight pr THU: <b> {{ line.weightSUL }} </b> {{ line.volumeSULUom }}
+            {{'COMMON.WEIGHT' | translate }}/{{'COMMON.THU' | translate }}: <b> {{ line.weightSUL }} </b> {{ line.weightSULUom }}
           </ui5-label>
           <ui5-label>
-            Volume pr. THU: <b> {{ line.volumeSUL }} </b> {{ line.volumeSULUom }}
+            {{'COMMON.VOLUME' | translate }}/{{'COMMON.THU' | translate }}: <b> {{ line.volumeSUL }} </b> {{ line.volumeSULUom }}
           </ui5-label>
         </div>
       </ui5-bar>
       <ui5-table data-ui5-compact-size>
         <ui5-table-column slot="columns" style="width: 100px">
-          <span>Package Material</span>
+          <span>{{'COMMON.PACKAGE_MATERIAL' | translate }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
           <span> </span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>Qty/Layer</span>
+          <span>{{'COMMON.QTY_PER_LAYER' | translate }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>Layers</span>
+          <span>{{'COMMON.LAYERS' | translate }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>Length (MM)</span>
+          <span>{{'COMMON.LENGTH' | translate }}(MM)</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>Width(MM)</span>
+          <span>{{'COMMON.WIDTH' | translate }}(MM)</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>Height(MM)</span>
+          <span>{{'COMMON.HIGHT' | translate }}(MM)</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>Contains Part/Qty oer unit</span>
+          <span>{{'COMMON.PARTS_PER_UNIT' | translate }}</span>
         </ui5-table-column>
 
         <ng-container *ngIf="thuList$ | async as thu">

@@ -1,6 +1,6 @@
 <div fxLayout="column" fxLayoutAlign="space-between" style="height: 100%">
   <ui5-bar design="Header" slot="header">
-    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> Close </ui5-button>
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> {{'COMMON.BUTTON_CLOSE' | translate }} </ui5-button>
   </ui5-bar>
 
   <div fxLayout="column" fxFlex fxLayoutAlign="stetch center" fxLayoutGap="1rem" class="network-form" [formGroup]="networkForm">
