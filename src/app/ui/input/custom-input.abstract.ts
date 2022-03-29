@@ -1,5 +1,5 @@
-import { AfterViewInit, Directive, ElementRef, Input, ViewChild } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import { AfterViewInit, Directive, ElementRef, Injector, Input, OnInit, ViewChild } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormControlDirective, FormControlName, FormGroupDirective, NgControl } from '@angular/forms';
 import { fromEvent } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
@@ -7,9 +7,11 @@ let id = 0;
 
 type NgClasses = string[] | { [key: string]: boolean };
 
+type ValueState = 'Success' | 'Error';
+
 @UntilDestroy()
 @Directive()
-export abstract class CustomInputAbstract implements ControlValueAccessor, AfterViewInit {
+export abstract class CustomInputAbstract implements ControlValueAccessor, AfterViewInit, OnInit {
   @ViewChild('customInput')
   customInput!: ElementRef;
 
@@ -34,15 +36,47 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   @Input()
   showColon = true;
 
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  @Input()
+  debugControl = false;
+
+  onChange = (value: any) => {};
+  onTouched = () => {};
   disabled = false;
+  touched = false;
 
   value: any;
+  formControl!: FormControl;
+
   protected _id: number;
 
-  protected constructor() {
+  protected constructor(private injector?: Injector) {
     this._id = ++id;
+  }
+
+  ngOnInit(): void {
+    if (this.injector == null) {
+      return;
+    }
+    const ngControl = this.injector.get(NgControl);
+
+    if (ngControl instanceof FormControlName) {
+      this.formControl = this.injector.get(FormGroupDirective).getControl(ngControl);
+    } else {
+      this.formControl = (ngControl as FormControlDirective).form as FormControl;
+    }
+  }
+
+  ngAfterViewInit(): void {
+    // @ts-ignore
+    fromEvent(this.customInput.nativeElement, 'change').subscribe((e: InputEvent) => {
+      this.value = (e.target as HTMLInputElement).value;
+      this.onChange(this.value);
+      this.markAsTouched();
+    });
+  }
+
+  get valueState(): ValueState | null {
+    return null;
   }
 
   abstract getId(): string;
@@ -50,9 +84,11 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   writeValue(value: any): void {
     this.value = value;
   }
+
   registerOnChange(onChange: any): void {
     this.onChange = onChange;
   }
+
   registerOnTouched(onTouched: any): void {
     this.onTouched = onTouched;
   }
@@ -61,11 +97,10 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
     this.disabled = isDisabled;
   }
 
-  ngAfterViewInit(): void {
-    // @ts-ignore
-    fromEvent(this.customInput.nativeElement, 'change').subscribe((e: InputEvent) => {
-      this.value = (e.target as HTMLInputElement).value;
-      this.onChange(this.value);
-    });
+  markAsTouched(): void {
+    if (!this.touched) {
+      this.onTouched();
+      this.touched = true;
+    }
   }
 }

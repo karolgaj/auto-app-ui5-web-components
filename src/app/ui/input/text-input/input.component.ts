@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Injector, Input, OnInit } from '@angular/core';
 import { CustomInputAbstract } from '../custom-input.abstract';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -26,11 +26,8 @@ export class InputComponent extends CustomInputAbstract implements OnInit {
   @Input()
   showSuggestions = false;
 
-  constructor() {
-    super();
-  }
-  ngOnInit() {
-    console.log(this.icons);
+  constructor(injector: Injector) {
+    super(injector);
   }
 
   getId(): string {

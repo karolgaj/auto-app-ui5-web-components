@@ -34,7 +34,7 @@
       (nextStep)="goToStep($event)"
     ></app-wizard-step-cost-owner>
   </ui5-wizard-step>
-  <ui5-wizard-step [titleText]="'COMMON.REASON_CODE' | translate | titlecase">
+  <ui5-wizard-step [titleText]="'COMMON.REASON_CODE' | translate | titlecase" disabled>
     <app-wizard-step-reason-code
       [titleText]="'COMMON.REASON_CODE' | translate | titlecase"
       [stepIndex]="4"

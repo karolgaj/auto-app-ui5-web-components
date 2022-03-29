@@ -10,12 +10,12 @@
   </div>
 
   <div fxLayout="column" fxFlex fxLayoutAlign="stretch end" class="wizard-step__content" fxLayoutGap="0.5rem" [formGroup]="pickupInfoForm">
-    <app-datepicker label="{{'COMMON.PICKUP_READY_DATE' | translate  }}"></app-datepicker>
-    <app-timepicker [required]="true" label="{{'COMMON.PICKUP_READY_TIME' | translate  }}"></app-timepicker>
-    <app-timepicker [required]="true" label="{{'COMMON.PICKUP_OPENING_HOUR' | translate  }}"></app-timepicker>
-    <app-timepicker [required]="true" label="{{'COMMON.PICKUP_CLOSING_HOUR' | translate  }}"></app-timepicker>
-    <app-input label="{{'COMMON.PICKUP_REFERENCE' | translate  }}"></app-input>
-    <app-input label="{{'COMMON.MESSAGE_TO_CARRIER' | translate  }}"></app-input>
+    <app-datepicker formControlName="pickupDate" label="{{'COMMON.PICKUP_READY_DATE' | translate  }}"></app-datepicker>
+    <app-timepicker formControlName="pickupTime" [required]="true" label="{{'COMMON.PICKUP_READY_TIME' | translate  }}"></app-timepicker>
+    <app-timepicker formControlName="openingHour" [required]="true" label="{{'COMMON.PICKUP_OPENING_HOUR' | translate  }}"></app-timepicker>
+    <app-timepicker formControlName="closingHour" [required]="true" label="{{'COMMON.PICKUP_CLOSING_HOUR' | translate  }}"></app-timepicker>
+    <app-input formControlName="reference" label="{{'COMMON.PICKUP_REFERENCE' | translate  }}"></app-input>
+    <app-input formControlName="msgToCarrier" label="{{'COMMON.MESSAGE_TO_CARRIER' | translate  }}"></app-input>
   </div>
 
   <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>

@@ -169,11 +169,11 @@
 </app-dialog>
 
 <app-dialog #customAddressDialog [dialogHeader]="addressDialogHeader" (close)="closeCustomAddressDialog()" (save)="saveCustomAddress()">
-  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form">
-    <app-input [placeholder]="'COMMON.ADDRESS_NAME' | translate | titlecase" [label]="'COMMON.ADDRESS_NAME' | translate | titlecase"></app-input>
-    <app-input [placeholder]="'COMMON.ADDRESS_COUNTRY' | translate | titlecase" [label]="'COMMON.ADDRESS_COUNTRY' | translate | titlecase"></app-input>
-    <app-input [placeholder]="'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase" [label]="'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase"></app-input>
-    <app-input [placeholder]="'COMMON.ADDRESS_CITY' | translate | titlecase" [label]="'COMMON.ADDRESS_CITY' | translate | titlecase"></app-input>
-    <app-input [placeholder]="'COMMON.ADDRESS_STREET' | translate | titlecase" [label]="'COMMON.ADDRESS_STREET' | translate | titlecase"></app-input>
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="customAddressForm">
+    <app-input formControlName="name" [placeholder]="'COMMON.ADDRESS_NAME' | translate | titlecase" [label]="'COMMON.ADDRESS_NAME' | translate | titlecase"></app-input>
+    <app-input formControlName="countryCode" [placeholder]="'COMMON.ADDRESS_COUNTRY' | translate | titlecase" [label]="'COMMON.ADDRESS_COUNTRY' | translate | titlecase"></app-input>
+    <app-input formControlName="postalCode" [placeholder]="'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase" [label]="'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase"></app-input>
+    <app-input formControlName="city" [placeholder]="'COMMON.ADDRESS_CITY' | translate | titlecase" [label]="'COMMON.ADDRESS_CITY' | translate | titlecase"></app-input>
+    <app-input formControlName="street1" [placeholder]="'COMMON.ADDRESS_STREET' | translate | titlecase" [label]="'COMMON.ADDRESS_STREET' | translate | titlecase"></app-input>
   </div>
 </app-dialog>

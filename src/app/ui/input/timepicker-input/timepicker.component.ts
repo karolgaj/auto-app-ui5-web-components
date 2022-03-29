@@ -1,4 +1,4 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, Injector } from '@angular/core';
 import { CustomInputAbstract } from '../custom-input.abstract';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -15,8 +15,8 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
 })
 export class TimepickerComponent extends CustomInputAbstract {
-  constructor() {
-    super();
+  constructor(injector: Injector) {
+    super(injector);
   }
 
   getId(): string {

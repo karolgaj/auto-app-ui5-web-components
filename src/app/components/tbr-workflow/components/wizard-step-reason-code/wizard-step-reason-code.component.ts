@@ -23,6 +23,9 @@ interface ReasonCodeData {
   styleUrls: ['./wizard-step-reason-code.component.scss'],
 })
 export class WizardStepReasonCodeComponent extends WizardStepAbstract implements OnInit, AfterViewInit {
+  private fb: IFormBuilder;
+  private editingIndex = new BehaviorSubject<number | null>(null);
+
   @ViewChild('reasonCodeDialog')
   reasonCodeDialog!: DialogComponent;
 
@@ -32,13 +35,9 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
   @ViewChild('secondSubCodeDialog')
   secondSubCodeDialog!: DialogComponent;
 
-  private fb: IFormBuilder;
-  private editingIndex = new BehaviorSubject<number | null>(null);
-
   reasonCodes$ = this.store.select(selectCauses());
   subCodes$: Observable<SubCode[] | null | undefined> = this.editingIndex.pipe(
     map((editingIndex) => {
-      console.log('editingIndex', editingIndex);
       if (editingIndex == null) {
         return null;
       }
@@ -58,7 +57,6 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
 
   secondSubCodes$: Observable<SecondSubCode[] | null | undefined> = this.subCodes$.pipe(
     map((subCodes) => {
-      console.log(subCodes);
       const editingIndex = this.editingIndex.value;
       if (editingIndex != null) {
         const subCode = this.reasonCodesFormArray.at(editingIndex).get('subCode')?.value;
@@ -80,12 +78,12 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
 
   constructor(private store: Store, fb: FormBuilder) {
     super();
-    this.store.dispatch(loadReasonCodes());
     this.fb = fb;
+    this.store.dispatch(loadReasonCodes());
     this.createForm();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.openReasonCodesDialog = WizardStepReasonCodeComponent.openDialog.bind(this, this.reasonCodeDialog);
 
     this.openSubCodesDialog = () => {
@@ -117,10 +115,6 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
     };
   }
 
-  createForm(): void {
-    this.reasonCodesFormArray = this.fb.array<ReasonCodeData>([]);
-  }
-
   isValid(): boolean {
     return true;
   }
@@ -140,52 +134,51 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
     return rowForm as FormGroup;
   }
 
-  closeReasonCodesDialog() {
-    this.clearDataOnCLoseDialog();
+  closeReasonCodesDialog(): void {
+    this.editingIndex.next(null);
     this.reasonCodeDialog.closeDialog();
   }
 
-  closeSubCodesDialog() {
-    this.clearDataOnCLoseDialog();
+  closeSubCodesDialog(): void {
+    this.editingIndex.next(null);
     this.subCodeDialog.closeDialog();
   }
 
-  closeSecondSubCodesDialog() {
-    this.clearDataOnCLoseDialog();
+  closeSecondSubCodesDialog(): void {
+    this.editingIndex.next(null);
     this.secondSubCodeDialog.closeDialog();
   }
 
-  private clearDataOnCLoseDialog(): void {
-    this.editingIndex.next(null);
-  }
-
-  private static openDialog(dialog: DialogComponent): void {
-    dialog.openDialog();
-  }
-
-  chooseReasonCode(cause: number) {
+  chooseReasonCode(cause: number): void {
     if (this.editingIndex.value != null) {
       this.reasonCodesFormArray.at(this.editingIndex.value).get('cause')?.setValue(cause);
     }
     this.closeReasonCodesDialog();
   }
 
-  chooseSubCode(subCode: SubCode) {
+  chooseSubCode(subCode: SubCode): void {
     if (this.editingIndex.value != null) {
       this.reasonCodesFormArray.at(this.editingIndex.value).get('subCode')?.setValue(subCode.code);
     }
     this.closeSubCodesDialog();
   }
 
-  chooseSecondSubCode(secondSubCode: SecondSubCode) {
+  chooseSecondSubCode(secondSubCode: SecondSubCode): void {
     if (this.editingIndex.value != null) {
       this.reasonCodesFormArray.at(this.editingIndex.value).get('subCode')?.setValue(secondSubCode.code);
     }
     this.closeSubCodesDialog();
   }
 
-  assignEditingIndex(editingIndex: number) {
-    console.log(editingIndex);
+  assignEditingIndex(editingIndex: number): void {
     this.editingIndex.next(editingIndex);
+  }
+
+  private createForm(): void {
+    this.reasonCodesFormArray = this.fb.array<ReasonCodeData>([]);
+  }
+
+  private static openDialog(dialog: DialogComponent): void {
+    dialog.openDialog();
   }
 }

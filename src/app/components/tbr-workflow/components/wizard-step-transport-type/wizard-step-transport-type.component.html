@@ -33,11 +33,11 @@
     fxLayoutGap="0.5rem"
     [formGroup]="transportTypeForm"
   >
-    <app-datepicker [required]="true" label="{{'COMMON.MUST_ARRIVE_DATE' | translate | titlecase }}"></app-datepicker>
-    <app-timepicker [required]="true" label="{{'COMMON.MUST_ARRIVE_TIME' | translate | titlecase }}"></app-timepicker>
-    <app-timepicker label="{{'COMMON.DROPOF_OPENING_HOUR' | translate  }}"></app-timepicker>
-    <app-timepicker label="{{'COMMON.DROPOF_CLOSING_HOUR' | translate  }}"></app-timepicker>
-    <app-input label="{{'COMMON.XDOCK' | translate  }}"></app-input>
+    <app-datepicker formControlName="mustArriveDate" [required]="true" label="{{'COMMON.MUST_ARRIVE_DATE' | translate | titlecase }}"></app-datepicker>
+    <app-timepicker formControlName="mustArriveTime" [required]="true" label="{{'COMMON.MUST_ARRIVE_TIME' | translate | titlecase }}"></app-timepicker>
+    <app-timepicker formControlName="openingHour" label="{{'COMMON.DROPOF_OPENING_HOUR' | translate  }}"></app-timepicker>
+    <app-timepicker formControlName="closingHour" label="{{'COMMON.DROPOF_CLOSING_HOUR' | translate  }}"></app-timepicker>
+    <app-input formControlName="xdock" label="{{'COMMON.XDOCK' | translate  }}"></app-input>
   </div>
 
   <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>

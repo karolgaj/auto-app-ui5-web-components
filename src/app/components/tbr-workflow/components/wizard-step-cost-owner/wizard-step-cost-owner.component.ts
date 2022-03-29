@@ -1,9 +1,15 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { WizardStepAbstract } from '../wizard-step-abstract';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { fromEvent } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime, map } from 'rxjs/operators';
+import { IFormBuilder, IFormGroup } from '@rxweb/types';
+
+interface CostOwnerForm {
+  consignee: string;
+  consignor: string;
+}
 
 @UntilDestroy()
 @Component({
@@ -12,7 +18,7 @@ import { debounceTime, map } from 'rxjs/operators';
   styleUrls: ['./wizard-step-cost-owner.component.scss'],
 })
 export class WizardStepCostOwnerComponent extends WizardStepAbstract implements OnInit, AfterViewInit {
-  costOwnerForm = new FormGroup({});
+  costOwnerForm!: IFormGroup<CostOwnerForm>;
   consignor = 'Akwel Sweden AB';
 
   @ViewChild('consignorSlider')
@@ -21,8 +27,12 @@ export class WizardStepCostOwnerComponent extends WizardStepAbstract implements 
   @ViewChild('consigneeSlider')
   consigneeSlider!: ElementRef;
 
-  constructor() {
+  private fb: IFormBuilder;
+
+  constructor(fb: FormBuilder) {
     super();
+    this.fb = fb;
+    this.createForm();
   }
 
   ngAfterViewInit() {
@@ -54,5 +64,12 @@ export class WizardStepCostOwnerComponent extends WizardStepAbstract implements 
 
   consigneeCostChanged($event: any) {
     console.log($event.target._stateStorage.value);
+  }
+
+  private createForm(): void {
+    this.costOwnerForm = this.fb.group<CostOwnerForm>({
+      consignee: [null],
+      consignor: [null],
+    });
   }
 }

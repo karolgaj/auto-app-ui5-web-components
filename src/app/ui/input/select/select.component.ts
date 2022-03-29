@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, Injector, Input } from '@angular/core';
 import { CustomInputAbstract } from '../custom-input.abstract';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SelectionOption } from '../../../models/selection-option.model';
@@ -21,13 +21,10 @@ export class SelectComponent extends CustomInputAbstract {
   selectionOptions: SelectionOption<any>[] = [];
 
   @Input()
-  valueState?: 'Success' | 'Warning' | 'Error' | 'Information';
-
-  @Input()
   valueStateMessage?: string;
 
-  constructor() {
-    super();
+  constructor(injector: Injector) {
+    super(injector);
   }
 
   getId(): string {
@@ -40,6 +37,7 @@ export class SelectComponent extends CustomInputAbstract {
       // @ts-ignore
       this.value = e.detail.selectedOption.value;
       this.onChange(this.value);
+      this.markAsTouched();
     });
   }
 }

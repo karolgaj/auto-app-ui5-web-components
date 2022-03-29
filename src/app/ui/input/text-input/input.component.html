@@ -8,6 +8,8 @@
     [placeholder]="placeholder"
     [showSuggestions]="showSuggestions"
     [value]="value"
+    [disabled]="disabled"
+    [valueState]="valueState"
   >
     <ng-container *ngFor="let icon of icons">
       <ui5-icon *ngIf="icon.icon" slot="icon" [name]="icon.icon" (click)="icon.action && icon.action()"></ui5-icon>

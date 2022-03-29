@@ -1,4 +1,4 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, Injector } from '@angular/core';
 import { CustomInputAbstract } from '../custom-input.abstract';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent } from 'rxjs';
@@ -16,8 +16,8 @@ import { fromEvent } from 'rxjs';
   ],
 })
 export class CheckboxComponent extends CustomInputAbstract {
-  constructor() {
-    super();
+  constructor(injector: Injector) {
+    super(injector);
   }
 
   getId(): string {
@@ -29,6 +29,7 @@ export class CheckboxComponent extends CustomInputAbstract {
     fromEvent(this.customInput.nativeElement, 'change').subscribe((e: InputEvent) => {
       this.value = (e.target as HTMLInputElement).checked;
       this.onChange(this.value);
+      this.markAsTouched();
     });
   }
 }

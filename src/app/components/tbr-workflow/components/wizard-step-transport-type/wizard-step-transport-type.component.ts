@@ -1,6 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { WizardStepAbstract } from '../wizard-step-abstract';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+import { IFormBuilder, IFormGroup } from '@rxweb/types';
+
+interface TransportTypeForm {
+  xdock: string;
+  mustArriveDate: string;
+  mustArriveTime: string;
+  openingHour: string;
+  closingHour: string;
+}
 
 @Component({
   selector: 'app-wizard-step-transport-type',
@@ -8,11 +17,15 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./wizard-step-transport-type.component.scss'],
 })
 export class WizardStepTransportTypeComponent extends WizardStepAbstract implements OnInit {
-  transportTypeForm = new FormGroup({});
+  transportTypeForm!: IFormGroup<TransportTypeForm>;
   selectedType?: string;
 
-  constructor() {
+  private fb: IFormBuilder;
+
+  constructor(fb: FormBuilder) {
     super();
+    this.fb = fb;
+    this.createForm();
   }
 
   isValid(): boolean {
@@ -21,5 +34,15 @@ export class WizardStepTransportTypeComponent extends WizardStepAbstract impleme
 
   selectType(type: string) {
     this.selectedType = type;
+  }
+
+  private createForm(): void {
+    this.transportTypeForm = this.fb.group<TransportTypeForm>({
+      xdock: [null],
+      closingHour: [null],
+      mustArriveDate: [null],
+      mustArriveTime: [null],
+      openingHour: [null],
+    });
   }
 }
