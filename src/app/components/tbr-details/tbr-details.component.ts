@@ -17,11 +17,12 @@ export class TbrDetailsComponent implements OnInit, AfterViewInit {
   public addLineFormGroup = this.fb.group({
     partNo: this.fb.control(null, Validators.required),
     plannedQty: this.fb.control(null, Validators.required),
-    poNumber: this.fb.control(null, Validators.required),
+    poNumber: this.fb.control(null, Validators.required),    
   });
   public addRefFormGroup = this.fb.group({
     msgToCarrier: this.fb.control(null),
     pickupRef: this.fb.control(null),
+    doNotMerge: this.fb.control(false),
   });
 
   @ViewChild('addLineDialog')
