@@ -1,6 +1,8 @@
 <div fxLayout="column" style="height: 100%" *ngIf="line$ | async as line">
   <ui5-bar design="Header" slot="header">
-    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">{{'COMMON.BUTTON_CLOSE' | translate }}</ui5-button>
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
+      {{ "COMMON.BUTTON_CLOSE" | translate }}
+    </ui5-button>
   </ui5-bar>
 
   <ui5-page>
@@ -9,71 +11,71 @@
         <ui5-label> {{ line.articleNumber }} </ui5-label>
         <div fxLayout>
           <img style="max-height: 3rem; max-width: 3rem; margin-right: 0.5rem" src="assets/volvo-logo.png" />
-          <ui5-title level="H2">{{ line.articleName }}</ui5-title>
+          <ui5-title level="H2"> {{ line.articleName }} </ui5-title>
         </div>
         <ui5-label> {{ line.weightSUL }} {{ line.weightSULUom }} </ui5-label>
       </div>
       <div fxLayout="column" fxLayoutAlign="center end">
-        <ui5-title level="H2" style="color: #2b7c2b">{{ line.requestedQuantity }}</ui5-title>
-        <ui5-label style="color: #2b7c2b"> {{'COMMON.SHIPPED_QTY' | translate | titlecase }}</ui5-label>
+        <ui5-title level="H2" style="color: #2b7c2b"> {{ line.requestedQuantity }} </ui5-title>
+        <ui5-label style="color: #2b7c2b"> {{ "COMMON.SHIPPED_QTY" | translate | titlecase }} </ui5-label>
         <ui5-label>
-          {{'COMMON.LENGTH' | translate}}: <span> {{ line.length }} </span></ui5-label
-        >
+          {{ "COMMON.LENGTH" | translate }}: <span> {{ line.length }} </span>
+        </ui5-label>
         <ui5-label>
-          {{'COMMON.WIDTH' | translate }}: <span> {{ line.width }} </span></ui5-label
-        >
+          {{ "COMMON.WIDTH" | translate }}: <span> {{ line.width }} </span>
+        </ui5-label>
         <ui5-label>
-          {{'COMMON.HIGHT' | translate }}: <span> {{ line.height }} </span></ui5-label
-        >
+          {{ "COMMON.HIGHT" | translate }}: <span> {{ line.height }} </span>
+        </ui5-label>
         <ui5-label>
-          {{'COMMON.STACKABLE' | translate }}:
+          {{ "COMMON.STACKABLE" | translate }}:
           <span> {{ line.stackable ? "Yes" : "No" }} </span>
         </ui5-label>
       </div>
     </div>
-    <ui5-panel [attr.header-text]="'COMMON.THU_LONG' | translate | titlecase ">
+    <ui5-panel [attr.header-text]="'COMMON.THU_LONG' | translate | titlecase">
       <ui5-bar style="background-color: transparent">
         <div slot="startContent">
           <ui5-label style="margin-right: 1rem">
-            {{'COMMON.THU_ID' | translate }}: <b> {{ line.type }} </b>
+            {{ "COMMON.THU_ID" | translate }}: <b> {{ line.type }} </b>
           </ui5-label>
           <ui5-label>
-            {{'COMMON.QUANTITY' | translate }}/{{'COMMON.THU' | translate }}: <b> {{ line.quantity }} </b>
+            {{ "COMMON.QUANTITY" | translate }}/{{ "COMMON.THU" | translate }}: <b> {{ line.quantity }} </b>
           </ui5-label>
         </div>
         <div slot="endContent">
           <ui5-label style="margin-right: 1rem">
-            {{'COMMON.WEIGHT' | translate }}/{{'COMMON.THU' | translate }}: <b> {{ line.weightSUL }} </b> {{ line.weightSULUom }}
+            {{ "COMMON.WEIGHT" | translate }}/{{ "COMMON.THU" | translate }}: <b> {{ line.weightSUL }} </b> {{ line.weightSULUom }}
           </ui5-label>
           <ui5-label>
-            {{'COMMON.VOLUME' | translate }}/{{'COMMON.THU' | translate }}: <b> {{ line.volumeSUL }} </b> {{ line.volumeSULUom }}
+            {{ "COMMON.VOLUME" | translate }}/{{ "COMMON.THU" | translate }}: <b> {{ line.volumeSUL }} </b> {{ line.volumeSULUom }}
           </ui5-label>
         </div>
       </ui5-bar>
       <ui5-table data-ui5-compact-size>
         <ui5-table-column slot="columns" style="width: 100px">
-          <span>{{'COMMON.PACKAGE_MATERIAL' | translate }}</span>
+          <span> {{ "COMMON.PACKAGE_MATERIAL" | translate }} </span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
           <span> </span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{'COMMON.QTY_PER_LAYER' | translate }}</span>
+          <span> {{ "COMMON.QTY_PER_LAYER" | translate }} </span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{'COMMON.LAYERS' | translate }}</span>
+          <span> {{ "COMMON.LAYERS" | translate }} </span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{'COMMON.LENGTH' | translate }}(MM)</span>
+          <span> {{ "COMMON.LENGTH" | translate }}(MM) </span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{'COMMON.WIDTH' | translate }}(MM)</span>
+          <span> {{ "COMMON.WIDTH" | translate }}(MM) </span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{'COMMON.HIGHT' | translate }}(MM)</span>
+          <span> {{ "COMMON.HIGHT" | translate }}(MM) </span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{'COMMON.PARTS_PER_UNIT' | translate }}</span>
+          <span> {{ "COMMON.PARTS_PER_UNIT" | translate }} </span>
         </ui5-table-column>
 
         <ng-container *ngIf="thuList$ | async as thu">
@@ -85,16 +87,18 @@
             <ui5-table-cell>
               <img width="50" height="50" [src]="packMack.packMaterial[0].imgUrl" />
             </ui5-table-cell>
-            <ui5-table-cell>{{ packMack.maxPackMaterialPerLayer }}</ui5-table-cell>
-            <ui5-table-cell>{{ packMack.numberOfLayers }}</ui5-table-cell>
-            <ui5-table-cell>{{ packMack.packMaterial[0].length }}</ui5-table-cell>
-            <ui5-table-cell>{{ packMack.packMaterial[0].width }}</ui5-table-cell>
-            <ui5-table-cell>{{ packMack.packMaterial[0].height }}</ui5-table-cell>
-            <ui5-table-cell>{{
-              packMack.packMaterial[0].articleQuantityPerPackageMaterial === 0
-                ? ""
-                : packMack.packMaterial[0].articleQuantityPerPackageMaterial
-            }}</ui5-table-cell>
+            <ui5-table-cell> {{ packMack.maxPackMaterialPerLayer }} </ui5-table-cell>
+            <ui5-table-cell> {{ packMack.numberOfLayers }} </ui5-table-cell>
+            <ui5-table-cell> {{ packMack.packMaterial[0].length }} </ui5-table-cell>
+            <ui5-table-cell> {{ packMack.packMaterial[0].width }} </ui5-table-cell>
+            <ui5-table-cell> {{ packMack.packMaterial[0].height }} </ui5-table-cell>
+            <ui5-table-cell>
+              {{
+                packMack.packMaterial[0].articleQuantityPerPackageMaterial === 0
+                  ? ""
+                  : packMack.packMaterial[0].articleQuantityPerPackageMaterial
+              }}
+            </ui5-table-cell>
           </ui5-table-row>
         </ng-container>
       </ui5-table>

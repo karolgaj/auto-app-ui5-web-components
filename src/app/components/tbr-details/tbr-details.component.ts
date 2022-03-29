@@ -1,71 +1,48 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TbrService } from '../../services/tbr.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { fromEvent } from 'rxjs';
 import { TbrLine } from '../../models/tbr-line.model';
 import { Store } from '@ngrx/store';
 import { selectedTbr } from '../../state/tbr.selectors';
+import { IFormBuilder, IFormGroup } from '@rxweb/types';
+import { DialogComponent } from '../../ui/dialog/dialog.component';
+
+interface AddLineForm {
+  partNo: string;
+  plannedQty: string;
+  poNumber: string;
+}
+
+interface AddRefForm {
+  msgToCarrier: string;
+  pickupRef: string;
+  dispatchAdviceNumber: string;
+  orderNumber: string;
+  doNotMerge: string;
+}
 
 @Component({
   selector: 'app-tbr-details',
   templateUrl: './tbr-details.component.html',
   styleUrls: ['./tbr-details.component.scss'],
 })
-export class TbrDetailsComponent implements OnInit, AfterViewInit {
-  public details = this.store.select(selectedTbr);
-  public addLineFormGroup = this.fb.group({
-    partNo: this.fb.control(null, Validators.required),
-    plannedQty: this.fb.control(null, Validators.required),
-    poNumber: this.fb.control(null, Validators.required),    
-  });
-  public addRefFormGroup = this.fb.group({
-    msgToCarrier: this.fb.control(null),
-    pickupRef: this.fb.control(null),
-    doNotMerge: this.fb.control(false),
-  });
-
+export class TbrDetailsComponent {
   @ViewChild('addLineDialog')
-  public addLineDialog!: ElementRef;
-  @ViewChild('partNo')
-  public partNo!: ElementRef;
-  @ViewChild('plannedQty')
-  public plannedQty!: ElementRef;
-  @ViewChild('poNumber')
-  public poNumber!: ElementRef;
+  addLineDialog!: DialogComponent;
 
   @ViewChild('addReferencesDialog')
-  public addReferencesDialog!: ElementRef;
-  @ViewChild('msgToCarrier')
-  public msgToCarrier!: ElementRef;
-  @ViewChild('pickupRef')
-  public pickupRef!: ElementRef;
+  addReferencesDialog!: DialogComponent;
 
-  constructor(private router: Router, private tbrService: TbrService, private fb: FormBuilder, private store: Store) {}
+  details$ = this.store.select(selectedTbr);
+  addLineFormGroup!: IFormGroup<AddLineForm>;
+  addRefFormGroup!: IFormGroup<AddRefForm>;
 
-  ngOnInit(): void {}
+  private fb: IFormBuilder;
 
-  ngAfterViewInit() {
-    // @ts-ignore
-    fromEvent(this.partNo.nativeElement, 'change').subscribe((e: InputEvent) =>
-      this.addLineFormGroup.controls.partNo.setValue((e.target as HTMLInputElement).value)
-    );
-    // @ts-ignore
-    fromEvent(this.plannedQty.nativeElement, 'change').subscribe((e: InputEvent) =>
-      this.addLineFormGroup.controls.plannedQty.setValue((e.target as HTMLInputElement).value)
-    );
-    // @ts-ignore
-    fromEvent(this.poNumber.nativeElement, 'change').subscribe((e: InputEvent) =>
-      this.addLineFormGroup.controls.poNumber.setValue((e.target as HTMLInputElement).value)
-    );
-    // @ts-ignore
-    fromEvent(this.msgToCarrier.nativeElement, 'change').subscribe((e: InputEvent) =>
-      this.addRefFormGroup.controls.msgToCarrier.setValue((e.target as HTMLInputElement).value)
-    );
-    // @ts-ignore
-    fromEvent(this.pickupRef.nativeElement, 'change').subscribe((e: InputEvent) =>
-      this.addRefFormGroup.controls.pickupRef.setValue((e.target as HTMLInputElement).value)
-    );
+  constructor(private router: Router, private tbrService: TbrService, private store: Store, fb: FormBuilder) {
+    this.fb = fb;
+    this.createForm();
   }
 
   goBack() {
@@ -73,37 +50,36 @@ export class TbrDetailsComponent implements OnInit, AfterViewInit {
   }
 
   openAddDialog() {
-    this.addLineDialog.nativeElement.show();
+    this.addLineDialog.openDialog();
   }
 
-  saveAddLine() {    
-    console.log(this.addLineFormGroup.getRawValue());
+  saveAddLine() {
     this.cancelAddLine();
   }
 
   cancelAddLine() {
-    this.addLineDialog.nativeElement.close();
+    this.addLineDialog.closeDialog();
   }
 
   openAddRefDialog() {
-    this.addReferencesDialog.nativeElement.show();
+    this.addReferencesDialog.openDialog();
   }
 
   saveAddRef() {
-    console.log(this.addRefFormGroup.getRawValue());
     this.cancelAddRef();
   }
 
   cancelAddRef() {
-    this.addReferencesDialog.nativeElement.close();
+    this.addReferencesDialog.closeDialog();
   }
 
   navigateToThuDetails(line: TbrLine, shipitId: string) {
     this.router.navigate(['/', shipitId, line.articleNumber]);
   }
-  split(){
+
+  split() {
     //add logic
-    console.log("Split a line into two via an Interface in XTR MS")
+    console.log('Split a line into two via an Interface in XTR MS');
   }
 
   log(e: any) {
@@ -112,5 +88,21 @@ export class TbrDetailsComponent implements OnInit, AfterViewInit {
 
   goToWorkflow(shipitId: string) {
     this.router.navigate(['/workflow', shipitId]);
+  }
+
+  private createForm(): void {
+    this.addLineFormGroup = this.fb.group<AddLineForm>({
+      partNo: [null, Validators.required],
+      plannedQty: [null, Validators.required],
+      poNumber: [null, Validators.required],
+    });
+
+    this.addRefFormGroup = this.fb.group<AddRefForm>({
+      dispatchAdviceNumber: [null],
+      doNotMerge: [null],
+      msgToCarrier: [null],
+      orderNumber: [null],
+      pickupRef: [null],
+    });
   }
 }

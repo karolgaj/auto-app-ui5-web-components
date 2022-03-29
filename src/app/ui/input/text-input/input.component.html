@@ -1,4 +1,9 @@
-<div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem" [ngClass]="inputContainerClasses">
+<div
+  [fxLayout]="vertical ? 'column' : 'row'"
+  [fxLayoutAlign]="vertical ? '' : 'end center'"
+  [fxLayoutGap]="vertical ? '0.25rem' : '0.5rem'"
+  [ngClass]="inputContainerClasses"
+>
   <ng-content [before]></ng-content>
   <ui5-label *ngIf="label" [ngClass]="labelClasses" [for]="getId()" [required]="required" [showColon]="showColon"> {{ label }} </ui5-label>
   <ui5-input

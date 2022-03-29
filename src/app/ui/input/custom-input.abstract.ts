@@ -5,8 +5,6 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 let id = 0;
 
-type NgClasses = string[] | { [key: string]: boolean };
-
 type ValueState = 'Success' | 'Error';
 
 @UntilDestroy()
@@ -16,19 +14,19 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   customInput!: ElementRef;
 
   @Input()
-  inputClasses: NgClasses = [];
+  inputClasses: string[] = [];
 
   @Input()
-  inputContainerClasses: NgClasses = [];
+  inputContainerClasses: string[] = [];
 
   @Input()
-  labelClasses: NgClasses = [];
+  labelClasses: string[] = [];
 
   @Input()
   label!: string;
 
   @Input()
-  placeholder!: string;
+  placeholder: string = '';
 
   @Input()
   required = false;
@@ -37,7 +35,7 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   showColon = true;
 
   @Input()
-  debugControl = false;
+  vertical = false;
 
   onChange = (value: any) => {};
   onTouched = () => {};
