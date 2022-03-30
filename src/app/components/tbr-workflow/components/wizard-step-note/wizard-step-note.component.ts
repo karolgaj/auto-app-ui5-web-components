@@ -1,17 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { WizardStepAbstract } from '../wizard-step-abstract';
+import { IFormGroup } from '@rxweb/types';
+import { FormBuilder } from '@angular/forms';
+import { Tbr } from '../../../../models/tbr.model';
 
 @Component({
   selector: 'app-wizard-step-note',
   templateUrl: './wizard-step-note.component.html',
-  styleUrls: ['./wizard-step-note.component.scss'],
 })
 export class WizardStepNoteComponent extends WizardStepAbstract implements OnInit {
-  constructor() {
-    super();
+  form!: IFormGroup<any>;
+
+  constructor(fb: FormBuilder) {
+    super(fb);
   }
 
-  isValid(): boolean {
-    return true;
+  getData(): Partial<Tbr> {
+    return this.form.getRawValue();
   }
+
+  protected createForm(): void {
+    this.fb.group({
+      internalNote: null,
+    });
+  }
+
+  protected patchInitialForm(): void {}
 }

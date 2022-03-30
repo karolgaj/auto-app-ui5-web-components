@@ -22,6 +22,8 @@ export const selectTbr = createAction('[Tbr] Select Tbr', props<{ data: string }
 export const selectTbrSuccess = createAction('[Tbr] Select Tbr Success', props<{ data: Tbr }>());
 export const selectTbrFailure = createAction('[Tbr] Select Tbr Failure', props<{ error: any }>());
 
+export const updateSelectedTbr = createAction('[Tbr] Update Selected Tbr', props<{ data: Partial<Tbr> }>());
+
 export const loadAvailableNetworks = createAction('[Networks] Load network', props<{ data: NetworkForm }>());
 export const loadAvailableNetworksSuccess = createAction('[Networks] Load network Success', props<{ data: TbrNetwork[] }>());
 export const loadAvailableNetworksFailure = createAction('[Networks] Load network Failure', props<{ error: any }>());

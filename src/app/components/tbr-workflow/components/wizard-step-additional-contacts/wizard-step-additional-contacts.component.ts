@@ -1,59 +1,37 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { WizardStepAbstract } from '../wizard-step-abstract';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IFormArray, IFormBuilder } from '@rxweb/types';
+import { IFormArray } from '@rxweb/types';
 import { BehaviorSubject } from 'rxjs';
 import { DialogComponent } from '../../../../ui/dialog/dialog.component';
-
-const contactTypes = [
-  { value: 'BOOK_ON_BEHALF_OF', title: 'Book on behalf on' },
-  { value: 'APPROVE_ON_BEHALF_OF', title: 'Approve on behalf on' },
-  { value: 'CONTACT_AT_SUPPLIER', title: 'Contact at Supplier' },
-  { value: 'CONTACT_AT_CARRIER', title: 'Contact at Carrier' },
-  { value: 'CONTACT_AT_CROSS_DOCK', title: 'Contact at XDock' },
-  { value: 'CONTACT_AT_GOODS_RECEIVING', title: 'Contact at goods receiving' },
-];
-
-interface AdditionalContactData {
-  contactType: string;
-  name: string;
-  email: string;
-  phone: string;
-}
+import { contactTypes } from '../../constants';
+import { AdditionalContact, Tbr } from '../../../../models/tbr.model';
 
 @Component({
   selector: 'app-wizard-step-additional-contacts',
   templateUrl: './wizard-step-additional-contacts.component.html',
-  styleUrls: ['./wizard-step-additional-contacts.component.scss'],
 })
 export class WizardStepAdditionalContactsComponent extends WizardStepAbstract implements OnInit, AfterViewInit {
-  private fb: IFormBuilder;
   private editingIndex = new BehaviorSubject<number | null>(null);
 
   @ViewChild('contactTypeDialog')
   contactTypeDialog!: DialogComponent;
 
-  additionalContactsFormArray!: IFormArray<AdditionalContactData>;
+  form!: IFormArray<AdditionalContact>;
   openTypeDialog!: () => void;
   contactTypes = contactTypes;
 
   constructor(fb: FormBuilder) {
-    super();
-    this.fb = fb;
-    this.createForm();
+    super(fb);
   }
 
   ngAfterViewInit(): void {
     this.openTypeDialog = WizardStepAdditionalContactsComponent.openDialog.bind(this, this.contactTypeDialog);
   }
 
-  isValid(): boolean {
-    return true;
-  }
-
-  addAdditionalContact() {
-    this.additionalContactsFormArray.push(
-      this.fb.group<AdditionalContactData>({
+  addAdditionalContact(): void {
+    this.form.push(
+      this.fb.group<AdditionalContact>({
         contactType: [null, [Validators.required]],
         email: [null, [Validators.required, Validators.email]],
         name: [null],
@@ -62,31 +40,43 @@ export class WizardStepAdditionalContactsComponent extends WizardStepAbstract im
     );
   }
 
-  assignEditingIndex(editingIndex: number) {
+  assignEditingIndex(editingIndex: number): void {
     this.editingIndex.next(editingIndex);
   }
 
-  getFormGroup(rowForm: any) {
+  getFormGroup(rowForm: any): FormGroup {
     return rowForm as FormGroup;
   }
 
-  closeContactTypeDialog() {
+  closeContactTypeDialog(): void {
     this.editingIndex.next(null);
     this.contactTypeDialog.closeDialog();
   }
 
-  chooseContactType(contactType: string) {
+  chooseContactType(contactType: string): void {
     if (this.editingIndex.value != null) {
-      this.additionalContactsFormArray.at(this.editingIndex.value).get('contactType')?.setValue(contactType);
+      this.form.at(this.editingIndex.value).get('contactType')?.setValue(contactType);
     }
     this.closeContactTypeDialog();
   }
 
-  private createForm() {
-    this.additionalContactsFormArray = this.fb.array<AdditionalContactData>([]);
-    this.additionalContactsFormArray.valueChanges.subscribe((val) => {
+  getData(): Partial<Tbr> {
+    return {
+      additionalContacts: this.form.getRawValue(),
+    };
+  }
+
+  protected createForm(): void {
+    this.form = this.fb.array<AdditionalContact>([]);
+    this.form.valueChanges.subscribe((val) => {
       console.log(val);
     });
+  }
+
+  protected patchInitialForm(): void {
+    if (this.data.additionalContacts) {
+      this.form.patchValue(this.data.additionalContacts);
+    }
   }
 
   private static openDialog(dialog: DialogComponent): void {

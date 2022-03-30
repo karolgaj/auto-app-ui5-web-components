@@ -19,7 +19,7 @@
 
       <ui5-table-row
         data-ui5-compact-size
-        *ngFor="let rowForm of reasonCodesFormArray.controls; let i = index"
+        *ngFor="let rowForm of form.controls; let i = index"
         (click)="assignEditingIndex(i)"
         [formGroup]="getFormGroup(rowForm)"
       >
@@ -35,7 +35,6 @@
             [placeholder]="'Reason code'"
             formControlName="subCode"
             [icons]="[{ icon: 'value-help', action: openSubCodesDialog }]"
-            [disabled]="!(reasonCodesFormArray.at(i)?.get('cause')?.value || (subCodes$ | async)?.length)"
           ></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
@@ -43,7 +42,6 @@
             [placeholder]="'reason subcode'"
             formControlName="secondSubCode"
             [icons]="[{ icon: 'value-help', action: openSecondSubCodesDialog }]"
-            [disabled]="reasonCodesFormArray.at(i)?.get('subCode')?.value || (secondSubCodes$ | async)?.length"
           ></app-input>
         </ui5-table-cell>
         <ui5-table-cell>

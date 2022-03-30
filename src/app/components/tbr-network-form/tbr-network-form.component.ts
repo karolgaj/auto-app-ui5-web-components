@@ -7,12 +7,12 @@ import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { createTbr, loadAvailableNetworks, loadConsignors, loadShipItems, loadUnloadingPoints } from '../../state/tbr.actions';
 import { TbrLightDetails } from '../../models/tbr-light.model';
-import { NetworkForm, PlanningType, ServiceLevel, TransportType } from '../../models/network-form.model';
+import { NetworkForm } from '../../models/network-form.model';
 import { selectConsignors, selectNetworks, selectShipItems, selectUnloadingPoints } from '../../state/tbr.selectors';
 import { CustomAddress } from '../../models/custom-address.model';
 import { TbrNetwork } from '../../models/tbr-network.model';
-import { SelectionOption } from '../../models/selection-option.model';
 import { filter, take } from 'rxjs/operators';
+import { PLANNING_TYPE_OPTIONS, SERVICE_LEVEL_OPTIONS, TRANSPORT_TYPE_OPTIONS } from './constants';
 
 @UntilDestroy()
 @Component({
@@ -57,52 +57,9 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   customAddressForm!: IFormGroup<CustomAddress>;
   initFinish = false;
 
-  serviceLevelOptions: SelectionOption<ServiceLevel>[] = [
-    {
-      text: 'Standard Inbound',
-      value: 'STD_INB',
-    },
-    {
-      text: 'Closed Loop',
-      value: 'CLOSED_LOOP',
-    },
-  ];
-  transportTypeOptions: SelectionOption<TransportType>[] = [
-    {
-      text: 'FCL',
-      value: 'FCL',
-    },
-    {
-      text: 'FTL',
-      value: 'FTL',
-    },
-    {
-      text: 'LCL',
-      value: 'LCL',
-    },
-    {
-      text: 'LTL',
-      value: 'LTL',
-    },
-    {
-      text: 'MIX',
-      value: 'MIX',
-    },
-  ];
-  planningTypesOptions: SelectionOption<PlanningType>[] = [
-    {
-      text: 'Express',
-      value: 'EXPRESS',
-    },
-    {
-      text: 'Inbound',
-      value: 'INBOUND',
-    },
-    {
-      text: 'Outbound',
-      value: 'OUTBOUND',
-    },
-  ];
+  serviceLevelOptions = SERVICE_LEVEL_OPTIONS;
+  transportTypeOptions = TRANSPORT_TYPE_OPTIONS;
+  planningTypesOptions = PLANNING_TYPE_OPTIONS;
 
   get parmaDialogAccessibleName(): string {
     if (this.parmaSelection === 'consignor') {
@@ -183,11 +140,9 @@ export class TbrNetworkFormComponent implements AfterViewInit {
         this.loadingPointSelection = 'loadingPoint';
         TbrNetworkFormComponent.openDialog.call(this, this.unloadingPointDialog);
       };
-    });
 
-    setTimeout(() => {
       this.initFinish = true;
-    }, 500);
+    });
   }
 
   closeCustomAddressDialog(): void {
@@ -234,11 +189,11 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     this.closeShipListDialog();
   }
 
-  goBack() {
+  goBack(): void {
     this.router.navigate(['../']);
   }
 
-  chooseNetwork(tbrNetwork: TbrNetwork) {
+  chooseNetwork(tbrNetwork: TbrNetwork): void {
     this.networkForm.patchValue({
       ...tbrNetwork,
       consignor: tbrNetwork.consignorId,
@@ -256,7 +211,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     this.store.dispatch(createTbr({ data: payload }));
   }
 
-  selectParma(parma: { parma: string }) {
+  selectParma(parma: { parma: string }): void {
     if (this.parmaSelection === 'consignor') {
       this.networkForm.controls.consignor.setValue(parma.parma);
     } else if (this.parmaSelection === 'consignee') {
@@ -266,7 +221,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     this.closeParmaDialog();
   }
 
-  toggleAvailableNetwork() {
+  toggleAvailableNetwork(): void {
     this.availableNetworks$
       .pipe(
         take(1),

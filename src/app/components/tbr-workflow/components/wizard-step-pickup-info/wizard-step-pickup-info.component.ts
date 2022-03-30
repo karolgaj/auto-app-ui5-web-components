@@ -1,49 +1,69 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WizardStepAbstract } from '../wizard-step-abstract';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Tbr } from '../../../../models/tbr.model';
-import { IFormBuilder, IFormGroup } from '@rxweb/types';
+import { IFormGroup } from '@rxweb/types';
 
 interface PickupInfoForm {
-  pickupDate: string;
-  pickupTime: string;
-  openingHour: string;
-  closingHour: string;
-  reference: string;
-  msgToCarrier: string;
+  deliveryDate: string;
+  collectionTime: string;
+  openingHourAtCollection: string;
+  closingHourAtCollection: string;
+  pickupReference: string;
+  messageToCarrier: string;
 }
 
 @Component({
   selector: 'app-wizard-step-pickup-info',
   templateUrl: './wizard-step-pickup-info.component.html',
-  styleUrls: ['./wizard-step-pickup-info.component.scss'],
 })
 export class WizardStepPickupInfoComponent extends WizardStepAbstract implements OnInit {
-  @Input()
-  tbrDetails!: Tbr;
-
-  pickupInfoForm!: IFormGroup<PickupInfoForm>;
-
-  private fb: IFormBuilder;
+  form!: IFormGroup<PickupInfoForm>;
 
   constructor(fb: FormBuilder) {
-    super();
-    this.fb = fb;
-    this.createForm();
+    super(fb);
   }
 
-  isValid(): boolean {
-    return true;
+  ngOnInit() {
+    super.ngOnInit();
+    this.patchInitialForm();
   }
 
-  private createForm() {
-    this.pickupInfoForm = this.fb.group<PickupInfoForm>({
-      closingHour: [null, [Validators.required]],
-      openingHour: [null, [Validators.required]],
-      pickupTime: [null, [Validators.required]],
-      pickupDate: null,
-      reference: null,
-      msgToCarrier: null,
+  getData(): Partial<Tbr> {
+    const payload = this.form.getRawValue();
+    return {
+      approvalDecision: {
+        collectionTime: payload.collectionTime,
+        openingHourAtCollection: payload.openingHourAtCollection,
+        closingHourAtCollection: payload.closingHourAtCollection,
+      },
+      pickupReference: payload.pickupReference,
+      messageToCarrier: payload.messageToCarrier,
+    };
+  }
+
+  protected createForm(): void {
+    this.form = this.fb.group<PickupInfoForm>({
+      deliveryDate: null,
+      closingHourAtCollection: [null, [Validators.required]],
+      openingHourAtCollection: [null, [Validators.required]],
+      collectionTime: [null, [Validators.required]],
+      pickupReference: [null, [Validators.maxLength(70)]],
+      messageToCarrier: [null, [Validators.maxLength(70)]],
     });
+    this.form.controls.deliveryDate.disable();
+  }
+
+  protected patchInitialForm(): void {
+    const data = {
+      approvalDecision: {
+        collectionTime: this.data.approvalDecision?.collectionTime,
+        openingHourAtCollection: this.data.approvalDecision?.openingHourAtCollection,
+        closingHourAtCollection: this.data.approvalDecision?.closingHourAtCollection,
+      },
+      pickupReference: this.data.pickupReference,
+      messageToCarrier: this.data.messageToCarrier,
+    };
+    this.form.patchValue(data);
   }
 }

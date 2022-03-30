@@ -4,10 +4,13 @@
   <div fxLayout fxLayoutGap="1rem" style="width: 100%">
     <ui5-card class="medium" fxFlex>
       <ui5-card-header
+        #partialExpressType
         slot="header"
+        interactive="true"
+        [status]="partialExpressTypeStatus$ | async"
         [titleText]="'COMMON.PARTIAL_EXPRESS' | translate | titlecase"
         [subtitleText]="'COMMON.PARTIAL_EXPRESS_TEXT' | translate "
-        (click)="selectType('xdock')"
+        (click)="selectType('PARTIAL_EXPRESS')"
       >
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
@@ -15,10 +18,13 @@
 
     <ui5-card class="medium" fxFlex>
       <ui5-card-header
+        #expressType
         slot="header"
+        interactive="true"
+        [status]="expressTypeStatus$ | async"
         [titleText]="'COMMON.EXPRESS' | translate | titlecase"
         [subtitleText]="'COMMON.EXPRESS_TEXT' | translate "
-        (click)="selectType('express')"
+        (click)="selectType('EXPRESS')"
       >
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
@@ -31,13 +37,13 @@
     fxLayoutAlign="stretch end"
     class="wizard-step__content"
     fxLayoutGap="0.5rem"
-    [formGroup]="transportTypeForm"
+    [formGroup]="form"
   >
-    <app-datepicker formControlName="mustArriveDate" [required]="true" label="{{'COMMON.MUST_ARRIVE_DATE' | translate | titlecase }}"></app-datepicker>
-    <app-timepicker formControlName="mustArriveTime" [required]="true" label="{{'COMMON.MUST_ARRIVE_TIME' | translate | titlecase }}"></app-timepicker>
-    <app-timepicker formControlName="openingHour" label="{{'COMMON.DROPOF_OPENING_HOUR' | translate  }}"></app-timepicker>
-    <app-timepicker formControlName="closingHour" label="{{'COMMON.DROPOF_CLOSING_HOUR' | translate  }}"></app-timepicker>
-    <app-input formControlName="xdock" label="{{'COMMON.XDOCK' | translate  }}"></app-input>
+    <app-datepicker formControlName="mustArriveDate" [required]="true" [label]="'COMMON.MUST_ARRIVE_DATE' | translate | titlecase"></app-datepicker>
+    <app-timepicker formControlName="mustArriveTime" [required]="true" [label]="'COMMON.MUST_ARRIVE_TIME' | translate | titlecase"></app-timepicker>
+    <app-timepicker formControlName="openingHourAtDelivery" [label]="'COMMON.DROPOF_OPENING_HOUR' | translate"></app-timepicker>
+    <app-timepicker formControlName="closeHourAtDelivery" [label]="'COMMON.DROPOF_CLOSING_HOUR' | translate"></app-timepicker>
+    <app-input *ngIf="isCrossDock$ | async" formControlName="crossDock" [label]="'COMMON.XDOCK' | translate"></app-input>
   </div>
 
   <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>

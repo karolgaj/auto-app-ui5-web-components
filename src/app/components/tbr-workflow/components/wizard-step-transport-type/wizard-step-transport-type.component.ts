@@ -1,48 +1,109 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { WizardStepAbstract } from '../wizard-step-abstract';
 import { FormBuilder } from '@angular/forms';
-import { IFormBuilder, IFormGroup } from '@rxweb/types';
+import { IFormGroup } from '@rxweb/types';
+import { Tbr } from '../../../../models/tbr.model';
+import { map } from 'rxjs/operators';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Observable } from 'rxjs';
 
+type TransportType = 'PARTIAL_EXPRESS' | 'EXPRESS';
 interface TransportTypeForm {
-  xdock: string;
+  crossDock: string;
   mustArriveDate: string;
   mustArriveTime: string;
-  openingHour: string;
-  closingHour: string;
+  mustArriveTimeZone: string;
+  openingHourAtDelivery: string;
+  closeHourAtDelivery: string;
+  transportSelection: TransportType;
+  expressType: 'NORMAL';
 }
 
+@UntilDestroy()
 @Component({
   selector: 'app-wizard-step-transport-type',
   templateUrl: './wizard-step-transport-type.component.html',
-  styleUrls: ['./wizard-step-transport-type.component.scss'],
 })
 export class WizardStepTransportTypeComponent extends WizardStepAbstract implements OnInit {
-  transportTypeForm!: IFormGroup<TransportTypeForm>;
-  selectedType?: string;
+  @ViewChild('partialExpressType')
+  partialExpressType!: ElementRef;
 
-  private fb: IFormBuilder;
+  @ViewChild('expressType')
+  expressType!: ElementRef;
+
+  form!: IFormGroup<TransportTypeForm>;
+  isCrossDock$!: Observable<boolean | null>;
+  expressTypeStatus$!: Observable<string>;
+  partialExpressTypeStatus$!: Observable<string>;
 
   constructor(fb: FormBuilder) {
-    super();
-    this.fb = fb;
-    this.createForm();
+    super(fb);
   }
 
-  isValid(): boolean {
-    return true;
+  ngOnInit() {
+    super.ngOnInit();
+    this.watchForm();
   }
 
-  selectType(type: string) {
-    this.selectedType = type;
+  selectType(type: TransportType) {
+    this.form.reset({
+      closeHourAtDelivery: '',
+      crossDock: '',
+      expressType: 'NORMAL',
+      mustArriveDate: '',
+      mustArriveTime: '',
+      mustArriveTimeZone: '',
+      openingHourAtDelivery: '',
+      transportSelection: type,
+    });
   }
 
-  private createForm(): void {
-    this.transportTypeForm = this.fb.group<TransportTypeForm>({
-      xdock: [null],
-      closingHour: [null],
+  getData(): Partial<Tbr> {
+    return {};
+  }
+
+  protected createForm(): void {
+    this.form = this.fb.group<TransportTypeForm>({
+      transportSelection: [null],
+      expressType: 'NORMAL',
+      crossDock: [null],
       mustArriveDate: [null],
       mustArriveTime: [null],
-      openingHour: [null],
+      mustArriveTimeZone: [null],
+      openingHourAtDelivery: [null],
+      closeHourAtDelivery: [null],
     });
+  }
+
+  protected patchInitialForm(): void {}
+
+  private watchForm(): void {
+    this.isCrossDock$ = this.form.controls.transportSelection.valueChanges.pipe(
+      map((value) => {
+        if (value) {
+          return value === 'PARTIAL_EXPRESS';
+        }
+        return null;
+      }),
+      untilDestroyed(this)
+    );
+
+    this.expressTypeStatus$ = this.isCrossDock$.pipe(
+      map((value) => {
+        if (value == null) {
+          return '';
+        }
+        return value ? '' : 'Selected';
+      })
+    );
+
+    this.partialExpressTypeStatus$ = this.isCrossDock$.pipe(
+      map((value) => {
+        if (value == null) {
+          return '';
+        }
+        return value ? 'Selected' : '';
+      })
+    );
   }
 }

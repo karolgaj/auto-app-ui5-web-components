@@ -7,51 +7,65 @@
 <ui5-wizard #wizard (stepChange)="stepChange($event)" *ngIf="details$ | async as tbrDetails">
   <ui5-wizard-step style="padding: 2rem" [titleText]="'COMMON.PICKUP_INFO' | translate | titlecase" selected>
     <app-wizard-step-pickup-info
+      #wizardStep
       [titleText]="'COMMON.PICKUP_INFO' | translate | titlecase"
       [stepIndex]="0"
-      (nextStep)="goToStep($event)"
       [tbrDetails]="tbrDetails"
+      [data]="tbrDetails"
+      (nextStep)="goToStep($event)"
     ></app-wizard-step-pickup-info>
   </ui5-wizard-step>
   <ui5-wizard-step [titleText]="'COMMON.CONTACT_PERSON' | translate | titlecase" disabled>
     <app-wizard-step-contact
+      #wizardStep
       [titleText]="'COMMON.CONTACT_PERSON_FULL' | translate | titlecase"
       [stepIndex]="1"
+      [data]="tbrDetails"
       (nextStep)="goToStep($event)"
     ></app-wizard-step-contact>
   </ui5-wizard-step>
   <ui5-wizard-step [titleText]="'COMMON.TRANSPORT_TYPE' | translate | titlecase" disabled>
     <app-wizard-step-transport-type
+      #wizardStep
       [titleText]="'COMMON.TRANSPORT_TYPE' | translate | titlecase"
       [stepIndex]="2"
+      [data]="tbrDetails"
       (nextStep)="goToStep($event)"
     ></app-wizard-step-transport-type>
   </ui5-wizard-step>
-  <ui5-wizard-step [titleText]="'COMMON.COST_OWNER' | translate | titlecase" disabled>
+  <ui5-wizard-step [titleText]="'COMMON.COST_OWNER' | translate | titlecase">
     <app-wizard-step-cost-owner
+      #wizardStep
       [titleText]="'COMMON.COST_OWNER' | translate | titlecase"
       [stepIndex]="3"
+      [data]="tbrDetails"
       (nextStep)="goToStep($event)"
     ></app-wizard-step-cost-owner>
   </ui5-wizard-step>
   <ui5-wizard-step [titleText]="'COMMON.REASON_CODE' | translate | titlecase" disabled>
     <app-wizard-step-reason-code
+      #wizardStep
       [titleText]="'COMMON.REASON_CODE' | translate | titlecase"
       [stepIndex]="4"
+      [data]="tbrDetails"
       (nextStep)="goToStep($event)"
     ></app-wizard-step-reason-code>
   </ui5-wizard-step>
   <ui5-wizard-step [titleText]="'COMMON.NOTE' | translate | titlecase" disabled>
     <app-wizard-step-note
+      #wizardStep
       [titleText]="'COMMON.NOTE' | translate | titlecase"
       [stepIndex]="5"
+      [data]="tbrDetails"
       (nextStep)="goToStep($event)"
     ></app-wizard-step-note>
   </ui5-wizard-step>
   <ui5-wizard-step [titleText]="'COMMON.ADDITIONAL_CONTACTS' | translate | titlecase" disabled>
     <app-wizard-step-additional-contacts
+      #wizardStep
       [titleText]="'COMMON.ADDITIONAL_CONTACTS' | translate | titlecase"
       [stepIndex]="6"
+      [data]="tbrDetails"
       (nextStep)="goToStep($event)"
     ></app-wizard-step-additional-contacts>
   </ui5-wizard-step>

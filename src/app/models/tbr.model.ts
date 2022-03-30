@@ -1,6 +1,7 @@
 import { ShipitStatus } from './tbr-type.model';
 
 export interface Tbr {
+  additionalContacts?: AdditionalContact[];
   orderReleaseLines: OrderReleaseLine[];
   transportBookings: any[];
   shipUnitLines: ShipUnitLine[];
@@ -11,8 +12,8 @@ export interface Tbr {
   consignor: Consignee;
   shipTo: Consignee;
   shipFrom: Consignee;
-  approvalRequest: null;
-  approvalDecision: null;
+  approvalRequest: any;
+  approvalDecision: ApprovalDecision;
   responsibleOfficeDecision: null;
   transportNetwork: TransportNetwork;
   apiVersion: string;
@@ -42,8 +43,8 @@ export interface Tbr {
   split: boolean;
   orderNumbers: any[];
   dispatchAdviceNumber: null;
-  pickupReference: null;
-  messageToCarrier: null;
+  pickupReference?: string;
+  messageToCarrier?: string;
   internalNote: null;
   splitFromId: null;
   splitToId: null;
@@ -59,6 +60,8 @@ export interface Tbr {
   crossDock: null;
   lines: any[];
 }
+
+export type ApprovalDecision = any;
 
 export interface Consignee {
   parma: string;
@@ -264,4 +267,11 @@ export interface TransportNetwork {
   updatedAt: Date;
   createdBy: null;
   updatedBy: null;
+}
+
+export interface AdditionalContact {
+  contactType: string;
+  name: string;
+  email: string;
+  phone: string;
 }

@@ -74,6 +74,13 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   }
 
   get valueState(): ValueState | null {
+    if (this.disabled) {
+      return null;
+    }
+
+    if (this.formControl?.touched) {
+      return this.formControl.invalid ? 'Error' : 'Success';
+    }
     return null;
   }
 

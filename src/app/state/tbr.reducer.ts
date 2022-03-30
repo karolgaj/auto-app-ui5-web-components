@@ -40,6 +40,29 @@ export const reducer = createReducer(
     ...state,
     selectedTbr: action.data,
   })),
+  on(TbrActions.updateSelectedTbr, (state, action) => {
+    let selectedTbr = { ...state.selectedTbr } as Tbr;
+    const data = { ...action.data };
+
+    if (data.approvalDecision) {
+      selectedTbr.approvalDecision = {
+        ...selectedTbr.approvalDecision,
+        ...data.approvalDecision,
+      };
+
+      delete data.approvalDecision;
+    }
+
+    selectedTbr = {
+      ...selectedTbr,
+      ...data,
+    };
+
+    return {
+      ...state,
+      selectedTbr,
+    };
+  }),
 
   on(
     TbrActions.loadTbrsFailure,

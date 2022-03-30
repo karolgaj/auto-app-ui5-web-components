@@ -19,7 +19,7 @@
 
       <ui5-table-row
         data-ui5-compact-size
-        *ngFor="let rowForm of additionalContactsFormArray.controls; let i = index"
+        *ngFor="let rowForm of form.controls; let i = index"
         (click)="assignEditingIndex(i)"
         [formGroup]="getFormGroup(rowForm)"
       >

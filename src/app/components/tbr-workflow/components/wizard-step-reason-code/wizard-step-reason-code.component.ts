@@ -3,12 +3,13 @@ import { WizardStepAbstract } from '../wizard-step-abstract';
 import { Store } from '@ngrx/store';
 import { selectCauses } from '../../../../state/tbr.selectors';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { IFormArray, IFormBuilder } from '@rxweb/types';
+import { IFormArray } from '@rxweb/types';
 import { loadReasonCodes } from '../../../../state/tbr.actions';
 import { DialogComponent } from '../../../../ui/dialog/dialog.component';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { SecondSubCode, SubCode } from '../../../../models/reason-code.model';
 import { filter, map, switchMap, take } from 'rxjs/operators';
+import { Tbr } from '../../../../models/tbr.model';
 
 interface ReasonCodeData {
   cause: string;
@@ -20,10 +21,8 @@ interface ReasonCodeData {
 @Component({
   selector: 'app-wizard-step-reason-code',
   templateUrl: './wizard-step-reason-code.component.html',
-  styleUrls: ['./wizard-step-reason-code.component.scss'],
 })
 export class WizardStepReasonCodeComponent extends WizardStepAbstract implements OnInit, AfterViewInit {
-  private fb: IFormBuilder;
   private editingIndex = new BehaviorSubject<number | null>(null);
 
   @ViewChild('reasonCodeDialog')
@@ -41,7 +40,7 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
       if (editingIndex == null) {
         return null;
       }
-      return this.reasonCodesFormArray.at(editingIndex).get('cause')?.value;
+      return this.form.at(editingIndex).get('cause')?.value;
     }),
     switchMap((value) => {
       if (value == null) {
@@ -59,7 +58,7 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
     map((subCodes) => {
       const editingIndex = this.editingIndex.value;
       if (editingIndex != null) {
-        const subCode = this.reasonCodesFormArray.at(editingIndex).get('subCode')?.value;
+        const subCode = this.form.at(editingIndex).get('subCode')?.value;
 
         if (subCode) {
           return subCodes?.find((sc) => sc.code === subCode)?.secondSubCodes;
@@ -70,17 +69,15 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
     })
   );
 
-  reasonCodesFormArray!: IFormArray<ReasonCodeData>;
+  form!: IFormArray<ReasonCodeData>;
 
   openReasonCodesDialog!: () => void;
   openSecondSubCodesDialog!: () => void;
   openSubCodesDialog!: () => void;
 
   constructor(private store: Store, fb: FormBuilder) {
-    super();
-    this.fb = fb;
+    super(fb);
     this.store.dispatch(loadReasonCodes());
-    this.createForm();
   }
 
   ngAfterViewInit(): void {
@@ -115,12 +112,8 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
     };
   }
 
-  isValid(): boolean {
-    return true;
-  }
-
   addReasonCode(): void {
-    this.reasonCodesFormArray.push(
+    this.form.push(
       this.fb.group<ReasonCodeData>({
         cause: [null],
         subCode: [null],
@@ -151,21 +144,21 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
 
   chooseReasonCode(cause: number): void {
     if (this.editingIndex.value != null) {
-      this.reasonCodesFormArray.at(this.editingIndex.value).get('cause')?.setValue(cause);
+      this.form.at(this.editingIndex.value).get('cause')?.setValue(cause);
     }
     this.closeReasonCodesDialog();
   }
 
   chooseSubCode(subCode: SubCode): void {
     if (this.editingIndex.value != null) {
-      this.reasonCodesFormArray.at(this.editingIndex.value).get('subCode')?.setValue(subCode.code);
+      this.form.at(this.editingIndex.value).get('subCode')?.setValue(subCode.code);
     }
     this.closeSubCodesDialog();
   }
 
   chooseSecondSubCode(secondSubCode: SecondSubCode): void {
     if (this.editingIndex.value != null) {
-      this.reasonCodesFormArray.at(this.editingIndex.value).get('subCode')?.setValue(secondSubCode.code);
+      this.form.at(this.editingIndex.value).get('subCode')?.setValue(secondSubCode.code);
     }
     this.closeSubCodesDialog();
   }
@@ -174,9 +167,19 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
     this.editingIndex.next(editingIndex);
   }
 
-  private createForm(): void {
-    this.reasonCodesFormArray = this.fb.array<ReasonCodeData>([]);
+  getData(): Partial<Tbr> {
+    return {
+      approvalDecision: {
+        reasonCodes: this.form.getRawValue(),
+      },
+    };
   }
+
+  protected createForm(): void {
+    this.form = this.fb.array<ReasonCodeData>([]);
+  }
+
+  protected patchInitialForm(): void {}
 
   private static openDialog(dialog: DialogComponent): void {
     dialog.openDialog();

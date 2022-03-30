@@ -2,7 +2,7 @@
   <ng-content [before]></ng-content>
   <ui5-label *ngIf="label" [ngClass]="labelClasses" [for]="getId()" [required]="required" [showColon]="showColon"> {{ label }} </ui5-label>
   <ui5-select #customInput [valueState]="valueState" class="select">
-    <ui5-option *ngFor="let option of selectionOptions" [icon]="option.icon" [value]="option.value" [selected]="option.value === value">
+    <ui5-option *ngFor="let option of selectionOptions" [icon]="option.icon" [value]="option.value" [selected]="option.value === value" [disabled]="disabled">
       {{ option.text }}
     </ui5-option>
     <!--   sanitize innerHTML pipe with DOM sanitizer  -->

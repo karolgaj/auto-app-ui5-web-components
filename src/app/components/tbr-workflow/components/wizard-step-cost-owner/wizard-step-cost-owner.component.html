@@ -5,9 +5,10 @@
     <ui5-card class="medium" fxFlex>
       <ui5-card-header
         slot="header"
+        interactive="true"
         [titleText]="'COMMON.COST_OWNER_VOLVO' | translate | titlecase"
         [subtitleText]="'COMMON.COST_OWNER_VOLVO_TEXT' | translate | titlecase"
-        (click)="selectCostOwner('consignee')"
+        (click)="selectCostOwner('CONSIGNEE')"
       >
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
@@ -16,9 +17,10 @@
     <ui5-card class="medium" fxFlex>
       <ui5-card-header
         slot="header"
-        [titleText]="consignor"
+        interactive="true"
+        [titleText]="data.consignor.name"
         [subtitleText]="'COMMON.COST_OWNER_CONSIGNOR_TEXT' | translate | titlecase"
-        (click)="selectCostOwner('consignor')"
+        (click)="selectCostOwner('CONSIGNOR')"
       >
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
@@ -27,9 +29,10 @@
     <ui5-card class="medium" fxFlex>
       <ui5-card-header
         slot="header"
+        interactive="true"
         [titleText]="'COMMON.COST_OWNER_SHARED_COST' | translate | titlecase"
         [subtitleText]="'COMMON.COST_OWNER_SHARED_COST_TEXT' | translate | titlecase"
-        (click)="selectCostOwner('shared')"
+        (click)="selectCostOwner('SHARED')"
       >
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
@@ -38,25 +41,26 @@
     <ui5-card class="medium" fxFlex>
       <ui5-card-header
         slot="header"
+        interactive="true"
         [titleText]="'COMMON.COST_OWNER_NOT_AGREED' | translate | titlecase"
         [subtitleText]="'COMMON.COST_OWNER_VOLVO_TEXT' | translate | titlecase"
-        (click)="selectCostOwner('notAgreed')"
+        (click)="selectCostOwner('NOT_AGREED')"
       >
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
     </ui5-card>
   </div>
 
-  <div fxLayout="column" fxFlex fxLayoutAlign="stretch end" class="wizard-step__content" fxLayoutGap="0.5rem" [formGroup]="costOwnerForm">
+  <div fxLayout="column" fxFlex fxLayoutAlign="stretch end" class="wizard-step__content" fxLayoutGap="0.5rem" [formGroup]="form">
     <app-input formControlName="consignor" [label]="'COMMON.CONSIGNOR' | translate | titlecase"></app-input>
     <app-input formControlName="consignee" [label]="'COMMON.CONSIGNEE' | translate | titlecase"></app-input>
   </div>
 
   <ui5-label>{{ "COMMON.COST_OWNER_CONSIGNEE_COST" | translate | titlecase }}: </ui5-label>
-  <ui5-slider #consigneeSlider min="0" max="100" step="5" value="50" show-tooltip label-interval="2" show-tickmarks></ui5-slider>
+  <ui5-slider #consigneeSlider min="0" max="100" step="5" [value]="consigneeCost" show-tooltip label-interval="2" show-tickmarks></ui5-slider>
 
   <ui5-label>{{ "COMMON.COST_OWNER_CONSIGNOR_COST" | translate | titlecase }}: </ui5-label>
-  <ui5-slider #consignorSlider min="0" max="100" step="5" value="50" show-tooltip label-interval="2" show-tickmarks></ui5-slider>
+  <ui5-slider #consignorSlider min="0" max="100" step="5" [value]="consignorCost" show-tooltip label-interval="2" show-tickmarks></ui5-slider>
 
   <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
 </div>
