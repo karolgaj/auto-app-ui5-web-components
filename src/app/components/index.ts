@@ -6,7 +6,7 @@ import { TbrDetailsComponent } from './tbr-details';
 import { TbrEmptyStateComponent } from './tbr-empty-state';
 import { TbrListComponent } from './tbr-list';
 
-export const components = [
+export const COMPONENTS = [
   ...WORKFLOW_COMPONENTS,
   ThuDetailsComponent,
   TbrNetworkComponent,
