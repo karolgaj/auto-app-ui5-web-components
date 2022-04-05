@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as fromTbr from './tbr.reducer';
-import { ReasonCode } from '../models/reason-code.model';
+import { ReasonCode } from '../../models/reason-code.model';
 
 export const selectTbrState = createFeatureSelector<fromTbr.State>(fromTbr.tbrFeatureKey);
 

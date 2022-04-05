@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { TbrService } from '../../services/tbr.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
-import { selectedTbr } from '../../state/tbr.selectors';
 import { Store } from '@ngrx/store';
+import { map, switchMap } from 'rxjs/operators';
+
+import { TbrService } from '../../services';
+import { selectedTbr } from '../../state';
 
 @Component({
   selector: 'app-thu-details',

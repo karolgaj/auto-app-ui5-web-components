@@ -1,12 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { TbrService } from '../../services/tbr.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TbrLine } from '../../models/tbr-line.model';
+import { Router } from '@angular/router';
+import { IFormBuilder, IFormControl, IFormGroup } from '@rxweb/types';
 import { Store } from '@ngrx/store';
-import { selectedTbr } from '../../state/tbr.selectors';
-import { IFormBuilder, IFormGroup } from '@rxweb/types';
+import { filter, take } from 'rxjs/operators';
+
+import { TbrService } from '../../services';
+import { TbrLine } from '../../models/tbr-line.model';
+import { selectedTbr } from '../../state';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
+import { Tbr } from '../../models/tbr.model';
+import { CommonValidators } from '../../utils/validators';
 
 interface AddLineForm {
   partNo: string;
@@ -25,7 +29,6 @@ interface AddRefForm {
 @Component({
   selector: 'app-tbr-details',
   templateUrl: './tbr-details.component.html',
-  styleUrls: ['./tbr-details.component.scss'],
 })
 export class TbrDetailsComponent {
   @ViewChild('addLineDialog')
@@ -34,15 +37,32 @@ export class TbrDetailsComponent {
   @ViewChild('addReferencesDialog')
   addReferencesDialog!: DialogComponent;
 
-  details$ = this.store.select(selectedTbr);
+  private details$ = this.store.select(selectedTbr);
+  tbrDetails?: Tbr;
+  lines?: any[];
   addLineFormGroup!: IFormGroup<AddLineForm>;
   addRefFormGroup!: IFormGroup<AddRefForm>;
+  deliveryDateFormControl!: IFormControl<string>;
 
   private fb: IFormBuilder;
 
   constructor(private router: Router, private tbrService: TbrService, private store: Store, fb: FormBuilder) {
     this.fb = fb;
+    this.details$.pipe(take(1)).subscribe((value) => {
+      this.tbrDetails = value;
+      this.lines = value?.lines.map((line) => {
+        const packagedQuantityControl = this.fb.control<number>(line.packagedQuantity, [Validators.required]);
+        const typeControl = this.fb.control<number>(line.type, [Validators.required]);
+
+        return {
+          ...line,
+          packagedQuantityControl,
+          typeControl,
+        };
+      });
+    });
     this.createForm();
+    this.patchForm();
   }
 
   goBack() {
@@ -54,6 +74,10 @@ export class TbrDetailsComponent {
   }
 
   saveAddLine() {
+    const newLineData = this.addLineFormGroup.getRawValue();
+    this.addLineFormGroup.reset();
+    this.addLineFormGroup.markAsPristine();
+
     this.cancelAddLine();
   }
 
@@ -87,6 +111,15 @@ export class TbrDetailsComponent {
   }
 
   goToWorkflow(shipitId: string) {
+    const areLinesInvalid: boolean =
+      this.lines == null ||
+      this.lines?.length === 0 ||
+      this.lines?.some((line) => line.packagedQuantityControl.invalid || line.typeControl.invalid);
+
+    if (this.deliveryDateFormControl.invalid && areLinesInvalid) {
+      return;
+    }
+    // this.store.dispatch go to workflow, change status, navigate to workflow
     this.router.navigate(['/workflow', shipitId]);
   }
 
@@ -104,5 +137,18 @@ export class TbrDetailsComponent {
       orderNumber: [null],
       pickupRef: [null],
     });
+
+    this.deliveryDateFormControl = this.fb.control<string>(null, [Validators.required, CommonValidators.IsNotPastDateValidator]);
+  }
+
+  private patchForm(): void {
+    this.details$
+      .pipe(
+        filter((value) => !!value),
+        take(1)
+      )
+      .subscribe((value) => {
+        this.deliveryDateFormControl.patchValue(value?.deliveryDate ?? null);
+      });
   }
 }

@@ -6,6 +6,7 @@ import { Tbr } from '../../../../models/tbr.model';
 import { map } from 'rxjs/operators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable } from 'rxjs';
+import { CommonValidators } from '../../../../utils/validators';
 
 type TransportType = 'PARTIAL_EXPRESS' | 'EXPRESS';
 interface TransportTypeForm {
@@ -63,16 +64,25 @@ export class WizardStepTransportTypeComponent extends WizardStepAbstract impleme
   }
 
   protected createForm(): void {
-    this.form = this.fb.group<TransportTypeForm>({
-      transportSelection: [null],
-      expressType: 'NORMAL',
-      crossDock: [null],
-      mustArriveDate: [null],
-      mustArriveTime: [null],
-      mustArriveTimeZone: [null],
-      openingHourAtDelivery: [null],
-      closeHourAtDelivery: [null],
-    });
+    this.form = this.fb.group<TransportTypeForm>(
+      {
+        transportSelection: [null],
+        expressType: 'NORMAL',
+        crossDock: [null],
+        mustArriveDate: [null],
+        mustArriveTime: [null],
+        mustArriveTimeZone: [null],
+        openingHourAtDelivery: [null],
+        closeHourAtDelivery: [null],
+      },
+      {
+        validators: [
+          CommonValidators.IsHourInBetweenHours<TransportTypeForm>('mustArriveTime', 'openingHourAtDelivery', 'closeHourAtDelivery'),
+          CommonValidators.IsDateAfterDate<TransportTypeForm>('mustArriveDate', undefined, this.data.deliveryDate),
+          CommonValidators.IsHourBeforeHour<TransportTypeForm>('openingHourAtDelivery', 'closeHourAtDelivery'),
+        ],
+      }
+    );
   }
 
   protected patchInitialForm(): void {}

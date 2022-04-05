@@ -3,6 +3,7 @@ import { WizardStepAbstract } from '../wizard-step-abstract';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Tbr } from '../../../../models/tbr.model';
 import { IFormGroup } from '@rxweb/types';
+import { CommonValidators } from '../../../../utils/validators';
 
 interface PickupInfoForm {
   deliveryDate: string;
@@ -43,14 +44,22 @@ export class WizardStepPickupInfoComponent extends WizardStepAbstract implements
   }
 
   protected createForm(): void {
-    this.form = this.fb.group<PickupInfoForm>({
-      deliveryDate: null,
-      closingHourAtCollection: [null, [Validators.required]],
-      openingHourAtCollection: [null, [Validators.required]],
-      collectionTime: [null, [Validators.required]],
-      pickupReference: [null, [Validators.maxLength(70)]],
-      messageToCarrier: [null, [Validators.maxLength(70)]],
-    });
+    this.form = this.fb.group<PickupInfoForm>(
+      {
+        deliveryDate: null,
+        closingHourAtCollection: [null, [Validators.required]],
+        openingHourAtCollection: [null, [Validators.required]],
+        collectionTime: [null, [Validators.required]],
+        pickupReference: [null, [Validators.maxLength(70)]],
+        messageToCarrier: [null, [Validators.maxLength(70)]],
+      },
+      {
+        validators: [
+          CommonValidators.IsHourInBetweenHours<PickupInfoForm>('deliveryDate', 'openingHourAtCollection', 'closingHourAtCollection'),
+          CommonValidators.IsHourBeforeHour<PickupInfoForm>('openingHourAtCollection', 'closingHourAtCollection'),
+        ],
+      }
+    );
     this.form.controls.deliveryDate.disable();
   }
 
@@ -63,6 +72,7 @@ export class WizardStepPickupInfoComponent extends WizardStepAbstract implements
       },
       pickupReference: this.data.pickupReference,
       messageToCarrier: this.data.messageToCarrier,
+      deliveryDate: this.data.deliveryDate,
     };
     this.form.patchValue(data);
   }

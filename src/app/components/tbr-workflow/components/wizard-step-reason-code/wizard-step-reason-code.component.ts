@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { WizardStepAbstract } from '../wizard-step-abstract';
 import { Store } from '@ngrx/store';
-import { selectCauses } from '../../../../state/tbr.selectors';
+import { selectCauses } from '../../../../state/tbr/tbr.selectors';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IFormArray } from '@rxweb/types';
-import { loadReasonCodes } from '../../../../state/tbr.actions';
+import { loadReasonCodes } from '../../../../state/tbr/tbr.actions';
 import { DialogComponent } from '../../../../ui/dialog/dialog.component';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { SecondSubCode, SubCode } from '../../../../models/reason-code.model';

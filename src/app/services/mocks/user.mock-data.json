@@ -1,0 +1,18 @@
+{
+  "userId": "",
+  "version": 1,
+  "roles": "[]",
+  "consigneeParmas": "[]",
+  "consignorParmas": "[]",
+  "systemOfMeasurement": "METRIC",
+  "dateFormat": "dd/MM/yyyy",
+  "timeFormat": "HH:mm",
+  "active": true,
+  "createdAt": "",
+  "updatedAt": "",
+  "firstname": "Karol",
+  "lastname": "Gaj",
+  "fullname": "Karol Gaj",
+  "email": "karol.gaj@consultant.volvo.com",
+  "phone": "+23423423123"
+}

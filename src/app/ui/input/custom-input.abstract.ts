@@ -37,10 +37,15 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   @Input()
   vertical = false;
 
+  @Input()
+  formatValue?: (value: any) => any;
+
   onChange = (value: any) => {};
   onTouched = () => {};
   disabled = false;
   touched = false;
+
+  formattedValue!: any;
 
   value: any;
   formControl!: FormControl;
@@ -68,6 +73,7 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
     // @ts-ignore
     fromEvent(this.customInput.nativeElement, 'change').subscribe((e: InputEvent) => {
       this.value = (e.target as HTMLInputElement).value;
+      this.formattedValue = this.formatValue ? this.formattedValue(this.value) : this.value;
       this.onChange(this.value);
       this.markAsTouched();
     });
@@ -83,8 +89,6 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
     }
     return null;
   }
-
-  abstract getId(): string;
 
   writeValue(value: any): void {
     this.value = value;
@@ -108,4 +112,6 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
       this.touched = true;
     }
   }
+
+  abstract getId(): string;
 }

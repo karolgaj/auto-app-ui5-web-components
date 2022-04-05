@@ -1,4 +1,4 @@
-<div fxLayout="column" style="height: 100%" *ngIf="details$ | async as tbrDetails">
+<div fxLayout="column" style="height: 100%" *ngIf="tbrDetails">
   <ui5-bar design="Header" slot="header">
     <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
       {{ "COMMON.BUTTON_CLOSE" | translate }}
@@ -21,7 +21,7 @@
         <ui5-button icon="add" (click)="openAddRefDialog()"> {{ "TBR_DETAILS.ADD_REFERENCES" | translate | titlecase }} </ui5-button>
       </div>
       <div slot="endContent">
-        <app-datepicker [label]="'COMMON.PICKUP_DATE' | translate | titlecase" [(ngModel)]="tbrDetails.deliveryDate"></app-datepicker>
+        <app-datepicker [label]="'COMMON.PICKUP_DATE' | translate | titlecase" [formControl]="deliveryDateFormControl"></app-datepicker>
       </div>
     </ui5-bar>
     <ui5-table mode="MultiSelect" (selectionChange)="log($event)">
@@ -53,9 +53,9 @@
       <ui5-table-column slot="columns">
         <span>{{ "COMMON.THU" | translate }}</span>
       </ui5-table-column>
-      <ui5-tabe-column slot="columns">
+      <ui5-table-column slot="columns">
         <span>{{ "COMMON.SUB_HU" | translate | titlecase }}</span>
-      </ui5-tabe-column>
+      </ui5-table-column>
       <ui5-table-column slot="columns">
         <span>{{ "TBR_DETAILS.NO_DELIVERY" | translate | titlecase }}</span>
       </ui5-table-column>
@@ -66,31 +66,31 @@
         <span>{{ "TBR_DETAILS.WH_LOCATION" | translate | titlecase }}</span>
       </ui5-table-column>
 
-      <ui5-table-row data-ui5-compact-size [data-line]="row" *ngFor="let row of tbrDetails.lines">
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.articleNumber }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.articleName }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.requestedQuantity }}</ui5-table-cell>
+      <ui5-table-row data-ui5-compact-size *ngFor="let line of lines">
+        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.articleNumber }}</ui5-table-cell>
+        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.articleName }}</ui5-table-cell>
+        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.requestedQuantity }}</ui5-table-cell>
         <ui5-table-cell>
-          <app-input [(ngModel)]="row.packagedQuantity"></app-input>
+          <app-input [formControl]="line.packagedQuantityControl"></app-input>
           <!--          <ui5-input style="width: 140px !important" [value]="row.packagedQuantity"></ui5-input>-->
         </ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.purchaseOrderNumber }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.weightSUL }} {{ row.weightSULUom }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.volumeSUL }} {{ row.volumeSULUom }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.quantity }}</ui5-table-cell>
+        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.purchaseOrderNumber }}</ui5-table-cell>
+        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.weightSUL }} {{ line.weightSULUom }}</ui5-table-cell>
+        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.volumeSUL }} {{ line.volumeSULUom }}</ui5-table-cell>
+        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.quantity }}</ui5-table-cell>
         <ui5-table-cell>
-          <app-input [(ngModel)]="row.type"></app-input>
+          <app-input [formControl]="line.typeControl"></app-input>
           <!--          <ui5-input [value]="row.type"></ui5-input>-->
         </ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.subHu }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">
+        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.subHu }}</ui5-table-cell>
+        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">
           <ui5-icon name="cancel" style="color: red"></ui5-icon>
         </ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">
-          <ui5-icon *ngIf="row.shipUnitLineId" name="circle-task-2" style="color: orange"></ui5-icon>
-          <ui5-icon *ngIf="row.mixValid" name="circle-task-2" style="color: #47962d"></ui5-icon>
+        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">
+          <ui5-icon *ngIf="line.shipUnitLineId" name="circle-task-2" style="color: orange"></ui5-icon>
+          <ui5-icon *ngIf="line.mixValid" name="circle-task-2" style="color: #47962d"></ui5-icon>
         </ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(row, tbrDetails.shipitId)">{{ row.whLoc }}</ui5-table-cell>
+        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.whLoc }}</ui5-table-cell>
       </ui5-table-row>
     </ui5-table>
   </div>

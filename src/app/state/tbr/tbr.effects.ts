@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 
 import * as TbrActions from './tbr.actions';
 import { selectTbr } from './tbr.actions';
-import { TbrService } from '../services/tbr.service';
+import { TbrService } from '../../services/tbr.service';
 
 @Injectable()
 export class TbrEffects {

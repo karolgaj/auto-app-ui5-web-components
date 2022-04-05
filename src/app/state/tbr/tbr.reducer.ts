@@ -1,12 +1,12 @@
 import { createReducer, on } from '@ngrx/store';
 import * as TbrActions from './tbr.actions';
-import { Tbr } from '../models/tbr.model';
-import { TbrLightDetails } from '../models/tbr-light.model';
-import { TbrNetwork } from '../models/tbr-network.model';
-import { Consignor } from '../models/consignor.model';
-import { UnloadingPoint } from '../models/unloading-point.model';
-import { ShipItem } from '../models/ship-item.model';
-import { ReasonCodesDetails } from '../models/reason-code.model';
+import { Tbr } from '../../models/tbr.model';
+import { TbrLightDetails } from '../../models/tbr-light.model';
+import { TbrNetwork } from '../../models/tbr-network.model';
+import { Consignor } from '../../models/consignor.model';
+import { UnloadingPoint } from '../../models/unloading-point.model';
+import { ShipItem } from '../../models/ship-item.model';
+import { ReasonCodesDetails } from '../../models/reason-code.model';
 
 export const tbrFeatureKey = 'tbr';
 

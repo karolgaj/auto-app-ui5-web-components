@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'aotu-app-ui5-web-components';
+  constructor() {
+    console.log(DateTime.fromString('asdasdasd', 'ddMMyyyy'));
+  }
 }

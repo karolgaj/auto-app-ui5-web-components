@@ -1,13 +1,11 @@
 import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { selectedTbr } from '../../state/tbr.selectors';
 import { Store } from '@ngrx/store';
 import { WizardStepAbstract } from './components/wizard-step-abstract';
-import { updateSelectedTbr } from '../../state/tbr.actions';
+import { selectedTbr, updateSelectedTbr } from '../../state';
 
 @Component({
   selector: 'app-tbr-workflow',
   templateUrl: './tbr-workflow.component.html',
-  styleUrls: ['./tbr-workflow.component.scss'],
 })
 export class TbrWorkflowComponent implements OnInit, AfterViewInit {
   @ViewChild('wizard')

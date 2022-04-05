@@ -1,24 +1,34 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { IFormBuilder, IFormGroup } from '@rxweb/types';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { createTbr, loadAvailableNetworks, loadConsignors, loadShipItems, loadUnloadingPoints } from '../../state/tbr.actions';
+import { filter, take } from 'rxjs/operators';
+
+import { DialogComponent } from '../../ui/dialog/dialog.component';
+import {
+  createTbr,
+  loadAvailableNetworks,
+  loadConsignors,
+  loadShipItems,
+  loadUnloadingPoints,
+  selectConsignors,
+  selectNetworks,
+  selectShipItems,
+  selectUnloadingPoints,
+} from '../../state';
 import { TbrLightDetails } from '../../models/tbr-light.model';
 import { NetworkForm } from '../../models/network-form.model';
-import { selectConsignors, selectNetworks, selectShipItems, selectUnloadingPoints } from '../../state/tbr.selectors';
 import { CustomAddress } from '../../models/custom-address.model';
 import { TbrNetwork } from '../../models/tbr-network.model';
-import { filter, take } from 'rxjs/operators';
 import { PLANNING_TYPE_OPTIONS, SERVICE_LEVEL_OPTIONS, TRANSPORT_TYPE_OPTIONS } from './constants';
+import { CommonValidators } from '../../utils/validators';
 
 @UntilDestroy()
 @Component({
   selector: 'app-tbr-network-form',
   templateUrl: './tbr-network-form.component.html',
-  styleUrls: ['./tbr-network-form.component.scss'],
 })
 export class TbrNetworkFormComponent implements AfterViewInit {
   private fb: IFormBuilder;
@@ -204,6 +214,10 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   }
 
   createTbr(): void {
+    if (this.networkForm.invalid) {
+      this.networkForm.markAllAsTouched();
+      return;
+    }
     const payload: Partial<TbrLightDetails> = {
       ...this.networkForm.getRawValue(),
     };
@@ -236,11 +250,11 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     this.networkForm = this.fb.group<NetworkForm>({
       consignor: [null, [Validators.required]],
       consignee: [null],
-      shipFrom: [null],
-      shipTo: [null],
-      unloadingPoint: [null],
+      shipFrom: [null, [Validators.required]],
+      shipTo: [null, [Validators.required]],
+      unloadingPoint: [null, [Validators.required]],
       loadingPoint: [null],
-      pickupDate: [null],
+      pickupDate: [null, [Validators.required, CommonValidators.IsNotPastDateValidator]],
       freightClass: [null],
       planningType: ['INBOUND'],
       serviceLevel: ['STD_INB'],

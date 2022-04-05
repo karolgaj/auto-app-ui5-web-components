@@ -1,12 +1,12 @@
 import { createAction, props } from '@ngrx/store';
-import { Tbr } from '../models/tbr.model';
-import { TbrLightDetails } from '../models/tbr-light.model';
-import { NetworkForm } from '../models/network-form.model';
-import { TbrNetwork } from '../models/tbr-network.model';
-import { Consignor } from '../models/consignor.model';
-import { UnloadingPoint } from '../models/unloading-point.model';
-import { ShipItem } from '../models/ship-item.model';
-import { ReasonCodePayload } from '../models/reason-code.model';
+import { Tbr } from '../../models/tbr.model';
+import { TbrLightDetails } from '../../models/tbr-light.model';
+import { NetworkForm } from '../../models/network-form.model';
+import { TbrNetwork } from '../../models/tbr-network.model';
+import { Consignor } from '../../models/consignor.model';
+import { UnloadingPoint } from '../../models/unloading-point.model';
+import { ShipItem } from '../../models/ship-item.model';
+import { ReasonCodePayload } from '../../models/reason-code.model';
 
 export const loadTbrs = createAction('[Tbr] Load Tbrs');
 export const loadTbrsSuccess = createAction('[Tbr] Load Tbrs Success', props<{ data: TbrLightDetails[] }>());

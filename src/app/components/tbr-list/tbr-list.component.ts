@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { TbrService } from '../../services/tbr.service';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+
+import { TbrService } from '../../services';
 import { TbrType } from '../../models/tbr-type.model';
 import { TbrLightDetails } from '../../models/tbr-light.model';
-import { Router } from '@angular/router';
-import { selectTbrs } from '../../state/tbr.selectors';
-import { Store } from '@ngrx/store';
-import { loadTbrs, refreshTbrList, selectTbr } from '../../state/tbr.actions';
+import { loadTbrs, refreshTbrList, selectTbr, selectTbrs } from '../../state';
 
 @Component({
   selector: 'app-tbr-list',
   templateUrl: './tbr-list.component.html',
-  styleUrls: ['./tbr-list.component.scss'],
 })
 export class TbrListComponent implements OnInit {
   public tbrList = this.store.select(selectTbrs);

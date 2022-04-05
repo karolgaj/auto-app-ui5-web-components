@@ -8,6 +8,9 @@ import { AppComponent } from './app.component';
 
 // @ts-ignore
 import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
+// @ts-ignore
+import { getLanguage, setLanguage } from '@ui5/webcomponents-base/dist/config/Language';
+
 import { TbrListComponent } from './components/tbr-list/tbr-list.component';
 import { TbrDetailsComponent } from './components/tbr-details/tbr-details.component';
 import { TbrEmptyStateComponent } from './components/tbr-empty-state/tbr-empty-state.component';
@@ -44,7 +47,9 @@ import { WizardStepAdditionalContactsComponent } from './components/tbr-workflow
 import { WizardSummaryComponent } from './components/tbr-workflow/components/wizard-summary/wizard-summary.component';
 
 setTheme('sap_belize');
+setLanguage('pl');
 
+console.log(getLanguage());
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
 }
