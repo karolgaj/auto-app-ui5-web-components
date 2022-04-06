@@ -26,6 +26,7 @@ import { UI_COMPONENTS } from './ui';
 import { COMPONENTS } from './components';
 
 import { environment } from '../environments/environment';
+import { SharedModule } from './shared/shared.module';
 
 setTheme('sap_belize');
 setLanguage('pl');
@@ -62,6 +63,7 @@ export function createTranslateLoader(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     StateModule,
+    SharedModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

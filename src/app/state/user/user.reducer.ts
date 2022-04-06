@@ -5,13 +5,11 @@ import { UserData } from '../../models/user.model';
 export const userFeatureKey = 'user';
 
 export interface State {
-  user: UserData | null;
+  user?: UserData;
   error?: any;
 }
 
-export const initialState: State = {
-  user: null,
-};
+export const initialState: State = {};
 
 export const reducer = createReducer(
   initialState,
