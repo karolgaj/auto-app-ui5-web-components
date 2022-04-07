@@ -31,7 +31,7 @@ export class TbrService {
     return of(tbrNetworks.default as TbrNetwork[]);
   }
 
-  getTbrList(): Observable<TbrLightDetails[]> {
+  getTbrList(parmas: string[]): Observable<TbrLightDetails[]> {
     return of(tbrsList.details as TbrLightDetails[]);
   }
 

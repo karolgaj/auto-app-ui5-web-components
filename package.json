@@ -28,6 +28,7 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "@ui5/webcomponents": "^1.0.2",
     "@ui5/webcomponents-fiori": "^1.0.2",
+    "angular-oauth2-oidc": "^13.0.1",
     "date-fns": "^2.28.0",
     "luxon": "^2.3.1",
     "rxjs": "~6.6.0",

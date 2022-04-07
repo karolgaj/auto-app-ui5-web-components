@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { WizardStepAbstract } from '../wizard-step-abstract';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IFormArray } from '@rxweb/types';
 import { BehaviorSubject } from 'rxjs';
 import { DialogComponent } from '../../../../ui/dialog/dialog.component';
-import { contactTypes } from '../../constants';
+import { contactTypes, requesterContactTypes } from '../../constants';
 import { AdditionalContact, Tbr } from '../../../../models/tbr.model';
 
 @Component({
@@ -17,12 +17,20 @@ export class WizardStepAdditionalContactsComponent extends WizardStepAbstract im
   @ViewChild('contactTypeDialog')
   contactTypeDialog!: DialogComponent;
 
+  @Input()
+  isRequester = false;
+
   form!: IFormArray<AdditionalContact>;
   openTypeDialog!: () => void;
   contactTypes = contactTypes;
 
   constructor(fb: FormBuilder) {
     super(fb);
+  }
+
+  ngOnInit(): void {
+    super.ngOnInit();
+    this.contactTypes = this.isRequester ? requesterContactTypes : contactTypes;
   }
 
   ngAfterViewInit(): void {

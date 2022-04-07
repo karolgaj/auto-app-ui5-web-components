@@ -1,7 +1,7 @@
 {
   "userId": "",
   "version": 1,
-  "roles": "[]",
+  "roles": "['EXPRESS_APPROVER]",
   "consigneeParmas": "[]",
   "consignorParmas": "[]",
   "systemOfMeasurement": "METRIC",

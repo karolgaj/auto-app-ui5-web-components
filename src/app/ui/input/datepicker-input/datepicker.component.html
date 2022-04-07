@@ -1,4 +1,12 @@
 <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem" [ngClass]="inputContainerClasses">
   <ui5-label [ngClass]="labelClasses" [for]="getId()" [required]="required" [showColon]="showColon"> {{ label }} </ui5-label>
-  <ui5-date-picker [ngClass]="inputClasses" #customInput [id]="getId()" [value]="value" [valueState]="valueState" [disabled]="disabled"></ui5-date-picker>
+  <ui5-date-picker
+    [ngClass]="inputClasses"
+    #customInput
+    [id]="getId()"
+    [value]="value"
+    [valueState]="valueState"
+    [disabled]="disabled"
+    [formatPattern]="dateFormat$ | async"
+  ></ui5-date-picker>
 </div>

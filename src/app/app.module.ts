@@ -27,11 +27,11 @@ import { COMPONENTS } from './components';
 
 import { environment } from '../environments/environment';
 import { SharedModule } from './shared/shared.module';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 setTheme('sap_belize');
 setLanguage('pl');
 
-console.log(getLanguage());
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
 }
@@ -44,6 +44,7 @@ export function createTranslateLoader(http: HttpClient) {
     CommonModule,
     AppRoutingModule,
     HttpClientModule,
+    OAuthModule.forRoot(),
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {

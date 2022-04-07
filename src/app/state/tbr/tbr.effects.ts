@@ -1,24 +1,30 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, concatMap, exhaustMap, map, tap } from 'rxjs/operators';
+import { catchError, concatMap, exhaustMap, map, tap, withLatestFrom } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import * as TbrActions from './tbr.actions';
 import { selectTbr } from './tbr.actions';
 import { TbrService } from '../../services/tbr.service';
+import { Store } from '@ngrx/store';
+import { selectUserData } from '../user';
 
 @Injectable()
 export class TbrEffects {
   loadTbrs$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TbrActions.loadTbrs, TbrActions.refreshTbrList),
-      concatMap(() =>
-        this.tbrService.getTbrList().pipe(
+      withLatestFrom(this.store.select(selectUserData)),
+      concatMap(([_, userData]) => {
+        const userRoles = userData?.roles ?? [];
+        const parmas = userRoles.includes('EXPRESS_APPROVER') ? userData?.consigneeParmas : userData?.consignorParmas;
+
+        return this.tbrService.getTbrList(parmas ?? []).pipe(
           map((data) => TbrActions.loadTbrsSuccess({ data })),
           catchError((error) => of(TbrActions.loadTbrsFailure({ error })))
-        )
-      )
+        );
+      })
     );
   });
 
@@ -126,5 +132,5 @@ export class TbrEffects {
     )
   );
 
-  constructor(private actions$: Actions, private tbrService: TbrService, private router: Router) {}
+  constructor(private actions$: Actions, private tbrService: TbrService, private router: Router, private store: Store) {}
 }

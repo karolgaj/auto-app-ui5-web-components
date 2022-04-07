@@ -78,7 +78,7 @@ export class WizardStepTransportTypeComponent extends WizardStepAbstract impleme
       {
         validators: [
           CommonValidators.IsHourInBetweenHours<TransportTypeForm>('mustArriveTime', 'openingHourAtDelivery', 'closeHourAtDelivery'),
-          CommonValidators.IsDateAfterDate<TransportTypeForm>('mustArriveDate', undefined, this.data.deliveryDate),
+          CommonValidators.IsDateAfterDate<TransportTypeForm>('mustArriveDate', undefined, this.data?.deliveryDate),
           CommonValidators.IsHourBeforeHour<TransportTypeForm>('openingHourAtDelivery', 'closeHourAtDelivery'),
         ],
       }

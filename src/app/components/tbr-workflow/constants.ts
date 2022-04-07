@@ -6,3 +6,8 @@ export const contactTypes = [
   { value: 'CONTACT_AT_CROSS_DOCK', title: 'Contact at XDock' },
   { value: 'CONTACT_AT_GOODS_RECEIVING', title: 'Contact at goods receiving' },
 ];
+
+export const requesterContactTypes = [
+  { value: 'BOOK_ON_BEHALF_OF', title: 'Book on behalf on' },
+  { value: 'CONTACT_AT_SUPPLIER', title: 'Contact at Supplier' },
+];

@@ -1,6 +1,8 @@
 import { Component, forwardRef, Injector } from '@angular/core';
 import { CustomInputAbstract } from '../custom-input.abstract';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { selectUserDateFormat } from '../../../state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-datepicker',
@@ -15,7 +17,9 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
 })
 export class DatepickerComponent extends CustomInputAbstract {
-  constructor(injector: Injector) {
+  dateFormat$ = this.store.select(selectUserDateFormat);
+
+  constructor(injector: Injector, private store: Store) {
     super(injector);
   }
 

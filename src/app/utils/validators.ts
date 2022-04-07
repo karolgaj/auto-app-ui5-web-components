@@ -25,9 +25,11 @@ export class CommonValidators {
 
   static IsHourInBetweenHours<T extends GenericWithStrings<T>>(checkDateKey: keyof T, betweenFromKey: keyof T, betweenToKey: keyof T) {
     return (control: IFormGroup<T>) => {
-      const checkDate = DateTime.fromFormat(control.controls[checkDateKey].value as string, TIME_FORMAT);
-      const betweenFrom = DateTime.fromFormat(control.controls[betweenFromKey].value as string, TIME_FORMAT);
-      const betweenTo = DateTime.fromFormat(control.controls[betweenToKey].value as string, TIME_FORMAT);
+      console.log(control.getRawValue());
+
+      const checkDate = DateTime.fromFormat((control.controls[checkDateKey].value as string) ?? '', TIME_FORMAT);
+      const betweenFrom = DateTime.fromFormat((control.controls[betweenFromKey].value as string) ?? '', TIME_FORMAT);
+      const betweenTo = DateTime.fromFormat((control.controls[betweenToKey].value as string) ?? '', TIME_FORMAT);
 
       if (betweenFrom <= checkDate && checkDate <= betweenTo) {
         return;
@@ -41,8 +43,8 @@ export class CommonValidators {
 
   static IsHourBeforeHour<T extends GenericWithStrings<T>>(checkDateKey: keyof T, beforeDateKey: keyof T) {
     return (control: IFormGroup<T>) => {
-      const checkDate = DateTime.fromFormat(control.controls[checkDateKey].value as string, TIME_FORMAT);
-      const afterDate = DateTime.fromFormat(control.controls[beforeDateKey].value as string, TIME_FORMAT);
+      const checkDate = DateTime.fromFormat((control.controls[checkDateKey].value as string) ?? '', TIME_FORMAT);
+      const afterDate = DateTime.fromFormat((control.controls[beforeDateKey].value as string) ?? '', TIME_FORMAT);
 
       if (checkDate < afterDate) {
         return;
@@ -56,17 +58,17 @@ export class CommonValidators {
 
   static IsDateAfterDate<T extends GenericWithStrings<T>>(checkDateKey: keyof T, afterDateKey?: keyof T, afterDateValue?: string) {
     return (control: IFormGroup<T>) => {
-      const checkDate = DateTime.fromFormat(control.controls[checkDateKey].value as string, DATE_FORMAT);
+      const checkDate = DateTime.fromFormat((control.controls[checkDateKey].value as string) ?? '', DATE_FORMAT);
       let afterDate;
 
       if (afterDateKey) {
-        afterDate = DateTime.fromFormat(control.controls[afterDateKey].value as string, DATE_FORMAT);
+        afterDate = DateTime.fromFormat((control.controls[afterDateKey].value as string) ?? '', DATE_FORMAT);
       } else if (afterDateValue) {
         afterDate = DateTime.fromFormat(afterDateValue, DATE_FORMAT);
       }
 
       if (afterDate == null) {
-        throw new Error('Provide afterDateKey or afterDateValue to IsDateAfterDate validator');
+        return;
       }
 
       if (checkDate >= afterDate) {

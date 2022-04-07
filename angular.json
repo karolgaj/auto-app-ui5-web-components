@@ -74,6 +74,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "ssl": true
+          },
           "configurations": {
             "production": {
               "browserTarget": "aotu-app-ui5-web-components:build:production"
