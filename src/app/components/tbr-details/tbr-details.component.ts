@@ -98,7 +98,7 @@ export class TbrDetailsComponent {
   }
 
   navigateToThuDetails(line: TbrLine, shipitId: string) {
-    this.router.navigate(['/', shipitId, line.articleNumber]);
+    this.router.navigate(['/', 'xtr', shipitId, line.articleNumber]);
   }
 
   split() {
@@ -120,7 +120,7 @@ export class TbrDetailsComponent {
       return;
     }
     // this.store.dispatch go to workflow, change status, navigate to workflow
-    this.router.navigate(['/workflow', shipitId]);
+    this.router.navigate(['/', 'xtr', 'workflow', shipitId]);
   }
 
   private createForm(): void {

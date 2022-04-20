@@ -1,5 +1,8 @@
 import { DialogComponent } from './dialog/dialog.component';
+import { LayoutComponent } from './layout/layout.component';
 import { CheckboxComponent, DatepickerComponent, InputComponent, SelectComponent, TimepickerComponent } from './input';
+
+export * from './layout/layout.component';
 
 export const UI_COMPONENTS = [
   DialogComponent,
@@ -8,4 +11,5 @@ export const UI_COMPONENTS = [
   SelectComponent,
   InputComponent,
   TimepickerComponent,
+  LayoutComponent,
 ];

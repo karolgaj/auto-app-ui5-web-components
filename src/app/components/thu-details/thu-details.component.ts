@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, switchMap } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { selectedTbr } from '../../state';
   templateUrl: './thu-details.component.html',
   styleUrls: ['./thu-details.component.scss'],
 })
-export class ThuDetailsComponent implements OnInit {
+export class ThuDetailsComponent {
   public line$;
   public thuList$;
 
@@ -19,25 +19,31 @@ export class ThuDetailsComponent implements OnInit {
     this.line$ = this.route.paramMap.pipe(
       switchMap((paramMap) => {
         const articleNumber = paramMap.get('articleNumber');
-        return this.store.select(selectedTbr).pipe(map((tbr) => tbr!.lines.find((line) => line.articleNumber === articleNumber)));
+        return this.store.select(selectedTbr).pipe(
+          map((tbr) => {
+            if (tbr) {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+              return tbr.lines.find((line: { articleNumber: string }) => line.articleNumber === articleNumber);
+            }
+            return undefined;
+          })
+        );
       })
     );
 
     this.thuList$ = this.store.select(selectedTbr).pipe(
       map((tbrDetails) => {
-        const thus = tbrDetails!.shipUnitLines.map((slu) => slu.transportHandlingUnits).reduce((acc, curr) => acc.concat(curr));
-        return thus[0];
+        const thus = tbrDetails?.shipUnitLines.map((slu) => slu.transportHandlingUnits).reduce((acc, curr) => acc.concat(curr));
+        return thus ? thus[0] : null;
       })
     );
 
     this.thuList$.subscribe();
   }
 
-  ngOnInit(): void {}
-
-  goBack() {
+  goBack(): void {
     this.route.paramMap.subscribe((paramMap) => {
-      this.router.navigate(['/', paramMap.get('shipItId')]);
+      void this.router.navigate(['/', 'xtr', paramMap.get('shipItId')]);
     });
   }
 }

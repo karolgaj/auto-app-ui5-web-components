@@ -1,4 +1,4 @@
-<div fxLayout="column" style="height: 100%" *ngIf="line$ | async as line">
+<div fxLayout="column" class="h-100" *ngIf="line$ | async as line">
   <ui5-bar design="Header" slot="header">
     <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
       {{ "COMMON.BUTTON_CLOSE" | translate }}
@@ -6,18 +6,18 @@
   </ui5-bar>
 
   <ui5-page>
-    <div fxLayout fxLayoutAlign="space-between" style="padding: 2rem 3rem; background-color: var(--sapPageHeader_Background)">
+    <div fxLayout fxLayoutAlign="space-between" class="thu-details-header">
       <div fxFlex="60" fxLayout="column" fxLayoutGap="1rem">
         <ui5-label> {{ line.articleNumber }} </ui5-label>
         <div fxLayout>
-          <img style="max-height: 3rem; max-width: 3rem; margin-right: 0.5rem" src="assets/volvo-logo.png" />
+          <img src="assets/volvo-logo.png" alt="volvoLogo" />
           <ui5-title level="H2"> {{ line.articleName }} </ui5-title>
         </div>
         <ui5-label> {{ line.weightSUL }} {{ line.weightSULUom }} </ui5-label>
       </div>
       <div fxLayout="column" fxLayoutAlign="center end">
-        <ui5-title level="H2" style="color: #2b7c2b"> {{ line.requestedQuantity }} </ui5-title>
-        <ui5-label style="color: #2b7c2b"> {{ "COMMON.SHIPPED_QTY" | translate | titlecase }} </ui5-label>
+        <ui5-title level="H2" class="main-font-color"> {{ line.requestedQuantity }} </ui5-title>
+        <ui5-label class="main-font-color"> {{ "COMMON.SHIPPED_QTY" | translate | titlecase }} </ui5-label>
         <ui5-label>
           {{ "COMMON.LENGTH" | translate }}: <span> {{ line.length }} </span>
         </ui5-label>
@@ -34,9 +34,9 @@
       </div>
     </div>
     <ui5-panel [attr.header-text]="'COMMON.THU_LONG' | translate | titlecase">
-      <ui5-bar style="background-color: transparent">
+      <ui5-bar class="transparent-bg">
         <div slot="startContent">
-          <ui5-label style="margin-right: 1rem">
+          <ui5-label class="margin-right-1">
             {{ "COMMON.THU_ID" | translate }}: <b> {{ line.type }} </b>
           </ui5-label>
           <ui5-label>
@@ -44,7 +44,7 @@
           </ui5-label>
         </div>
         <div slot="endContent">
-          <ui5-label style="margin-right: 1rem">
+          <ui5-label class="margin-right-1">
             {{ "COMMON.WEIGHT" | translate }}/{{ "COMMON.THU" | translate }}: <b> {{ line.weightSUL }} </b> {{ line.weightSULUom }}
           </ui5-label>
           <ui5-label>
@@ -53,7 +53,7 @@
         </div>
       </ui5-bar>
       <ui5-table data-ui5-compact-size>
-        <ui5-table-column slot="columns" style="width: 100px">
+        <ui5-table-column slot="columns" class="w-100">
           <span> {{ "COMMON.PACKAGE_MATERIAL" | translate }} </span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
@@ -80,12 +80,12 @@
 
         <ng-container *ngIf="thuList$ | async as thu">
           <ui5-table-row *ngFor="let packMack of thu.packMaterialLayer">
-            <ui5-table-cell style="width: 100px">
+            <ui5-table-cell class="w-100">
               <div>{{ packMack.packMaterial[0].oldMaterialNumber }}</div>
               <div>{{ packMack.packMaterial[0].materialDescription }}</div>
             </ui5-table-cell>
             <ui5-table-cell>
-              <img width="50" height="50" [src]="packMack.packMaterial[0].imgUrl" />
+              <img width="50" height="50" [src]="packMack.packMaterial[0].imgUrl" alt="materialImage"/>
             </ui5-table-cell>
             <ui5-table-cell> {{ packMack.maxPackMaterialPerLayer }} </ui5-table-cell>
             <ui5-table-cell> {{ packMack.numberOfLayers }} </ui5-table-cell>

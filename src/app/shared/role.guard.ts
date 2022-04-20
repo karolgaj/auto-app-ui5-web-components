@@ -22,7 +22,7 @@ export class RoleGuard implements CanActivate {
       filter((value) => value != null),
       map((user) => {
         if (route.url.length === 0 && user?.roles.length === 1) {
-          return this.router.createUrlTree(['']);
+          return this.router.createUrlTree(['xtr']);
         }
         return requiredRoles.some((r) => user?.roles.includes(r));
       })

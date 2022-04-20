@@ -1,19 +1,16 @@
 import { Injectable } from '@angular/core';
 import { UserData } from '../models/user.model';
 
-// @ts-ignore
-import * as data from './mocks/user.mock-data.json';
-import { Observable, of } from 'rxjs';
-
-const userData: UserData = data;
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   getUserDate(): Observable<UserData> {
-    return of(userData);
+    return this.http.get<UserData>('/gateway/api/user/v1/me');
   }
 }

@@ -26,7 +26,7 @@ export class TbrListComponent implements OnInit {
   }
 
   goToNetworkForm() {
-    this.router.navigate(['network']);
+    this.router.navigate(['/', 'xtr', 'network']);
   }
 
   refreshList() {

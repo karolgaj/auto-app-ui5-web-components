@@ -1,0 +1,14 @@
+<div>
+  <ui5-shellbar [primaryTitle]="'HELLO' | translate">
+    <ui5-avatar slot="profile" icon="customer"></ui5-avatar>
+  </ui5-shellbar>
+
+  <main fxLayout>
+    <div fxFlex="20rem">
+      <app-tbr-list></app-tbr-list>
+    </div>
+    <div fxFlex>
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

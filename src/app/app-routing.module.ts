@@ -1,32 +1,57 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TbrEmptyStateComponent } from './components/tbr-empty-state';
-import { TbrDetailsComponent } from './components/tbr-details';
-import { ThuDetailsComponent } from './components/thu-details';
-import { TbrNetworkFormComponent } from './components/tbr-network-form';
-import { TbrWorkflowComponent } from './components/tbr-workflow/tbr-workflow.component';
+import {
+  TbrDetailsComponent,
+  TbrEmptyStateComponent,
+  TbrNetworkFormComponent,
+  TbrWorkflowComponent,
+  ThuDetailsComponent,
+} from './components';
+import { LayoutComponent } from './ui';
+import { AuthenticatedGuard } from './shared';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
+    redirectTo: 'xtr',
+  },
+  {
+    path: 'xtr',
+    component: LayoutComponent,
+    canActivate: [AuthenticatedGuard],
+    canActivateChild: [AuthenticatedGuard],
+    children: [
+      {
+        path: '',
+        component: TbrEmptyStateComponent,
+      },
+      {
+        path: 'network',
+        component: TbrNetworkFormComponent,
+      },
+      {
+        path: 'workflow/:shipItId',
+        component: TbrWorkflowComponent,
+      },
+      {
+        path: ':shipItId',
+        component: TbrDetailsComponent,
+      },
+      {
+        path: ':shipItId/:articleNumber',
+        component: ThuDetailsComponent,
+      },
+    ],
+  },
+  {
+    path: 'volvooauth/callback',
     component: TbrEmptyStateComponent,
   },
   {
-    path: 'network',
-    component: TbrNetworkFormComponent,
-  },
-  {
-    path: ':shipItId',
-    component: TbrDetailsComponent,
-  },
-  {
-    path: 'workflow/:shipItId',
-    component: TbrWorkflowComponent,
-  },
-  {
-    path: ':shipItId/:articleNumber',
-    component: ThuDetailsComponent,
+    path: '**',
+    pathMatch: 'full',
+    component: TbrEmptyStateComponent,
   },
 ];
 

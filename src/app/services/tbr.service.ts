@@ -15,13 +15,18 @@ import { TbrLine } from '../models/tbr-line.model';
 import { TbrNetwork } from '../models/tbr-network.model';
 import { NetworkForm } from '../models/network-form.model';
 import { ReasonCodePayload } from '../models/reason-code.model';
+import { HttpClient } from '@angular/common/http';
 
 const tbrsList = tbrList;
 const tbrDetails = details;
 
 @Injectable({ providedIn: 'root' })
 export class TbrService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
+
+  testCall() {
+    this.http.get('/gateway/api/xtr/v1/xtr/shipit/XTRM000000010920220328112555437').subscribe(console.log);
+  }
 
   getReasonCodes(): Observable<ReasonCodePayload> {
     return of(reasonCodes.default as ReasonCodePayload);

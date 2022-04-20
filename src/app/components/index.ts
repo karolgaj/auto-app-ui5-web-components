@@ -6,6 +6,14 @@ import { TbrDetailsComponent } from './tbr-details';
 import { TbrEmptyStateComponent } from './tbr-empty-state';
 import { TbrListComponent } from './tbr-list';
 
+export * from './thu-details';
+export * from './tbr-network';
+export * from './tbr-network-form';
+export * from './tbr-details';
+export * from './tbr-empty-state';
+export * from './tbr-list';
+export * from './tbr-workflow/tbr-workflow.component';
+
 export const COMPONENTS = [
   ...WORKFLOW_COMPONENTS,
   ThuDetailsComponent,

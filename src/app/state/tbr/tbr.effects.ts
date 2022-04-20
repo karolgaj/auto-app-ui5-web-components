@@ -16,7 +16,7 @@ export class TbrEffects {
     return this.actions$.pipe(
       ofType(TbrActions.loadTbrs, TbrActions.refreshTbrList),
       withLatestFrom(this.store.select(selectUserData)),
-      concatMap(([_, userData]) => {
+      concatMap(([, userData]) => {
         const userRoles = userData?.roles ?? [];
         const parmas = userRoles.includes('EXPRESS_APPROVER') ? userData?.consigneeParmas : userData?.consignorParmas;
 
@@ -106,7 +106,7 @@ export class TbrEffects {
       return this.actions$.pipe(
         ofType(TbrActions.selectTbrSuccess),
         tap(({ data }) => {
-          this.router.navigate([data.shipitId]);
+          this.router.navigate(['/', 'xtr', data.shipitId]);
         })
       );
     },

@@ -6,10 +6,13 @@ export const userFeatureKey = 'user';
 
 export interface State {
   user?: UserData;
-  error?: any;
+  isAuthenticated: boolean;
+  error?: unknown;
 }
 
-export const initialState: State = {};
+export const initialState: State = {
+  isAuthenticated: false,
+};
 
 export const reducer = createReducer(
   initialState,
@@ -17,6 +20,7 @@ export const reducer = createReducer(
   on(UserActions.loadUserDataSuccess, (state, action) => ({
     ...state,
     user: action.data,
+    isAuthenticated: true,
   })),
   on(UserActions.loadUserDataFailure, (state, action) => ({
     ...state,

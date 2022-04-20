@@ -22,15 +22,17 @@ import { getLanguage, setLanguage } from '@ui5/webcomponents-base/dist/config/La
 import { StateModule } from './state/state.module';
 
 import { PIPES } from './pipes';
-import { UI_COMPONENTS } from './ui';
+import { LayoutComponent, UI_COMPONENTS } from './ui';
 import { COMPONENTS } from './components';
+import { SharedModule } from './shared';
 
 import { environment } from '../environments/environment';
-import { SharedModule } from './shared/shared.module';
-import { OAuthModule } from 'angular-oauth2-oidc';
+import { CoreModule } from './core/core.module';
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 setTheme('sap_belize');
-setLanguage('pl');
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+setLanguage('en');
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
@@ -38,13 +40,13 @@ export function createTranslateLoader(http: HttpClient) {
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  declarations: [AppComponent, ...PIPES, ...UI_COMPONENTS, ...COMPONENTS],
+  declarations: [AppComponent, ...PIPES, ...UI_COMPONENTS, ...COMPONENTS, LayoutComponent],
   imports: [
     BrowserModule,
     CommonModule,
+    CoreModule,
     AppRoutingModule,
     HttpClientModule,
-    OAuthModule.forRoot(),
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       loader: {
