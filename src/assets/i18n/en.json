@@ -39,6 +39,7 @@
     "NUMBER_OF_THU": "#THU",
     "THU": "THU",
     "THU_LONG": "Transport Handling Unit",
+    "HAZMATS": "Hazmats Details",
     "THU_ID": "THU ID",
     "SUB_HU": "Sub HU",
     "QUANTITY": "Quantity",
@@ -127,5 +128,16 @@
     "MIX": "MIX",
     "BUTTON_DO_NOT_DELIVER_FULL": "Do not deliver full shipment",
     "BUTTON_CONTINUE_TO_DETAILS": "Continue to details"
+  },
+  "HAZMAT_DETAILS":{
+
+    "ADD_HAZMAT": "Add Hazmat",
+    "HAZMAT_CLASS":"Hazmat Class",
+    "HAZMAT_PACKAGING_GROUP":"Packaging Group",
+    "HAZMAT_PROPPER_SHIPPING_NAME":"Shipping Name",
+    "HAZMAT_UNCODE":"Hazmat Uncode",
+    "LOADING_METERS":"Loading Meters",
+    "TEMPERATURE_CONTROL":"Temperature Control"
+
   }
 }

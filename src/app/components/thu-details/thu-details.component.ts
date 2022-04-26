@@ -1,10 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+
+import { FormBuilder,Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { IFormBuilder, IFormControl, IFormGroup } from '@rxweb/types';
 import { map, switchMap } from 'rxjs/operators';
+import { DialogComponent } from 'src/app/ui/dialog/dialog.component';
 
 import { TbrService } from '../../services';
 import { selectedTbr } from '../../state';
+
+interface AddHazmatForm {
+  hazmatClass: string;
+  hazmatPackagingGroup: string;
+  hazmatPropperShippingName: string;
+  hazmatUnode: string;
+}
 
 @Component({
   selector: 'app-thu-details',
@@ -12,10 +23,17 @@ import { selectedTbr } from '../../state';
   styleUrls: ['./thu-details.component.scss'],
 })
 export class ThuDetailsComponent {
+  @ViewChild('addHazmatDialog')
+  addHazmatDialog!: DialogComponent;
+
   public line$;
   public thuList$;
+  addHazmatFormGroup!: IFormGroup<AddHazmatForm>;
 
-  constructor(private tbrService: TbrService, private router: Router, private route: ActivatedRoute, private store: Store) {
+  private fb: IFormBuilder;
+
+  constructor(private tbrService: TbrService, private router: Router, private route: ActivatedRoute, private store: Store,fb: FormBuilder) {
+
     this.line$ = this.route.paramMap.pipe(
       switchMap((paramMap) => {
         const articleNumber = paramMap.get('articleNumber');
@@ -37,8 +55,9 @@ export class ThuDetailsComponent {
         return thus ? thus[0] : null;
       })
     );
-
+    this.fb = fb;
     this.thuList$.subscribe();
+    this.createForm();
   }
 
   goBack(): void {
@@ -46,4 +65,30 @@ export class ThuDetailsComponent {
       void this.router.navigate(['/', 'xtr', paramMap.get('shipItId')]);
     });
   }
+
+  saveAddHazmat() {
+    const newLineData = this.addHazmatFormGroup.getRawValue();
+    this.addHazmatFormGroup.reset();
+    this.addHazmatFormGroup.markAsPristine();
+
+    this.cancelAddHazmat();
+  }
+  openAddHazmatDialog() {
+    this.addHazmatDialog.openDialog();
+  }
+
+  cancelAddHazmat() {
+    this.addHazmatDialog.closeDialog();
+  }
+  private createForm(): void {
+    this.addHazmatFormGroup = this.fb.group<AddHazmatForm>({
+      hazmatClass: [null],
+      hazmatPackagingGroup: [null],
+      hazmatPropperShippingName: [null],
+      hazmatUnode: [null],
+    });
+
+  }
 }
+
+

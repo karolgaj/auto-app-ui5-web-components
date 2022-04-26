@@ -33,6 +33,28 @@
         </ui5-label>
       </div>
     </div>
+    <ui5-panel [attr.header-text]="'COMMON.HAZMATS' | translate | titlecase">
+      <ui5-bar class="transparent-bg">
+        <ui5-button slot="startContent"  icon="add" (click)="openAddHazmatDialog()">
+          {{ "HAZMAT_DETAILS.ADD_HAZMAT" | translate | titlecase }}
+        </ui5-button>
+      </ui5-bar>
+      <ui5-table data-ui5-compact-size>
+        <ui5-table-column slot="columns" >
+          <span> {{ "HAZMAT_DETAILS.HAZMAT_CLASS" | translate }} </span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span> {{ "HAZMAT_DETAILS.HAZMAT_PACKAGING_GROUP" | translate }} </span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span> {{ "HAZMAT_DETAILS.HAZMAT_PROPPER_SHIPPING_NAME" | translate }} </span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span> {{ "HAZMAT_DETAILS.HAZMAT_UNCODE" | translate }} </span>
+        </ui5-table-column>
+
+      </ui5-table>
+    </ui5-panel>
     <ui5-panel [attr.header-text]="'COMMON.THU_LONG' | translate | titlecase">
       <ui5-bar class="transparent-bg">
         <div slot="startContent">
@@ -103,5 +125,35 @@
         </ng-container>
       </ui5-table>
     </ui5-panel>
+
   </ui5-page>
 </div>
+
+<app-dialog #addHazmatDialog [dialogHeader]="'HAZMAT_DETAILS.ADD_HAZMAT' | translate | titlecase" (close)="cancelAddHazmat()" (save)="saveAddHazmat()" >
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="addHazmatFormGroup">
+    <app-input
+      formControlName="hazmatClass"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'HAZMAT_DETAILS.HAZMAT_CLASS' | translate | titlecase"
+    ></app-input>
+    <app-input
+      formControlName="hazmatPackagingGroup"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'HAZMAT_DETAILS.HAZMAT_PACKAGING_GROUP' | translate | titlecase"
+    ></app-input>
+    <app-input
+      formControlName="hazmatPropperShippingName"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'HAZMAT_DETAILS.HAZMAT_PROPPER_SHIPPING_NAME' | translate | titlecase"
+    ></app-input>
+    <app-input
+    formControlName="hazmatUnode"
+    [inputClasses]="['w-100']"
+    [vertical]="true"
+    [label]="'HAZMAT_DETAILS.HAZMAT_UNCODE' | translate | titlecase"
+  ></app-input>
+  </div>
+</app-dialog>
