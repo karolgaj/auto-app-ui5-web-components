@@ -1,28 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, concatMap, exhaustMap, map, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, concatMap, exhaustMap, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import * as TbrActions from './tbr.actions';
 import { selectTbr } from './tbr.actions';
-import { TbrService } from '../../services/tbr.service';
+import { TbrService } from '../../services';
 import { Store } from '@ngrx/store';
-import { selectUserData } from '../user';
+import { XtrService } from '../../services/xtr.service';
 
 @Injectable()
 export class TbrEffects {
   loadTbrs$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TbrActions.loadTbrs, TbrActions.refreshTbrList),
-      withLatestFrom(this.store.select(selectUserData)),
-      concatMap(([, userData]) => {
-        const userRoles = userData?.roles ?? [];
-        const parmas = userRoles.includes('EXPRESS_APPROVER') ? userData?.consigneeParmas : userData?.consignorParmas;
-
-        return this.tbrService.getTbrList(parmas ?? []).pipe(
+      concatMap(({ data }) => {
+        return this.xtrService.getXtrs().pipe(
           map((data) => TbrActions.loadTbrsSuccess({ data })),
-          catchError((error) => of(TbrActions.loadTbrsFailure({ error })))
+          catchError((error: unknown) => of(TbrActions.loadTbrsFailure({ error })))
         );
       })
     );
@@ -34,7 +30,7 @@ export class TbrEffects {
       concatMap(({ data }) =>
         this.tbrService.getTbrNetworks().pipe(
           map((data) => TbrActions.loadAvailableNetworksSuccess({ data })),
-          catchError((error) => of(TbrActions.loadAvailableNetworksFailure({ error })))
+          catchError((error: unknown) => of(TbrActions.loadAvailableNetworksFailure({ error })))
         )
       )
     );
@@ -44,9 +40,9 @@ export class TbrEffects {
     return this.actions$.pipe(
       ofType(TbrActions.loadReasonCodes),
       concatMap(() =>
-        this.tbrService.getReasonCodes().pipe(
+        this.xtrService.reasonCodes().pipe(
           map((data) => TbrActions.loadReasonCodesSuccess({ data })),
-          catchError((error) => of(TbrActions.loadReasonCodesFailure({ error })))
+          catchError((error: unknown) => of(TbrActions.loadReasonCodesFailure({ error })))
         )
       )
     );
@@ -58,7 +54,7 @@ export class TbrEffects {
       concatMap(({ data }) =>
         this.tbrService.getConsignors().pipe(
           map((data) => TbrActions.loadConsignorsSuccess({ data })),
-          catchError((error) => of(TbrActions.loadConsignorsFailure({ error })))
+          catchError((error: unknown) => of(TbrActions.loadConsignorsFailure({ error })))
         )
       )
     );
@@ -70,7 +66,7 @@ export class TbrEffects {
       concatMap(() =>
         this.tbrService.getShipItems().pipe(
           map((data) => TbrActions.loadShipItemsSuccess({ data })),
-          catchError((error) => of(TbrActions.loadShipItemsFailure({ error })))
+          catchError((error: unknown) => of(TbrActions.loadShipItemsFailure({ error })))
         )
       )
     );
@@ -82,7 +78,7 @@ export class TbrEffects {
       concatMap(({ data }) =>
         this.tbrService.getUnloadingPoints(data).pipe(
           map((data) => TbrActions.loadUnloadingPointsSuccess({ data })),
-          catchError((error) => of(TbrActions.loadUnloadingPointsFailure({ error })))
+          catchError((error: unknown) => of(TbrActions.loadUnloadingPointsFailure({ error })))
         )
       )
     );
@@ -93,9 +89,9 @@ export class TbrEffects {
       ofType(TbrActions.selectTbr),
       tap((data) => console.log(data.data)),
       exhaustMap(({ data }) =>
-        this.tbrService.getTbrDetails(data).pipe(
+        this.xtrService.getXtrByShipItId(data).pipe(
           map((data) => TbrActions.selectTbrSuccess({ data })),
-          catchError((error) => of(TbrActions.selectTbrFailure({ error })))
+          catchError((error: unknown) => of(TbrActions.selectTbrFailure({ error })))
         )
       )
     );
@@ -106,7 +102,7 @@ export class TbrEffects {
       return this.actions$.pipe(
         ofType(TbrActions.selectTbrSuccess),
         tap(({ data }) => {
-          this.router.navigate(['/', 'xtr', data.shipitId]);
+          void this.router.navigate(['/', 'xtr', data.shipitId]);
         })
       );
     },
@@ -119,7 +115,7 @@ export class TbrEffects {
       concatMap(({ data }) =>
         this.tbrService.createTbr(data).pipe(
           map((data) => TbrActions.createTbrSuccess({ data })),
-          catchError((error) => of(TbrActions.createTbrFailure({ error })))
+          catchError((error: unknown) => of(TbrActions.createTbrFailure({ error })))
         )
       )
     )
@@ -132,5 +128,23 @@ export class TbrEffects {
     )
   );
 
-  constructor(private actions$: Actions, private tbrService: TbrService, private router: Router, private store: Store) {}
+  updateReference$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.updateReference),
+      concatMap(({ data }) =>
+        this.xtrService.updateReference(data.shipitId, data.pickupRef, data.msgToCarrier).pipe(
+          map((data) => TbrActions.updateReferenceSuccess(data)),
+          catchError((error: unknown) => of(TbrActions.updateReferenceFailure({ error })))
+        )
+      )
+    )
+  );
+
+  constructor(
+    private actions$: Actions,
+    private tbrService: TbrService,
+    private xtrService: XtrService,
+    private router: Router,
+    private store: Store
+  ) {}
 }

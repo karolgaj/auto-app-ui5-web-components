@@ -1,10 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { EMPTY, Observable, tap } from 'rxjs';
+import { LOCAL_STORAGE } from '../core';
+import { REFRESH_TOKEN_KEY, TOKEN_KEY } from '../core/providers/value-tokens';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    @Inject(REFRESH_TOKEN_KEY) private refreshTokenKey: string,
+    @Inject(TOKEN_KEY) private tokenKey: string,
+    @Inject(LOCAL_STORAGE) private localStorage: Storage
+  ) {}
 
   private static dec2hex(dec: number): string {
     return ('0' + dec.toString(16)).substr(-2);
@@ -39,7 +47,7 @@ export class AuthService {
 
   async login(): Promise<void> {
     const codeVerifier = AuthService.generateCodeVerifier();
-    localStorage.setItem('code_verifier', codeVerifier);
+    this.localStorage.setItem('code_verifier', codeVerifier);
     const codeChallenge = await AuthService.generateCodeChallengeFromVerifier(codeVerifier);
     const url = `https://federate-qa.volvo.com/as/authorization.oauth2?client_id=shipit&response_type=code&redirect_uri=https://localhost:4200/volvooauth/callback&code_challenge=${codeChallenge}&code_challenge_method=S256`;
     window.open(url, '_self');
@@ -52,7 +60,7 @@ export class AuthService {
     body.set('grant_type', 'authorization_code');
     body.set('code', code);
     body.set('client_id', 'shipit');
-    body.set('code_verifier', localStorage.getItem('code_verifier') as string);
+    body.set('code_verifier', this.localStorage.getItem('code_verifier') as string);
     body.set('redirect_uri', 'https://localhost:4200/volvooauth/callback');
 
     return this.httpClient
@@ -60,8 +68,35 @@ export class AuthService {
         headers,
       })
       .pipe(
-        tap(() => {
-          localStorage.removeItem('code_verifier');
+        tap((data) => {
+          this.localStorage.removeItem('code_verifier');
+          this.localStorage.setItem(this.tokenKey, data.access_token);
+          this.localStorage.setItem(this.refreshTokenKey, data.refresh_token);
+        })
+      );
+  }
+
+  refreshToken(): Observable<{ access_token: string; refresh_token: string }> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    const body = new URLSearchParams();
+    body.set('grant_type', 'refresh_token');
+    body.set('refresh_token', this.localStorage.getItem(this.refreshTokenKey) as string);
+    body.set('client_id', 'shipit');
+    body.set('redirect_uri', 'https://localhost:4200/volvooauth/callback');
+
+    return this.httpClient
+      .post<{ access_token: string; refresh_token: string }>('https://federate-qa.volvo.com/as/token.oauth2', body.toString(), {
+        headers,
+      })
+      .pipe(
+        tap((data) => {
+          this.localStorage.setItem(this.tokenKey, data.access_token);
+          this.localStorage.setItem(this.refreshTokenKey, data.refresh_token);
+        }),
+        catchError(() => {
+          void this.login();
+          return EMPTY;
         })
       );
   }

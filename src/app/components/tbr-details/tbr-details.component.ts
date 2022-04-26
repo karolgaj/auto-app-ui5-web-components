@@ -3,11 +3,12 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IFormBuilder, IFormControl, IFormGroup } from '@rxweb/types';
 import { Store } from '@ngrx/store';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { filter, take } from 'rxjs/operators';
 
 import { TbrService } from '../../services';
 import { TbrLine } from '../../models/tbr-line.model';
-import { selectedTbr } from '../../state';
+import { selectedTbr, updateReference } from '../../state';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { Tbr } from '../../models/tbr.model';
 import { CommonValidators } from '../../utils/validators';
@@ -26,6 +27,7 @@ interface AddRefForm {
   doNotMerge: string;
 }
 
+@UntilDestroy()
 @Component({
   selector: 'app-tbr-details',
   templateUrl: './tbr-details.component.html',
@@ -48,7 +50,7 @@ export class TbrDetailsComponent {
 
   constructor(private router: Router, private tbrService: TbrService, private store: Store, fb: FormBuilder) {
     this.fb = fb;
-    this.details$.pipe(take(1)).subscribe((value) => {
+    this.details$.pipe(untilDestroyed(this)).subscribe((value) => {
       this.tbrDetails = value;
       this.lines = value?.lines.map((line) => {
         const packagedQuantityControl = this.fb.control<number>(line.packagedQuantity, [Validators.required]);
@@ -90,10 +92,20 @@ export class TbrDetailsComponent {
   }
 
   saveAddRef() {
+    this.store.dispatch(
+      updateReference({
+        data: {
+          shipitId: this.tbrDetails?.shipitId,
+          ...this.addRefFormGroup.getRawValue(),
+        },
+      })
+    );
     this.cancelAddRef();
   }
 
   cancelAddRef() {
+    this.addRefFormGroup.reset();
+    this.addRefFormGroup.markAsPristine();
     this.addReferencesDialog.closeDialog();
   }
 

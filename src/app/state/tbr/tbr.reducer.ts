@@ -33,9 +33,13 @@ export const reducer = createReducer(
   on(TbrActions.loadConsignorsSuccess, (state, action) => ({ ...state, consignors: action.data })),
   on(TbrActions.loadUnloadingPointsSuccess, (state, action) => ({ ...state, unloadingPoints: action.data })),
   on(TbrActions.loadShipItemsSuccess, (state, action) => ({ ...state, shipItems: action.data })),
-  on(TbrActions.loadReasonCodesSuccess, (state, action) => ({ ...state, reasonCodes: action.data.details })),
+  on(TbrActions.loadReasonCodesSuccess, (state, action) => ({ ...state, reasonCodes: action.data })),
 
   on(TbrActions.createTbrSuccess, (state, action) => ({ ...state, tbrs: [...state.tbrs, action.data] })),
+  on(TbrActions.selectTbr, (state) => ({
+    ...state,
+    selectedTbr: undefined,
+  })),
   on(TbrActions.selectTbrSuccess, (state, action) => ({
     ...state,
     selectedTbr: action.data,

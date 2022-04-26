@@ -1,116 +1,124 @@
-<div fxLayout="column" style="height: 100%" *ngIf="tbrDetails">
-  <ui5-bar design="Header" slot="header">
-    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
-      {{ "COMMON.BUTTON_CLOSE" | translate }}
-    </ui5-button>
-  </ui5-bar>
+<ng-container *ngIf="tbrDetails; else emptyState">
+  <div fxLayout="column" style="height: 100%">
+    <ui5-bar design="Header" slot="header">
+      <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
+        {{ "COMMON.BUTTON_CLOSE" | translate }}
+      </ui5-button>
+    </ui5-bar>
 
-  <app-tbr-network [tbrDetails]="tbrDetails"></app-tbr-network>
+    <app-tbr-network [tbrDetails]="tbrDetails"></app-tbr-network>
 
-  <div fxFlex>
-    <ui5-bar design="Subheader">
-      <div slot="startContent">
-        <ui5-button style="margin-right: 0.5rem; border-left: 1px solid grey" icon="group-2"></ui5-button>
-        <ui5-button style="margin-right: 0.5rem; margin-left: 0.5rem" icon="add" (click)="openAddDialog()">
-          {{ "TBR_DETAILS.ADD_LINE" | translate | titlecase }}
-        </ui5-button>
-        <ui5-button style="margin-right: 0.5rem" icon="increase-line-height" (click)="split()">
-          {{ "TBR_DETAILS.SPLIT" | translate | titlecase }}
-        </ui5-button>
-        <ui5-button style="margin-right: 0.5rem" icon="duplicate"> {{ "TBR_DETAILS.SPLIT_LINES" | translate | titlecase }} </ui5-button>
-        <ui5-button icon="add" (click)="openAddRefDialog()"> {{ "TBR_DETAILS.ADD_REFERENCES" | translate | titlecase }} </ui5-button>
-      </div>
+    <div fxFlex>
+      <ui5-bar design="Subheader">
+        <div slot="startContent">
+          <ui5-button style="margin-right: 0.5rem; border-left: 1px solid grey" icon="group-2"></ui5-button>
+          <ui5-button style="margin-right: 0.5rem; margin-left: 0.5rem" icon="add" (click)="openAddDialog()">
+            {{ "TBR_DETAILS.ADD_LINE" | translate | titlecase }}
+          </ui5-button>
+          <ui5-button style="margin-right: 0.5rem" icon="increase-line-height" (click)="split()">
+            {{ "TBR_DETAILS.SPLIT" | translate | titlecase }}
+          </ui5-button>
+          <ui5-button style="margin-right: 0.5rem" icon="duplicate"> {{ "TBR_DETAILS.SPLIT_LINES" | translate | titlecase }} </ui5-button>
+          <ui5-button icon="add" (click)="openAddRefDialog()"> {{ "TBR_DETAILS.ADD_REFERENCES" | translate | titlecase }} </ui5-button>
+        </div>
+        <div slot="endContent">
+          <app-datepicker [label]="'COMMON.PICKUP_DATE' | translate | titlecase" [formControl]="deliveryDateFormControl"></app-datepicker>
+        </div>
+      </ui5-bar>
+      <ui5-table mode="MultiSelect" (selectionChange)="log($event)">
+        <!-- Columns -->
+        <ui5-table-column slot="columns">
+          <span>{{ "COMMON.PART" | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ "COMMON.PART_NAME" | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ "COMMON.REQUESTED_QTY" | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ "COMMON.SHIPPED_QTY" | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ "COMMON.PO_NUMBER" | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ "COMMON.WEIGHT" | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ "COMMON.VOLUME" | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>#</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ "COMMON.THU" | translate }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ "COMMON.SUB_HU" | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ "TBR_DETAILS.NO_DELIVERY" | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ "TBR_DETAILS.MIX" | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ "TBR_DETAILS.WH_LOCATION" | translate | titlecase }}</span>
+        </ui5-table-column>
+
+        <ui5-table-row data-ui5-compact-size *ngFor="let line of lines">
+          <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.articleNumber }}</ui5-table-cell>
+          <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.articleName }}</ui5-table-cell>
+          <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.requestedQuantity }}</ui5-table-cell>
+          <ui5-table-cell>
+            <app-input [formControl]="line.packagedQuantityControl"></app-input>
+            <!--          <ui5-input style="width: 140px !important" [value]="row.packagedQuantity"></ui5-input>-->
+          </ui5-table-cell>
+          <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.purchaseOrderNumber }}</ui5-table-cell>
+          <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)"
+            >{{ line.weightSUL }} {{ line.weightSULUom }}</ui5-table-cell
+          >
+          <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)"
+            >{{ line.volumeSUL }} {{ line.volumeSULUom }}</ui5-table-cell
+          >
+          <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.quantity }}</ui5-table-cell>
+          <ui5-table-cell>
+            <app-input [formControl]="line.typeControl"></app-input>
+            <!--          <ui5-input [value]="row.type"></ui5-input>-->
+          </ui5-table-cell>
+          <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.subHu }}</ui5-table-cell>
+          <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">
+            <ui5-icon name="cancel" style="color: red"></ui5-icon>
+          </ui5-table-cell>
+          <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">
+            <ui5-icon *ngIf="line.shipUnitLineId" name="circle-task-2" style="color: orange"></ui5-icon>
+            <ui5-icon *ngIf="line.mixValid" name="circle-task-2" style="color: #47962d"></ui5-icon>
+          </ui5-table-cell>
+          <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.whLoc }}</ui5-table-cell>
+        </ui5-table-row>
+      </ui5-table>
+    </div>
+
+    <ui5-bar design="Footer">
+      <ui5-button slot="startContent" icon="delete" design="Negative" (click)="goBack()">
+        {{ "TBR_DETAILS.BUTTON_DO_NOT_DELIVER_FULL" | translate }}
+      </ui5-button>
+      <ui5-switch [textOn]="'COMMON.IMPERIAL' | translate" [textOff]="'COMMON.METRIC' | translate"></ui5-switch>
       <div slot="endContent">
-        <app-datepicker [label]="'COMMON.PICKUP_DATE' | translate | titlecase" [formControl]="deliveryDateFormControl"></app-datepicker>
+        <ui5-button design="Positive" icon="save" style="margin-right: 1rem">
+          {{ "COMMON.BUTTON_SAVE_DRAFT" | translate | titlecase }}
+        </ui5-button>
+        <ui5-button design="Emphasized" icon="accounting-document-verification" (click)="goToWorkflow(tbrDetails.shipitId)">
+          {{ "TBR_DETAILS.BUTTON_CONTINUE_TO_DETAILS" | translate }}
+        </ui5-button>
       </div>
     </ui5-bar>
-    <ui5-table mode="MultiSelect" (selectionChange)="log($event)">
-      <!-- Columns -->
-      <ui5-table-column slot="columns">
-        <span>{{ "COMMON.PART" | translate | titlecase }}</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>{{ "COMMON.PART_NAME" | translate | titlecase }}</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>{{ "COMMON.REQUESTED_QTY" | translate | titlecase }}</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>{{ "COMMON.SHIPPED_QTY" | translate | titlecase }}</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>{{ "COMMON.PO_NUMBER" | translate | titlecase }}</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>{{ "COMMON.WEIGHT" | translate | titlecase }}</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>{{ "COMMON.VOLUME" | translate | titlecase }}</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>#</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>{{ "COMMON.THU" | translate }}</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>{{ "COMMON.SUB_HU" | translate | titlecase }}</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>{{ "TBR_DETAILS.NO_DELIVERY" | translate | titlecase }}</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>{{ "TBR_DETAILS.MIX" | translate | titlecase }}</span>
-      </ui5-table-column>
-      <ui5-table-column slot="columns">
-        <span>{{ "TBR_DETAILS.WH_LOCATION" | translate | titlecase }}</span>
-      </ui5-table-column>
-
-      <ui5-table-row data-ui5-compact-size *ngFor="let line of lines">
-        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.articleNumber }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.articleName }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.requestedQuantity }}</ui5-table-cell>
-        <ui5-table-cell>
-          <app-input [formControl]="line.packagedQuantityControl"></app-input>
-          <!--          <ui5-input style="width: 140px !important" [value]="row.packagedQuantity"></ui5-input>-->
-        </ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.purchaseOrderNumber }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.weightSUL }} {{ line.weightSULUom }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.volumeSUL }} {{ line.volumeSULUom }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.quantity }}</ui5-table-cell>
-        <ui5-table-cell>
-          <app-input [formControl]="line.typeControl"></app-input>
-          <!--          <ui5-input [value]="row.type"></ui5-input>-->
-        </ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.subHu }}</ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">
-          <ui5-icon name="cancel" style="color: red"></ui5-icon>
-        </ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">
-          <ui5-icon *ngIf="line.shipUnitLineId" name="circle-task-2" style="color: orange"></ui5-icon>
-          <ui5-icon *ngIf="line.mixValid" name="circle-task-2" style="color: #47962d"></ui5-icon>
-        </ui5-table-cell>
-        <ui5-table-cell (click)="navigateToThuDetails(line, tbrDetails.shipitId)">{{ line.whLoc }}</ui5-table-cell>
-      </ui5-table-row>
-    </ui5-table>
   </div>
-
-  <ui5-bar design="Footer">
-    <ui5-button slot="startContent" icon="delete" design="Negative" (click)="goBack()">
-      {{ "TBR_DETAILS.BUTTON_DO_NOT_DELIVER_FULL" | translate }}
-    </ui5-button>
-    <ui5-switch [textOn]="'COMMON.IMPERIAL' | translate" [textOff]="'COMMON.METRIC' | translate"></ui5-switch>
-    <div slot="endContent">
-      <ui5-button design="Positive" icon="save" style="margin-right: 1rem">
-        {{ "COMMON.BUTTON_SAVE_DRAFT" | translate | titlecase }}
-      </ui5-button>
-      <ui5-button design="Emphasized" icon="accounting-document-verification" (click)="goToWorkflow(tbrDetails.shipitId)">
-        {{ "TBR_DETAILS.BUTTON_CONTINUE_TO_DETAILS" | translate }}
-      </ui5-button>
-    </div>
-  </ui5-bar>
-</div>
-
+</ng-container>
+<ng-template #emptyState>
+  <app-tbr-empty-state></app-tbr-empty-state>
+</ng-template>
 <app-dialog #addLineDialog [dialogHeader]="'TBR_DETAILS.ADD_LINE' | translate | titlecase" (close)="cancelAddLine()" (save)="saveAddLine()">
   <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="addLineFormGroup">
     <app-input
