@@ -2,18 +2,24 @@
   <ui5-title>{{ title }}</ui5-title>
 
   <div fxLayout="column" class="wizard-step__content">
-    <ui5-label>{{'COMMON.SHIP_FROM' | translate | titlecase }}  :   {{ data.shipFrom | address }}</ui5-label>
-    <ui5-label>{{'COMMON.ADDRESS_STREET' | translate | titlecase }} :   {{ data.shipFrom.address?.street1 }}</ui5-label>
-    <ui5-label>{{'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase }}  :  {{ data.shipFrom.address?.postalCode }}</ui5-label>
-    <ui5-label>{{'COMMON.ADDRESS_CITY' | translate | titlecase }} :   {{ data.shipFrom.address?.city }}</ui5-label>
-    <ui5-label>{{'COMMON.ADDRESS_COUNTRY' | translate | titlecase }}  :  {{ data.shipFrom.countryCode }}</ui5-label>
+    <ui5-label>{{ 'COMMON.SHIP_FROM' | translate | titlecase }} : {{ data.shipFrom | address }}</ui5-label>
+    <ui5-label>{{ 'COMMON.ADDRESS_STREET' | translate | titlecase }} : {{ data.shipFrom.address?.street1 }}</ui5-label>
+    <ui5-label>{{ 'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase }} : {{ data.shipFrom.address?.postalCode }}</ui5-label>
+    <ui5-label>{{ 'COMMON.ADDRESS_CITY' | translate | titlecase }} : {{ data.shipFrom.address?.city }}</ui5-label>
+    <ui5-label>{{ 'COMMON.ADDRESS_COUNTRY' | translate | titlecase }} : {{ data.shipFrom.countryCode }}</ui5-label>
   </div>
 
   <div fxLayout="column" fxFlex fxLayoutAlign="stretch end" class="wizard-step__content" fxLayoutGap="0.5rem" [formGroup]="form">
     <app-datepicker formControlName="deliveryDate" [label]="'COMMON.PICKUP_READY_DATE' | translate"></app-datepicker>
     <app-timepicker formControlName="collectionTime" [required]="true" [label]="'COMMON.PICKUP_READY_TIME' | translate"></app-timepicker>
-    <app-timepicker formControlName="openingHourAtCollection" [required]="true" [label]="'COMMON.PICKUP_OPENING_HOUR' | translate"></app-timepicker>
-    <app-timepicker formControlName="closingHourAtCollection" [required]="true" [label]="'COMMON.PICKUP_CLOSING_HOUR' | translate"></app-timepicker>
+    <app-timepicker
+      formControlName="openingHourAtCollection"
+      [required]="true"
+      [label]="'COMMON.PICKUP_OPENING_HOUR' | translate"></app-timepicker>
+    <app-timepicker
+      formControlName="closingHourAtCollection"
+      [required]="true"
+      [label]="'COMMON.PICKUP_CLOSING_HOUR' | translate"></app-timepicker>
     <app-input formControlName="pickupReference" [label]="'COMMON.PICKUP_REFERENCE' | translate"></app-input>
     <app-input formControlName="messageToCarrier" [label]="'COMMON.MESSAGE_TO_CARRIER' | translate"></app-input>
   </div>

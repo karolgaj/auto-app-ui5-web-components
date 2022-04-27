@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { FormBuilder,Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { IFormBuilder, IFormControl, IFormGroup } from '@rxweb/types';
@@ -32,8 +32,13 @@ export class ThuDetailsComponent {
 
   private fb: IFormBuilder;
 
-  constructor(private tbrService: TbrService, private router: Router, private route: ActivatedRoute, private store: Store,fb: FormBuilder) {
-
+  constructor(
+    private tbrService: TbrService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private store: Store,
+    fb: FormBuilder
+  ) {
     this.line$ = this.route.paramMap.pipe(
       switchMap((paramMap) => {
         const articleNumber = paramMap.get('articleNumber');
@@ -87,8 +92,5 @@ export class ThuDetailsComponent {
       hazmatPropperShippingName: [null],
       hazmatUnode: [null],
     });
-
   }
 }
-
-

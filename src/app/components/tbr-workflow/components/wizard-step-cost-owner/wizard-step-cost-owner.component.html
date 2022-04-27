@@ -8,8 +8,7 @@
         interactive="true"
         [titleText]="'COMMON.COST_OWNER_VOLVO' | translate | titlecase"
         [subtitleText]="'COMMON.COST_OWNER_VOLVO_TEXT' | translate | titlecase"
-        (click)="selectCostOwner('CONSIGNEE')"
-      >
+        (click)="selectCostOwner('CONSIGNEE')">
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
     </ui5-card>
@@ -20,8 +19,7 @@
         interactive="true"
         [titleText]="data.consignor.name"
         [subtitleText]="'COMMON.COST_OWNER_CONSIGNOR_TEXT' | translate | titlecase"
-        (click)="selectCostOwner('CONSIGNOR')"
-      >
+        (click)="selectCostOwner('CONSIGNOR')">
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
     </ui5-card>
@@ -32,8 +30,7 @@
         interactive="true"
         [titleText]="'COMMON.COST_OWNER_SHARED_COST' | translate | titlecase"
         [subtitleText]="'COMMON.COST_OWNER_SHARED_COST_TEXT' | translate | titlecase"
-        (click)="selectCostOwner('SHARED')"
-      >
+        (click)="selectCostOwner('SHARED')">
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
     </ui5-card>
@@ -44,8 +41,7 @@
         interactive="true"
         [titleText]="'COMMON.COST_OWNER_NOT_AGREED' | translate | titlecase"
         [subtitleText]="'COMMON.COST_OWNER_VOLVO_TEXT' | translate | titlecase"
-        (click)="selectCostOwner('NOT_AGREED')"
-      >
+        (click)="selectCostOwner('NOT_AGREED')">
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
     </ui5-card>
@@ -56,11 +52,27 @@
     <app-input formControlName="consignee" [label]="'COMMON.CONSIGNEE' | translate | titlecase"></app-input>
   </div>
 
-  <ui5-label>{{ "COMMON.COST_OWNER_CONSIGNEE_COST" | translate | titlecase }}: </ui5-label>
-  <ui5-slider #consigneeSlider min="0" max="100" step="5" [value]="consigneeCost" show-tooltip label-interval="2" show-tickmarks></ui5-slider>
+  <ui5-label>{{ 'COMMON.COST_OWNER_CONSIGNEE_COST' | translate | titlecase }}: </ui5-label>
+  <ui5-slider
+    #consigneeSlider
+    min="0"
+    max="100"
+    step="5"
+    [value]="consigneeCost"
+    show-tooltip
+    label-interval="2"
+    show-tickmarks></ui5-slider>
 
-  <ui5-label>{{ "COMMON.COST_OWNER_CONSIGNOR_COST" | translate | titlecase }}: </ui5-label>
-  <ui5-slider #consignorSlider min="0" max="100" step="5" [value]="consignorCost" show-tooltip label-interval="2" show-tickmarks></ui5-slider>
+  <ui5-label>{{ 'COMMON.COST_OWNER_CONSIGNOR_COST' | translate | titlecase }}: </ui5-label>
+  <ui5-slider
+    #consignorSlider
+    min="0"
+    max="100"
+    step="5"
+    [value]="consignorCost"
+    show-tooltip
+    label-interval="2"
+    show-tickmarks></ui5-slider>
 
   <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
 </div>

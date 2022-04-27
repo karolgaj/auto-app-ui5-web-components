@@ -9,9 +9,8 @@
         interactive="true"
         [status]="partialExpressTypeStatus$ | async"
         [titleText]="'COMMON.PARTIAL_EXPRESS' | translate | titlecase"
-        [subtitleText]="'COMMON.PARTIAL_EXPRESS_TEXT' | translate "
-        (click)="selectType('PARTIAL_EXPRESS')"
-      >
+        [subtitleText]="'COMMON.PARTIAL_EXPRESS_TEXT' | translate"
+        (click)="selectType('PARTIAL_EXPRESS')">
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
     </ui5-card>
@@ -23,24 +22,22 @@
         interactive="true"
         [status]="expressTypeStatus$ | async"
         [titleText]="'COMMON.EXPRESS' | translate | titlecase"
-        [subtitleText]="'COMMON.EXPRESS_TEXT' | translate "
-        (click)="selectType('EXPRESS')"
-      >
+        [subtitleText]="'COMMON.EXPRESS_TEXT' | translate"
+        (click)="selectType('EXPRESS')">
         <ui5-icon name="group" slot="avatar"></ui5-icon>
       </ui5-card-header>
     </ui5-card>
   </div>
 
-  <div
-    fxLayout="column"
-    fxFlex
-    fxLayoutAlign="stretch end"
-    class="wizard-step__content"
-    fxLayoutGap="0.5rem"
-    [formGroup]="form"
-  >
-    <app-datepicker formControlName="mustArriveDate" [required]="true" [label]="'COMMON.MUST_ARRIVE_DATE' | translate | titlecase"></app-datepicker>
-    <app-timepicker formControlName="mustArriveTime" [required]="true" [label]="'COMMON.MUST_ARRIVE_TIME' | translate | titlecase"></app-timepicker>
+  <div fxLayout="column" fxFlex fxLayoutAlign="stretch end" class="wizard-step__content" fxLayoutGap="0.5rem" [formGroup]="form">
+    <app-datepicker
+      formControlName="mustArriveDate"
+      [required]="true"
+      [label]="'COMMON.MUST_ARRIVE_DATE' | translate | titlecase"></app-datepicker>
+    <app-timepicker
+      formControlName="mustArriveTime"
+      [required]="true"
+      [label]="'COMMON.MUST_ARRIVE_TIME' | translate | titlecase"></app-timepicker>
     <app-timepicker formControlName="openingHourAtDelivery" [label]="'COMMON.DROPOF_OPENING_HOUR' | translate"></app-timepicker>
     <app-timepicker formControlName="closeHourAtDelivery" [label]="'COMMON.DROPOF_CLOSING_HOUR' | translate"></app-timepicker>
     <app-input *ngIf="isCrossDock$ | async" formControlName="crossDock" [label]="'COMMON.XDOCK' | translate"></app-input>

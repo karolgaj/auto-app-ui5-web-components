@@ -2,13 +2,18 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EMPTY, Observable, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { LOCAL_STORAGE } from '../core';
-import { REFRESH_TOKEN_KEY, TOKEN_KEY } from '../core/providers/value-tokens';
+import { LOCAL_STORAGE, WINDOW } from '../core';
+import { CLIENT_ID, PING_URL, REFRESH_TOKEN_KEY, TOKEN_KEY } from '../core/providers/value-tokens';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private pingRedirectUrl = `${this.window.origin}/volvooauth/callback`;
+
   constructor(
     private httpClient: HttpClient,
+    @Inject(WINDOW) private window: Window,
+    @Inject(PING_URL) private pingUrl: string,
+    @Inject(CLIENT_ID) private clientId: string,
     @Inject(REFRESH_TOKEN_KEY) private refreshTokenKey: string,
     @Inject(TOKEN_KEY) private tokenKey: string,
     @Inject(LOCAL_STORAGE) private localStorage: Storage
@@ -18,7 +23,7 @@ export class AuthService {
     const codeVerifier = AuthService.generateCodeVerifier();
     this.localStorage.setItem('code_verifier', codeVerifier);
     const codeChallenge = await AuthService.generateCodeChallengeFromVerifier(codeVerifier);
-    const url = `https://federate-qa.volvo.com/as/authorization.oauth2?client_id=shipit&response_type=code&redirect_uri=https://localhost:4200/volvooauth/callback&code_challenge=${codeChallenge}&code_challenge_method=S256`;
+    const url = `${this.pingUrl}/as/authorization.oauth2?client_id=${this.clientId}&response_type=code&redirect_uri=${this.pingRedirectUrl}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
     window.open(url, '_self');
   }
 
@@ -28,12 +33,12 @@ export class AuthService {
     const body = new URLSearchParams();
     body.set('grant_type', 'authorization_code');
     body.set('code', code);
-    body.set('client_id', 'shipit');
+    body.set('client_id', this.clientId);
     body.set('code_verifier', this.localStorage.getItem('code_verifier') as string);
-    body.set('redirect_uri', 'https://localhost:4200/volvooauth/callback');
+    body.set('redirect_uri', this.pingRedirectUrl);
 
     return this.httpClient
-      .post<{ access_token: string; refresh_token: string }>('https://federate-qa.volvo.com/as/token.oauth2', body.toString(), {
+      .post<{ access_token: string; refresh_token: string }>(`${this.pingUrl}/as/token.oauth2`, body.toString(), {
         headers,
       })
       .pipe(
@@ -51,11 +56,11 @@ export class AuthService {
     const body = new URLSearchParams();
     body.set('grant_type', 'refresh_token');
     body.set('refresh_token', this.localStorage.getItem(this.refreshTokenKey) as string);
-    body.set('client_id', 'shipit');
-    body.set('redirect_uri', 'https://localhost:4200/volvooauth/callback');
+    body.set('client_id', this.clientId);
+    body.set('redirect_uri', this.pingRedirectUrl);
 
     return this.httpClient
-      .post<{ access_token: string; refresh_token: string }>('https://federate-qa.volvo.com/as/token.oauth2', body.toString(), {
+      .post<{ access_token: string; refresh_token: string }>(`${this.pingUrl}/as/token.oauth2`, body.toString(), {
         headers,
       })
       .pipe(

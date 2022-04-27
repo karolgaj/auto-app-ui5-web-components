@@ -2,7 +2,7 @@
   <div fxLayout="column" style="height: 100%">
     <ui5-bar design="Header" slot="header">
       <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
-        {{ "COMMON.BUTTON_CLOSE" | translate }}
+        {{ 'COMMON.BUTTON_CLOSE' | translate }}
       </ui5-button>
     </ui5-bar>
 
@@ -13,13 +13,13 @@
         <div slot="startContent">
           <ui5-button style="margin-right: 0.5rem; border-left: 1px solid grey" icon="group-2"></ui5-button>
           <ui5-button style="margin-right: 0.5rem; margin-left: 0.5rem" icon="add" (click)="openAddDialog()">
-            {{ "TBR_DETAILS.ADD_LINE" | translate | titlecase }}
+            {{ 'TBR_DETAILS.ADD_LINE' | translate | titlecase }}
           </ui5-button>
           <ui5-button style="margin-right: 0.5rem" icon="increase-line-height" (click)="split()">
-            {{ "TBR_DETAILS.SPLIT" | translate | titlecase }}
+            {{ 'TBR_DETAILS.SPLIT' | translate | titlecase }}
           </ui5-button>
-          <ui5-button style="margin-right: 0.5rem" icon="duplicate"> {{ "TBR_DETAILS.SPLIT_LINES" | translate | titlecase }} </ui5-button>
-          <ui5-button icon="add" (click)="openAddRefDialog()"> {{ "TBR_DETAILS.ADD_REFERENCES" | translate | titlecase }} </ui5-button>
+          <ui5-button style="margin-right: 0.5rem" icon="duplicate"> {{ 'TBR_DETAILS.SPLIT_LINES' | translate | titlecase }} </ui5-button>
+          <ui5-button icon="add" (click)="openAddRefDialog()"> {{ 'TBR_DETAILS.ADD_REFERENCES' | translate | titlecase }} </ui5-button>
         </div>
         <div slot="endContent">
           <app-datepicker [label]="'COMMON.PICKUP_DATE' | translate | titlecase" [formControl]="deliveryDateFormControl"></app-datepicker>
@@ -28,43 +28,43 @@
       <ui5-table mode="MultiSelect" (selectionChange)="log($event)">
         <!-- Columns -->
         <ui5-table-column slot="columns">
-          <span>{{ "COMMON.PART" | translate | titlecase }}</span>
+          <span>{{ 'COMMON.PART' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{ "COMMON.PART_NAME" | translate | titlecase }}</span>
+          <span>{{ 'COMMON.PART_NAME' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{ "COMMON.REQUESTED_QTY" | translate | titlecase }}</span>
+          <span>{{ 'COMMON.REQUESTED_QTY' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{ "COMMON.SHIPPED_QTY" | translate | titlecase }}</span>
+          <span>{{ 'COMMON.SHIPPED_QTY' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{ "COMMON.PO_NUMBER" | translate | titlecase }}</span>
+          <span>{{ 'COMMON.PO_NUMBER' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{ "COMMON.WEIGHT" | translate | titlecase }}</span>
+          <span>{{ 'COMMON.WEIGHT' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{ "COMMON.VOLUME" | translate | titlecase }}</span>
+          <span>{{ 'COMMON.VOLUME' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
           <span>#</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{ "COMMON.THU" | translate }}</span>
+          <span>{{ 'COMMON.THU' | translate }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{ "COMMON.SUB_HU" | translate | titlecase }}</span>
+          <span>{{ 'COMMON.SUB_HU' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{ "TBR_DETAILS.NO_DELIVERY" | translate | titlecase }}</span>
+          <span>{{ 'TBR_DETAILS.NO_DELIVERY' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{ "TBR_DETAILS.MIX" | translate | titlecase }}</span>
+          <span>{{ 'TBR_DETAILS.MIX' | translate | titlecase }}</span>
         </ui5-table-column>
         <ui5-table-column slot="columns">
-          <span>{{ "TBR_DETAILS.WH_LOCATION" | translate | titlecase }}</span>
+          <span>{{ 'TBR_DETAILS.WH_LOCATION' | translate | titlecase }}</span>
         </ui5-table-column>
 
         <ui5-table-row data-ui5-compact-size *ngFor="let line of lines">
@@ -102,15 +102,15 @@
 
     <ui5-bar design="Footer">
       <ui5-button slot="startContent" icon="delete" design="Negative" (click)="goBack()">
-        {{ "TBR_DETAILS.BUTTON_DO_NOT_DELIVER_FULL" | translate }}
+        {{ 'TBR_DETAILS.BUTTON_DO_NOT_DELIVER_FULL' | translate }}
       </ui5-button>
       <ui5-switch [textOn]="'COMMON.IMPERIAL' | translate" [textOff]="'COMMON.METRIC' | translate"></ui5-switch>
       <div slot="endContent">
         <ui5-button design="Positive" icon="save" style="margin-right: 1rem">
-          {{ "COMMON.BUTTON_SAVE_DRAFT" | translate | titlecase }}
+          {{ 'COMMON.BUTTON_SAVE_DRAFT' | translate | titlecase }}
         </ui5-button>
         <ui5-button design="Emphasized" icon="accounting-document-verification" (click)="goToWorkflow(tbrDetails.shipitId)">
-          {{ "TBR_DETAILS.BUTTON_CONTINUE_TO_DETAILS" | translate }}
+          {{ 'TBR_DETAILS.BUTTON_CONTINUE_TO_DETAILS' | translate }}
         </ui5-button>
       </div>
     </ui5-bar>
@@ -125,20 +125,17 @@
       formControlName="partNo"
       [inputClasses]="['w-100']"
       [vertical]="true"
-      [label]="'COMMON.PART_NUMBER' | translate | titlecase"
-    ></app-input>
+      [label]="'COMMON.PART_NUMBER' | translate | titlecase"></app-input>
     <app-input
       formControlName="plannedQty"
       [inputClasses]="['w-100']"
       [vertical]="true"
-      [label]="'COMMON.REQUESTED_QTY' | translate | titlecase"
-    ></app-input>
+      [label]="'COMMON.REQUESTED_QTY' | translate | titlecase"></app-input>
     <app-input
       formControlName="poNumber"
       [inputClasses]="['w-100']"
       [vertical]="true"
-      [label]="'COMMON.PO_NUMBER' | translate | titlecase"
-    ></app-input>
+      [label]="'COMMON.PO_NUMBER' | translate | titlecase"></app-input>
   </div>
 </app-dialog>
 
@@ -146,33 +143,28 @@
   #addReferencesDialog
   [dialogHeader]="'TBR_DETAILS.ADD_REFERENCES' | translate | titlecase"
   (close)="cancelAddRef()"
-  (save)="saveAddRef()"
->
+  (save)="saveAddRef()">
   <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="addRefFormGroup">
     <app-input
       formControlName="msgToCarrier"
       [inputClasses]="['w-100']"
       [vertical]="true"
-      [label]="'COMMON.MESSAGE_TO_CARRIER' | translate | titlecase"
-    ></app-input>
+      [label]="'COMMON.MESSAGE_TO_CARRIER' | translate | titlecase"></app-input>
     <app-input
       formControlName="pickupRef"
       [inputClasses]="['w-100']"
       [vertical]="true"
-      [label]="'COMMON.PICKUP_REFERENCE' | translate | titlecase"
-    ></app-input>
+      [label]="'COMMON.PICKUP_REFERENCE' | translate | titlecase"></app-input>
     <app-input
       formControlName="dispatchAdviceNumber"
       [inputClasses]="['w-100']"
       [vertical]="true"
-      [label]="'COMMON.DISPATCH_ADVICE_NUMBER' | translate | titlecase"
-    ></app-input>
+      [label]="'COMMON.DISPATCH_ADVICE_NUMBER' | translate | titlecase"></app-input>
     <app-input
       formControlName="orderNumber"
       [inputClasses]="['w-100']"
       [vertical]="true"
-      [label]="'COMMON.ORDER_NUMBER' | translate | titlecase"
-    ></app-input>
+      [label]="'COMMON.ORDER_NUMBER' | translate | titlecase"></app-input>
     <app-checkbox formControlName="doNotMerge" [label]="'COMMON.DO_NOT_MERGE' | translate | titlecase"></app-checkbox>
   </div>
 </app-dialog>

@@ -1,6 +1,8 @@
 <div fxLayout="column" fxLayoutAlign="space-between" style="height: 100%">
   <ui5-bar design="Header" slot="header">
-    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()"> {{'COMMON.BUTTON_CLOSE' | translate }} </ui5-button>
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
+      {{ 'COMMON.BUTTON_CLOSE' | translate }}
+    </ui5-button>
   </ui5-bar>
 
   <div fxLayout="column" fxFlex fxLayoutAlign="stetch center" fxLayoutGap="1rem" class="network-form" [formGroup]="networkForm">
@@ -9,16 +11,14 @@
       [label]="'COMMON.CONSIGNEE' | translate | titlecase"
       formControlName="consignee"
       [required]="true"
-      [icons]="[{ icon: 'value-help', action: openConsigneeDialogBound }]"
-    ></app-input>
+      [icons]="[{ icon: 'value-help', action: openConsigneeDialogBound }]"></app-input>
     <app-input
       class="after-icon"
       [placeholder]="'COMMON.CONSIGNOR' | translate | titlecase"
       [label]="'COMMON.CONSIGNOR' | translate | titlecase"
       formControlName="consignor"
       [showColon]="true"
-      [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]"
-    >
+      [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]">
       <ui5-icon name="question-mark" after (click)="toggleAvailableNetwork()"></ui5-icon>
     </app-input>
 
@@ -58,14 +58,12 @@
       [icons]="[
         { icon: 'add-contact', action: openCustomShipFromAddressDialogBound },
         { icon: 'value-help', action: openShipFromListDialogBound }
-      ]"
-    ></app-input>
+      ]"></app-input>
     <app-input
       [placeholder]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"
       [label]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"
       formControlName="loadingPoint"
-      [icons]="[{ icon: 'value-help', action: openLoadingPointDialogBound }]"
-    ></app-input>
+      [icons]="[{ icon: 'value-help', action: openLoadingPointDialogBound }]"></app-input>
     <app-input
       [placeholder]="'COMMON.SHIP_TO' | translate | titlecase"
       [label]="'COMMON.SHIP_TO' | translate | titlecase"
@@ -74,15 +72,13 @@
       [icons]="[
         { icon: 'add-contact', action: openCustomShipToAddressDialogBound },
         { icon: 'value-help', action: openShipToListDialogBound }
-      ]"
-    ></app-input>
+      ]"></app-input>
     <app-input
       [placeholder]="'COMMON.UNLOADING_POINT' | translate | titlecase"
       [label]="'COMMON.UNLOADING_POINT' | translate | titlecase"
       formControlName="unloadingPoint"
       [required]="true"
-      [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"
-    ></app-input>
+      [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"></app-input>
 
     <app-datepicker formControlName="pickupDate" [required]="true" [label]="'COMMON.PICKUP_DATE' | translate | titlecase"></app-datepicker>
 
@@ -90,27 +86,24 @@
       [placeholder]="'COMMON.SERVICE_LEVEL' | translate | titlecase"
       [label]="'COMMON.SERVICE_LEVEL' | translate | titlecase"
       [selectionOptions]="serviceLevelOptions"
-      formControlName="serviceLevel"
-    ></app-select>
+      formControlName="serviceLevel"></app-select>
     <app-select
       [placeholder]="'COMMON.PLANNING_TYPE' | translate"
       [label]="'COMMON.PLANNING_TYPE' | translate | titlecase"
       [selectionOptions]="planningTypesOptions"
-      formControlName="planningType"
-    ></app-select>
+      formControlName="planningType"></app-select>
     <app-select
       [placeholder]="'COMMON.TRANSPORT_TYPE' | translate"
       [label]="'COMMON.TRANSPORT_TYPE' | translate | titlecase"
       [selectionOptions]="transportTypeOptions"
-      formControlName="transportType"
-    ></app-select>
+      formControlName="transportType"></app-select>
 
     <app-checkbox formControlName="customs" [label]="'COMMON.CUSTOMS' | translate"></app-checkbox>
-    <app-checkbox formControlName="useLoadingMeters" [label]="'COMMON.USE_LOADING_METERS' | translate | titlecase "></app-checkbox>
+    <app-checkbox formControlName="useLoadingMeters" [label]="'COMMON.USE_LOADING_METERS' | translate | titlecase"></app-checkbox>
   </div>
   <ui5-bar design="Footer">
     <div slot="endContent">
-      <ui5-button design="Emphasized" (click)="createTbr()"> {{'COMMON.BUTTON_CREATE' | translate}} </ui5-button>
+      <ui5-button design="Emphasized" (click)="createTbr()"> {{ 'COMMON.BUTTON_CREATE' | translate }} </ui5-button>
     </div>
   </ui5-bar>
 </div>
@@ -123,14 +116,13 @@
       *ngFor="let parma of consignors$ | async"
       [description]="parma.info"
       [additionalText]="parma.parma"
-      (click)="selectParma(parma)"
-    >
+      (click)="selectParma(parma)">
       {{ parma.name }}
     </ui5-li>
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeParmaDialog()"> {{'COMMON.BUTTON_CANCEL' | translate}} </ui5-button>
+    <ui5-button design="Transparent" (click)="closeParmaDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
   </div>
 </app-dialog>
 
@@ -140,14 +132,13 @@
       *ngFor="let consignor of unloadingPoints$ | async"
       [description]="consignor.info"
       [additionalText]="consignor.parma"
-      (click)="selectLoadingPoint(consignor.parma)"
-    >
+      (click)="selectLoadingPoint(consignor.parma)">
       {{ consignor.name }}
     </ui5-li>
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeUnloadingPointDialog()"> {{'COMMON.BUTTON_CANCEL' | translate}} </ui5-button>
+    <ui5-button design="Transparent" (click)="closeUnloadingPointDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
   </div>
 </app-dialog>
 
@@ -157,23 +148,37 @@
       *ngFor="let shipItem of shipItems$ | async"
       [description]="shipItem.info"
       [additionalText]="shipItem.parma"
-      (click)="selectShipItem(shipItem)"
-    >
+      (click)="selectShipItem(shipItem)">
       {{ shipItem.name }}
     </ui5-li>
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeShipListDialog()"> {{'COMMON.BUTTON_CANCEL' | translate}} </ui5-button>
+    <ui5-button design="Transparent" (click)="closeShipListDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
   </div>
 </app-dialog>
 
 <app-dialog #customAddressDialog [dialogHeader]="addressDialogHeader" (close)="closeCustomAddressDialog()" (save)="saveCustomAddress()">
   <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="customAddressForm">
-    <app-input formControlName="name" [placeholder]="'COMMON.ADDRESS_NAME' | translate | titlecase" [label]="'COMMON.ADDRESS_NAME' | translate | titlecase"></app-input>
-    <app-input formControlName="countryCode" [placeholder]="'COMMON.ADDRESS_COUNTRY' | translate | titlecase" [label]="'COMMON.ADDRESS_COUNTRY' | translate | titlecase"></app-input>
-    <app-input formControlName="postalCode" [placeholder]="'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase" [label]="'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase"></app-input>
-    <app-input formControlName="city" [placeholder]="'COMMON.ADDRESS_CITY' | translate | titlecase" [label]="'COMMON.ADDRESS_CITY' | translate | titlecase"></app-input>
-    <app-input formControlName="street1" [placeholder]="'COMMON.ADDRESS_STREET' | translate | titlecase" [label]="'COMMON.ADDRESS_STREET' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="name"
+      [placeholder]="'COMMON.ADDRESS_NAME' | translate | titlecase"
+      [label]="'COMMON.ADDRESS_NAME' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="countryCode"
+      [placeholder]="'COMMON.ADDRESS_COUNTRY' | translate | titlecase"
+      [label]="'COMMON.ADDRESS_COUNTRY' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="postalCode"
+      [placeholder]="'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase"
+      [label]="'COMMON.ADDRESS_POSTAL_CODE' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="city"
+      [placeholder]="'COMMON.ADDRESS_CITY' | translate | titlecase"
+      [label]="'COMMON.ADDRESS_CITY' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="street1"
+      [placeholder]="'COMMON.ADDRESS_STREET' | translate | titlecase"
+      [label]="'COMMON.ADDRESS_STREET' | translate | titlecase"></app-input>
   </div>
 </app-dialog>

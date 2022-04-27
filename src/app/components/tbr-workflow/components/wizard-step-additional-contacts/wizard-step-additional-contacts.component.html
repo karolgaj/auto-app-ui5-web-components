@@ -5,30 +5,28 @@
   <div fxLayout="column" fxFlex fxLayoutAlign="stretch end" class="wizard-step__content" style="width: 100%">
     <ui5-table>
       <ui5-table-column slot="columns">
-        <span> {{ "Type" }} </span>
+        <span> {{ 'Type' }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ "Email" }} </span>
+        <span> {{ 'Email' }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ "Name" }} </span>
+        <span> {{ 'Name' }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ "Phone" }} </span>
+        <span> {{ 'Phone' }} </span>
       </ui5-table-column>
 
       <ui5-table-row
         data-ui5-compact-size
         *ngFor="let rowForm of form.controls; let i = index"
         (click)="assignEditingIndex(i)"
-        [formGroup]="getFormGroup(rowForm)"
-      >
+        [formGroup]="getFormGroup(rowForm)">
         <ui5-table-cell>
           <app-input
             [placeholder]="'Type'"
             formControlName="contactType"
-            [icons]="[{ icon: 'value-help', action: openTypeDialog }]"
-          ></app-input>
+            [icons]="[{ icon: 'value-help', action: openTypeDialog }]"></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
           <app-input [placeholder]="'Email'" formControlName="email"></app-input>
@@ -46,22 +44,14 @@
   <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
 </div>
 
-<app-dialog
-  #contactTypeDialog
-  dialogHeader="Contact type"
-  [hideDefaultFooter]="true"
-  accessibleName="Contact type point value help"
->
+<app-dialog #contactTypeDialog dialogHeader="Contact type" [hideDefaultFooter]="true" accessibleName="Contact type point value help">
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
-    <ui5-li
-      *ngFor="let contactType of contactTypes"
-      (click)="chooseContactType(contactType.value)"
-    >
+    <ui5-li *ngFor="let contactType of contactTypes" (click)="chooseContactType(contactType.value)">
       {{ contactType.title }}
     </ui5-li>
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeContactTypeDialog()"> {{ "COMMON.BUTTON_CANCEL" | translate }} </ui5-button>
+    <ui5-button design="Transparent" (click)="closeContactTypeDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
   </div>
 </app-dialog>

@@ -5,44 +5,40 @@
   <div fxLayout="column" fxFlex fxLayoutAlign="stretch end" class="wizard-step__content" style="width: 100%">
     <ui5-table>
       <ui5-table-column slot="columns">
-        <span> {{ "Couse" }} </span>
+        <span> {{ 'Couse' }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ "Reason Code" }} </span>
+        <span> {{ 'Reason Code' }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ "Sub-Reason Code" }} </span>
+        <span> {{ 'Sub-Reason Code' }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ "Reference" }} </span>
+        <span> {{ 'Reference' }} </span>
       </ui5-table-column>
 
       <ui5-table-row
         data-ui5-compact-size
         *ngFor="let rowForm of form.controls; let i = index"
         (click)="assignEditingIndex(i)"
-        [formGroup]="getFormGroup(rowForm)"
-      >
+        [formGroup]="getFormGroup(rowForm)">
         <ui5-table-cell>
           <app-input
             [placeholder]="'Cause'"
             formControlName="cause"
-            [icons]="[{ icon: 'value-help', action: openReasonCodesDialog }]"
-          ></app-input>
+            [icons]="[{ icon: 'value-help', action: openReasonCodesDialog }]"></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
           <app-input
             [placeholder]="'Reason code'"
             formControlName="subCode"
-            [icons]="[{ icon: 'value-help', action: openSubCodesDialog }]"
-          ></app-input>
+            [icons]="[{ icon: 'value-help', action: openSubCodesDialog }]"></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
           <app-input
             [placeholder]="'reason subcode'"
             formControlName="secondSubCode"
-            [icons]="[{ icon: 'value-help', action: openSecondSubCodesDialog }]"
-          ></app-input>
+            [icons]="[{ icon: 'value-help', action: openSecondSubCodesDialog }]"></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
           <app-input [placeholder]="'Reference'" formControlName="reference"></app-input>
@@ -62,7 +58,7 @@
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeReasonCodesDialog()"> {{ "COMMON.BUTTON_CANCEL" | translate }} </ui5-button>
+    <ui5-button design="Transparent" (click)="closeReasonCodesDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
   </div>
 </app-dialog>
 
@@ -74,7 +70,7 @@
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeSubCodesDialog()"> {{ "COMMON.BUTTON_CANCEL" | translate }} </ui5-button>
+    <ui5-button design="Transparent" (click)="closeSubCodesDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
   </div>
 </app-dialog>
 
@@ -82,18 +78,14 @@
   #secondSubCodeDialog
   dialogHeader="reason sub code"
   [hideDefaultFooter]="true"
-  accessibleName="reason sub code point value help"
->
+  accessibleName="reason sub code point value help">
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
-    <ui5-li
-      *ngFor="let secondSubCode of secondSubCodes$ | async"
-      (click)="chooseSecondSubCode(secondSubCode)"
-    >
+    <ui5-li *ngFor="let secondSubCode of secondSubCodes$ | async" (click)="chooseSecondSubCode(secondSubCode)">
       {{ secondSubCode.description }}
     </ui5-li>
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeSecondSubCodesDialog()"> {{ "COMMON.BUTTON_CANCEL" | translate }} </ui5-button>
+    <ui5-button design="Transparent" (click)="closeSecondSubCodesDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
   </div>
 </app-dialog>

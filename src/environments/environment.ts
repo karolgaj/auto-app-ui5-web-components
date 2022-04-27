@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   baseUrl: 'https://shipitapi-dev.volvogroup.com/apigw',
+  pingUrl: 'https://federate-qa.volvo.com',
+  clientId: 'shipit',
 };
 
 /*

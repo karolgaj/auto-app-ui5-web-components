@@ -2,8 +2,7 @@
   [fxLayout]="vertical ? 'column' : 'row'"
   [fxLayoutAlign]="vertical ? '' : 'end center'"
   [fxLayoutGap]="vertical ? '0.25rem' : '0.5rem'"
-  [ngClass]="inputContainerClasses"
->
+  [ngClass]="inputContainerClasses">
   <ng-content [before]></ng-content>
   <ui5-label *ngIf="label" [ngClass]="labelClasses" [for]="getId()" [required]="required" [showColon]="showColon"> {{ label }} </ui5-label>
   <ui5-input
@@ -14,8 +13,7 @@
     [showSuggestions]="showSuggestions"
     [value]="value"
     [disabled]="disabled"
-    [valueState]="valueState"
-  >
+    [valueState]="valueState">
     <ng-container *ngFor="let icon of icons">
       <ui5-icon *ngIf="icon.icon" slot="icon" [name]="icon.icon" (click)="icon.action && icon.action()"></ui5-icon>
     </ng-container>

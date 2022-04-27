@@ -2,9 +2,9 @@
   <ui5-title>{{ title }}</ui5-title>
 
   <div fxLayout="column" fxFlex fxLayoutAlign="stretch end" class="wizard-step__content" fxLayoutGap="0.5rem" [formGroup]="form">
-    <app-input label="{{'COMMON.CONTACT_PERSON_NAME' | translate | titlecase }}" formControlName="name" [required]="true"></app-input>
-    <app-input label="{{'COMMON.CONTACT_PERSON_PHONE' | translate | titlecase }}" formControlName="phone" [required]="true"></app-input>
-    <app-input label="{{'COMMON.CONTACT_PERSON_EMAIL' | translate | titlecase }}" formControlName="email" [required]="true"></app-input>
+    <app-input label="{{ 'COMMON.CONTACT_PERSON_NAME' | translate | titlecase }}" formControlName="name" [required]="true"></app-input>
+    <app-input label="{{ 'COMMON.CONTACT_PERSON_PHONE' | translate | titlecase }}" formControlName="phone" [required]="true"></app-input>
+    <app-input label="{{ 'COMMON.CONTACT_PERSON_EMAIL' | translate | titlecase }}" formControlName="email" [required]="true"></app-input>
   </div>
 
   <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
