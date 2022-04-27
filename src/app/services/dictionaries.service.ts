@@ -11,8 +11,6 @@ import { HazmatClass } from '../models/hazmat-class.model';
 export class DictionariesService {
   constructor(private http: HttpClient) {}
 
-  /* GET METHODS */
-
   countryList(): Observable<CountryCode[]> {
     return this.http.get<CountryCode[]>('/gateway/api/xtr/v1/country');
   }

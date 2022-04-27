@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { TbrLightDetails } from '../models/tbr-light.model';
 import { OrderReleaseLine, ShipUnitLine, Tbr } from '../models/tbr.model';
-import { map } from 'rxjs/operators';
 import { TbrLine } from '../models/tbr-line.model';
 
 @Injectable({
@@ -12,14 +12,14 @@ import { TbrLine } from '../models/tbr-line.model';
 export class XtrService {
   constructor(private http: HttpClient) {}
 
-  /**** POST METHODS ****/
+  /* POST METHODS */
 
   saveXTR(): Observable<any> {
-    return this.http.delete('/api/xtr/v3/xtr');
+    return this.http.delete('/gateway/api/xtr/v3/xtr');
   }
 
   searchTBRs(search: string, consigneeIds: string[], consignorIds: string[]): Observable<any> {
-    return this.http.post('/api/xtr/v3/search/xtr', {
+    return this.http.post('/gateway/api/xtr/v3/search/xtr', {
       search,
       consigneeIds,
       consignorIds,
@@ -27,20 +27,20 @@ export class XtrService {
   }
 
   searchTBs(search: string, consigneeIds: string[], consignorIds: string[]): Observable<any> {
-    return this.http.post('/api/xtr/v3/search/tb', {
+    return this.http.post('/gateway/api/xtr/v3/search/tb', {
       search,
       consigneeIds,
       consignorIds,
     });
   }
 
-  /**** PUT METHODS ****/
+  /* PUT METHODS */
 
-  setManualTHU(): Observable<any> {
-    return this.http.put('/api/xtr/v3/xtr/{shipitId}/manual/thu/{releaseLine}', {});
+  setManualTHU(shipItId: string): Observable<any> {
+    return this.http.put(`/gateway/api/xtr/v3/xtr/${shipItId}/manual/thu/{releaseLine}`, {});
   }
 
-  /**** PATCH METHODS ****/
+  /* PATCH METHODS */
 
   updateReference(shipItId: string, pickupReference: string, messageToCarrier: string): Observable<any> {
     return this.http.patch(`/gateway/api/xtr/v1/xtr/${shipItId}/pickup/references`, {
@@ -49,48 +49,48 @@ export class XtrService {
     });
   }
 
-  /**** DELETE METHODS ****/
+  /* DELETE METHODS */
 
   deleteOldXTRs(): Observable<any> {
-    return this.http.delete('/api/xtr/v3/xtr');
+    return this.http.delete('/gateway/api/xtr/v3/xtr');
   }
 
-  /**** GET METHODS ****/
+  /* GET METHODS */
 
   getXtrs(): Observable<TbrLightDetails[]> {
     return this.http.get<TbrLightDetails[]>(`/gateway/api/xtr/v3/xtr`);
   }
 
-  splitLinesAndTransferToNewTBR(): Observable<any> {
-    return this.http.get('/api/xtr/v3/xtr/{shipitId}/split/{shipUnitLines}');
+  splitLinesAndTransferToNewTBR(shipItId: string): Observable<any> {
+    return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/split/{shipUnitLines}`);
   }
 
-  setPickupAndDeadlineDate(): Observable<any> {
-    return this.http.get(`/v3/xtr/{shipitId}/pickup/{pickupDate}/deadline/{deadlineDate}/{deadlineTime}`);
+  setPickupAndDeadlineDate(shipItId: string, pickupDate: string, deadlineDate: string, deadlineTime: string): Observable<any> {
+    return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/pickup/${pickupDate}/deadline/${deadlineDate}/${deadlineTime}`);
   }
 
   mixPartsInTHU(shipItId: string, shipUnitLines: string[]): Observable<any> {
-    return this.http.get(`/api/xtr/v3/xtr/{shipitId}/lines/mix/{releaseLines}`);
+    return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/lines/mix/${shipUnitLines}`);
   }
 
-  breakMixedTHU(): Observable<any> {
-    return this.http.get('/api/xtr/v3/xtr/{shipitId}/lines/mix/break/{shipUnitLine}');
+  breakMixedTHU(shipItId: string, shipUnitLine: string): Observable<any> {
+    return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/lines/mix/break/${shipUnitLine}`);
   }
 
-  setPackagedQuantityForLine(): Observable<any> {
-    return this.http.get('/api/xtr/v3/xtr/{shipitId}/line/{releaseLine}/{quantity}');
+  setPackagedQuantityForLine(shipItId: string, releaseLine: string, quantity: number): Observable<any> {
+    return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/line/${releaseLine}/${quantity}`);
   }
 
-  splitLine(): Observable<any> {
-    return this.http.get('/api/xtr/v3/xtr/{shipitId}/line/split/{releaseLine}');
+  splitLine(shipItId: string, releaseLine: string): Observable<any> {
+    return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/line/split/${releaseLine}`);
   }
 
-  deleteLine(): Observable<any> {
-    return this.http.get('/api/xtr/v3/xtr/{shipitId}/line/delete/{releaseLineId}');
+  deleteLine(shipItId: string, releaseLineId: string): Observable<any> {
+    return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/line/delete/${releaseLineId}`);
   }
 
-  addLine(): Observable<any> {
-    return this.http.get('/api/xtr/v3/xtr/{shipitId}/line/add/{purchaseOrderNumber}/{partNumber}/{quantity}');
+  addLine(shipItId: string, purchaseOrderNumber: string, partNumber: string, quantity: number): Observable<any> {
+    return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/line/add/${purchaseOrderNumber}/${partNumber}/${quantity}`);
   }
 
   getXtrByShipItId(shipItId: string): Observable<Tbr> {
@@ -104,19 +104,18 @@ export class XtrService {
     );
   }
 
-  getXTRsForResponsibleOffice(): Observable<any> {
-    return this.http.get('/api/xtr/v3/xtr/responsibleoffice/{rtoPk}');
+  getXTRsForResponsibleOffice(responsibleOffice: string): Observable<any> {
+    return this.http.get(`/gateway/api/xtr/v3/xtr/responsibleoffice/${responsibleOffice}`);
   }
 
   getListOfConfirmedTbs(): Observable<any> {
-    return this.http.get('/api/xtr/v3/tb');
+    return this.http.get('/gateway/api/xtr/v3/tb');
   }
 
   static mapToLines(tbr: Tbr): TbrLine[] {
-    const orderReleaseLines = tbr.orderReleaseLines;
+    const { orderReleaseLines } = tbr;
     const aTBRlines: TbrLine[] = [];
     let aSubHUs: any[] = [];
-    let totalTHUs = 0;
     orderReleaseLines.forEach((oORL) => {
       const aSUL = tbr.shipUnitLines.filter((element) =>
         element.releaseLineIds.some((subElement) => subElement.includes(oORL.releaseLineId))
@@ -125,7 +124,7 @@ export class XtrService {
       const res = XtrService.mapTBRline(oORL, aSUL, aTBRlines);
       if (res && res.aSubHU && res.oTBRline) {
         aSubHUs = aSubHUs.concat(res.aSubHU);
-        let oTBRline = res.oTBRline;
+        const { oTBRline } = res;
         oTBRline.tbrType = tbr.tbrType;
         aTBRlines.push(oTBRline);
       }
@@ -134,7 +133,7 @@ export class XtrService {
   }
 
   static mapTBRline(oORL: OrderReleaseLine, aSUL: ShipUnitLine[], aTBRlines: TbrLine[]) {
-    let oTBRline: any = {
+    const oTBRline: any = {
       releaseLineId: oORL.releaseLineId,
       additionalInternalDestination: oORL.additionalInternalDestination,
       articleNumber: oORL.articleNumber,
@@ -142,10 +141,10 @@ export class XtrService {
       requestedQuantity: oORL.requestedQuantity,
       packagedQuantity: oORL.packagedQuantity,
       purchaseOrderNumber: oORL.purchaseOrderNumber,
-      weight: oORL.weight, //This is the PART weight
-      weightUom: oORL.weightUom, //And this is the PART weight Uom
+      weight: oORL.weight, // This is the PART weight
+      weightUom: oORL.weightUom, // And this is the PART weight Uom
       notDelivered: oORL.notDelivered,
-      //200160
+      // 200160
       shipitLine: true,
       deleted: oORL.deleted,
       userThu: oORL.userThu,
@@ -172,31 +171,29 @@ export class XtrService {
       oTBRline.shipUnitLineId = aSUL[0].shipUnitLineId;
     }
 
-    let aSubHU: { id: any; oldMaterialNumber: any; releaseLineId: any; additionalInternalDestination: any }[] = [];
+    const aSubHU: { id: any; oldMaterialNumber: any; releaseLineId: any; additionalInternalDestination: any }[] = [];
 
     // Map SUL data to oTBRline(s)
 
     for (var j = 0; j < aSUL.length; j++) {
       if (!bMixed) {
-        oTBRline.quantity = oTBRline.quantity + Number(aSUL[j].quantity);
-        oTBRline.weightSUL = oTBRline.weightSUL + Number(aSUL[j].weight); //(Number(aSUL[j].weight) * Number(aSUL[j].quantity));
-        oTBRline.volumeSUL = oTBRline.volumeSUL + Number(aSUL[j].volume); //(Number(aSUL[j].volume) * Number(aSUL[j].quantity));
+        oTBRline.quantity += Number(aSUL[j].quantity);
+        oTBRline.weightSUL += Number(aSUL[j].weight); // (Number(aSUL[j].weight) * Number(aSUL[j].quantity));
+        oTBRline.volumeSUL += Number(aSUL[j].volume); // (Number(aSUL[j].volume) * Number(aSUL[j].quantity));
+      } else if (iMixedIdx < 0) {
+        // SUL not mapped yet
+        oTBRline.quantity += Number(aSUL[j].quantity);
+        oTBRline.weightSUL += Number(aSUL[j].weight); // (Number(aSUL[j].weight) * Number(aSUL[j].quantity));
+        oTBRline.volumeSUL += Number(aSUL[j].volume); // (Number(aSUL[j].volume) * Number(aSUL[j].quantity));
       } else {
-        if (iMixedIdx < 0) {
-          // SUL not mapped yet
-          oTBRline.quantity = oTBRline.quantity + Number(aSUL[j].quantity);
-          oTBRline.weightSUL = oTBRline.weightSUL + Number(aSUL[j].weight); //(Number(aSUL[j].weight) * Number(aSUL[j].quantity));
-          oTBRline.volumeSUL = oTBRline.volumeSUL + Number(aSUL[j].volume); //(Number(aSUL[j].volume) * Number(aSUL[j].quantity));
-        } else {
-          // modify the TBR line already added (in mapTBRlines, after the lines have been added to the table)
-          let oMixedLine = aTBRlines[iMixedIdx];
-          oMixedLine.articleNumber = oMixedLine.articleNumber + '\n' + oTBRline.articleNumber;
-          oMixedLine.articleName = oMixedLine.articleName + '\n' + oTBRline.articleName;
-          oMixedLine.requestedQuantity = oMixedLine.requestedQuantity + '\n' + oTBRline.requestedQuantity;
-          oMixedLine.packagedQuantity = oMixedLine.packagedQuantity + '\n' + oTBRline.packagedQuantity;
-          oMixedLine.purchaseOrderNumber = oMixedLine.purchaseOrderNumber + '\n' + oTBRline.purchaseOrderNumber;
-          return;
-        }
+        // modify the TBR line already added (in mapTBRlines, after the lines have been added to the table)
+        const oMixedLine = aTBRlines[iMixedIdx];
+        oMixedLine.articleNumber = `${oMixedLine.articleNumber}\n${oTBRline.articleNumber}`;
+        oMixedLine.articleName = `${oMixedLine.articleName}\n${oTBRline.articleName}`;
+        oMixedLine.requestedQuantity = `${oMixedLine.requestedQuantity}\n${oTBRline.requestedQuantity}`;
+        oMixedLine.packagedQuantity = `${oMixedLine.packagedQuantity}\n${oTBRline.packagedQuantity}`;
+        oMixedLine.purchaseOrderNumber = `${oMixedLine.purchaseOrderNumber}\n${oTBRline.purchaseOrderNumber}`;
+        return;
       }
 
       if (j === 0) {

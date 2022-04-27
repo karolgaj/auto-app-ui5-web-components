@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EMPTY, Observable, tap } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { LOCAL_STORAGE } from '../core';
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from '../core/providers/value-tokens';
-import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -13,37 +13,6 @@ export class AuthService {
     @Inject(TOKEN_KEY) private tokenKey: string,
     @Inject(LOCAL_STORAGE) private localStorage: Storage
   ) {}
-
-  private static dec2hex(dec: number): string {
-    return ('0' + dec.toString(16)).substr(-2);
-  }
-
-  private static generateCodeVerifier(): string {
-    const array = new Uint32Array(56 / 2);
-    window.crypto.getRandomValues(array);
-    return Array.from(array, AuthService.dec2hex.bind(this)).join('');
-  }
-
-  private static sha256(plain: string): Promise<ArrayBuffer> {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(plain);
-    return window.crypto.subtle.digest('SHA-256', data);
-  }
-
-  private static base64urlencode(a: ArrayBuffer): string {
-    let str = '';
-    const bytes = new Uint8Array(a);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      str += String.fromCharCode(bytes[i]);
-    }
-    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  }
-
-  private static async generateCodeChallengeFromVerifier(v: string): Promise<string> {
-    const hashed = await AuthService.sha256(v);
-    return AuthService.base64urlencode(hashed);
-  }
 
   async login(): Promise<void> {
     const codeVerifier = AuthService.generateCodeVerifier();
@@ -95,9 +64,40 @@ export class AuthService {
           this.localStorage.setItem(this.refreshTokenKey, data.refresh_token);
         }),
         catchError(() => {
-          void this.login();
+          this.login();
           return EMPTY;
         })
       );
+  }
+
+  private static dec2hex(dec: number): string {
+    return `0${dec.toString(16)}`.substr(-2);
+  }
+
+  private static generateCodeVerifier(): string {
+    const array = new Uint32Array(56 / 2);
+    window.crypto.getRandomValues(array);
+    return Array.from(array, AuthService.dec2hex.bind(this)).join('');
+  }
+
+  private static sha256(plain: string): Promise<ArrayBuffer> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(plain);
+    return window.crypto.subtle.digest('SHA-256', data);
+  }
+
+  private static base64urlencode(a: ArrayBuffer): string {
+    let str = '';
+    const bytes = new Uint8Array(a);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      str += String.fromCharCode(bytes[i]);
+    }
+    return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  private static async generateCodeChallengeFromVerifier(v: string): Promise<string> {
+    const hashed = await AuthService.sha256(v);
+    return AuthService.base64urlencode(hashed);
   }
 }
