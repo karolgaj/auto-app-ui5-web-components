@@ -1,15 +1,15 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { WizardStepAbstract } from '../wizard-step-abstract';
-import { Store } from '@ngrx/store';
-import { selectCauses } from '../../../../state/tbr/tbr.selectors';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { IFormArray } from '@rxweb/types';
-import { loadReasonCodes } from '../../../../state/tbr/tbr.actions';
-import { DialogComponent } from '../../../../ui/dialog/dialog.component';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { SecondSubCode, SubCode } from '../../../../models/reason-code.model';
 import { filter, map, switchMap, take } from 'rxjs/operators';
+import { WizardStepAbstract } from '../wizard-step-abstract';
+import { DialogComponent } from '../../../../ui/dialog/dialog.component';
+import { SecondSubCode, SubCode } from '../../../../models/reason-code.model';
 import { Tbr } from '../../../../models/tbr.model';
+import { selectCauses } from '../../../../state/dictionaries/dictionaries.selectors';
+import { loadReasonCodes } from '../../../../state/dictionaries/dictionaries.actions';
 
 interface ReasonCodeData {
   cause: string;
@@ -23,8 +23,6 @@ interface ReasonCodeData {
   templateUrl: './wizard-step-reason-code.component.html',
 })
 export class WizardStepReasonCodeComponent extends WizardStepAbstract implements OnInit, AfterViewInit {
-  private editingIndex = new BehaviorSubject<number | null>(null);
-
   @ViewChild('reasonCodeDialog')
   reasonCodeDialog!: DialogComponent;
 
@@ -33,6 +31,8 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
 
   @ViewChild('secondSubCodeDialog')
   secondSubCodeDialog!: DialogComponent;
+
+  private editingIndex = new BehaviorSubject<number | null>(null);
 
   reasonCodes$ = this.store.select(selectCauses());
   subCodes$: Observable<SubCode[] | null | undefined> = this.editingIndex.pipe(
@@ -46,11 +46,7 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
       if (value == null) {
         return of([]);
       }
-      return this.reasonCodes$.pipe(
-        map((reasonCodes) => {
-          return reasonCodes.find((reasonCode) => reasonCode.generalCode === value)?.subCodes;
-        })
-      );
+      return this.reasonCodes$.pipe(map((reasonCodes) => reasonCodes.find((reasonCode) => reasonCode.generalCode === value)?.subCodes));
     })
   );
 

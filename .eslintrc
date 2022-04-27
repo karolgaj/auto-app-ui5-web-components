@@ -1,0 +1,225 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "plugins": ["@typescript-eslint/eslint-plugin", "eslint-plugin-import", "@angular-eslint/eslint-plugin", "sort-class-members"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:eslint-plugin-import/recommended",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
+        "plugin:@angular-eslint/recommended",
+        "airbnb-base",
+        "airbnb-typescript/base",
+        "plugin:prettier/recommended"
+      ],
+      "settings": {
+        "import/parsers": {
+          "@typescript-eslint/parser": ["*.ts"]
+        },
+        "import/resolver": {
+          "eslint-import-resolver-typescript": "true"
+        }
+      },
+      "rules": {
+        "max-len": "off",
+        "no-useless-constructor": "off",
+        "global-require": "off",
+        "import/namespace": "off",
+        "import/prefer-default-export": "off",
+        "@typescript-eslint/quotes": ["error", "single", { "allowTemplateLiterals": true }],
+        "@typescript-eslint/no-explict-any": "off",
+        "@typescript-eslint/explicit-module-boundries-types": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/lines-between-class-members": "off",
+        "no-plusplus": "off",
+        "class-methods-use-this": "off",
+        "no-param-reassign": [
+          "error",
+          {
+            "props": false
+          }
+        ],
+        "prefer-arrow-callback": "warn",
+        "prefer-destructuring": "warn",
+        "sort-class-members/sort-class-members": [
+          2,
+          {
+            "order": [
+              "[inputs-properties]",
+              "[outputs-properties]",
+
+              "[view-child-properties]",
+              "[view-children-properties]",
+
+              "[content-child-properties]",
+              "[content-children-properties]",
+
+              "[host-binding-properties]",
+
+              "[static-properties]",
+              "[properties]",
+
+              "constructor",
+
+              "[ng-on-changes-method]",
+              "[ng-on-init-method]",
+              "[ng-do-check-method]",
+              "[ng-after-content-init-method]",
+              "[ng-after-content-checked-method]",
+              "[ng-after-view-init-method]",
+              "[ng-after-view-checked-method]",
+              "[ng-on-destroy-method]",
+
+              "[methods]",
+              "[static-methods]",
+              "[everything-else]",
+              "[accessor-pairs]",
+              "[arrow-function-properties]"
+            ],
+            "groups": {
+              "inputs-properties": [
+                {
+                  "type": "property",
+                  "groupByDecorator": "Input"
+                }
+              ],
+              "outputs-properties": [
+                {
+                  "type": "property",
+                  "groupByDecorator": "Output"
+                }
+              ],
+
+              "view-child-properties": [
+                {
+                  "type": "property",
+                  "groupByDecorator": "ViewChild"
+                }
+              ],
+              "view-children-properties": [
+                {
+                  "type": "property",
+                  "groupByDecorator": "ViewChildren"
+                }
+              ],
+              "content-child-properties": [
+                {
+                  "type": "property",
+                  "groupByDecorator": "ContentChild"
+                }
+              ],
+              "content-children-properties": [
+                {
+                  "type": "property",
+                  "groupByDecorator": "ContentChildren"
+                }
+              ],
+              "host-binding-properties": [
+                {
+                  "type": "property",
+                  "groupByDecorator": "HostBinding"
+                }
+              ],
+              "ng-on-changes-method": [
+                {
+                  "type": "method",
+                  "name": "ngOnChanges"
+                }
+              ],
+              "ng-on-init-method": [
+                {
+                  "type": "property",
+                  "name": "ngOnInit"
+                }
+              ],
+              "ng-do-check-method": [
+                {
+                  "type": "method",
+                  "name": "ngDoCheck"
+                }
+              ],
+              "ng-after-content-init-method": [
+                {
+                  "type": "method",
+                  "name": "ngAfterContentInit"
+                }
+              ],
+              "ng-after-content-checked-method": [
+                {
+                  "type": "method",
+                  "name": "ngAfterContentChecked"
+                }
+              ],
+              "ng-after-view-init-method": [
+                {
+                  "type": "method",
+                  "name": "ngAfterViewInit"
+                }
+              ],
+              "ng-after-view-checked-method": [
+                {
+                  "type": "method",
+                  "name": "ngAfterViewChecked"
+                }
+              ],
+              "ng-on-destroy": [
+                {
+                  "type": "method",
+                  "name": "ngOnDestroy"
+                }
+              ],
+              "arrow-function-properties": [
+                {
+                  "type": "property",
+                  "propertyType": "ArrowFunctionExpression"
+                }
+              ]
+            }
+          }
+        ],
+        "@angular-eslint/component-class-suffix": [
+          "error",
+          {
+            "suffixes": ["Component"]
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@typescript-eslint/array-type": [
+          "error",
+          {
+            "default": "array"
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "rules": {}
+    }
+  ]
+}

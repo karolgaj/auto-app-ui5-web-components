@@ -6,7 +6,6 @@ import { TbrNetwork } from '../../models/tbr-network.model';
 import { Consignor } from '../../models/consignor.model';
 import { UnloadingPoint } from '../../models/unloading-point.model';
 import { ShipItem } from '../../models/ship-item.model';
-import { ReasonCodesDetails } from '../../models/reason-code.model';
 
 export const tbrFeatureKey = 'tbr';
 
@@ -17,7 +16,6 @@ export interface State {
   unloadingPoints?: UnloadingPoint[];
   shipItems?: ShipItem[];
   selectedTbr?: Tbr;
-  reasonCodes?: ReasonCodesDetails[];
   error?: any;
 }
 
@@ -33,7 +31,6 @@ export const reducer = createReducer(
   on(TbrActions.loadConsignorsSuccess, (state, action) => ({ ...state, consignors: action.data })),
   on(TbrActions.loadUnloadingPointsSuccess, (state, action) => ({ ...state, unloadingPoints: action.data })),
   on(TbrActions.loadShipItemsSuccess, (state, action) => ({ ...state, shipItems: action.data })),
-  on(TbrActions.loadReasonCodesSuccess, (state, action) => ({ ...state, reasonCodes: action.data })),
 
   on(TbrActions.createTbrSuccess, (state, action) => ({ ...state, tbrs: [...state.tbrs, action.data] })),
   on(TbrActions.selectTbr, (state) => ({
@@ -75,7 +72,6 @@ export const reducer = createReducer(
     TbrActions.loadUnloadingPointsFailure,
     TbrActions.loadShipItemsFailure,
     TbrActions.createTbrFailure,
-    TbrActions.loadReasonCodesFailure,
     (state, action) => ({
       ...state,
       error: action.error,

@@ -1,4 +1,9 @@
 {
   "arrowParens": "always",
-  "printWidth": 140
+  "printWidth": 140,
+  "singleQuote": true,
+  "useTabs": false,
+  "semi": true,
+  "bracketSpacing": true,
+  "bracketSameLine": true
 }

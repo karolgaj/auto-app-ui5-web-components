@@ -6,7 +6,6 @@ import { TbrNetwork } from '../../models/tbr-network.model';
 import { Consignor } from '../../models/consignor.model';
 import { UnloadingPoint } from '../../models/unloading-point.model';
 import { ShipItem } from '../../models/ship-item.model';
-import { ReasonCodesDetails } from '../../models/reason-code.model';
 
 export const loadTbrs = createAction('[Tbr] Load Tbrs', props<{ data: { query: string } }>());
 export const loadTbrsSuccess = createAction('[Tbr] Load Tbrs Success', props<{ data: TbrLightDetails[] }>());
@@ -39,10 +38,6 @@ export const loadUnloadingPointsFailure = createAction('[Networks] Load unloadin
 export const loadShipItems = createAction('[Networks] Load ship items');
 export const loadShipItemsSuccess = createAction('[Networks] Load ship items Success', props<{ data: ShipItem[] }>());
 export const loadShipItemsFailure = createAction('[Networks] Load ship items Failure', props<{ error: unknown }>());
-
-export const loadReasonCodes = createAction('[Networks] Load reason codes');
-export const loadReasonCodesSuccess = createAction('[Networks] Load reason codes Success', props<{ data: ReasonCodesDetails[] }>());
-export const loadReasonCodesFailure = createAction('[Networks] Load reason codes Failure', props<{ error: unknown }>());
 
 export const updateReference = createAction('[Express] Update Reference', props<{ data: any }>());
 export const updateReferenceSuccess = createAction('[Express] Update Reference Success', props<{ data: any }>());

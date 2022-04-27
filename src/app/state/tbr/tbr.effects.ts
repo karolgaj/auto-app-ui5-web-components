@@ -36,18 +36,6 @@ export class TbrEffects {
     );
   });
 
-  loadReasonCodes$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(TbrActions.loadReasonCodes),
-      concatMap(() =>
-        this.xtrService.reasonCodes().pipe(
-          map((data) => TbrActions.loadReasonCodesSuccess({ data })),
-          catchError((error: unknown) => of(TbrActions.loadReasonCodesFailure({ error })))
-        )
-      )
-    );
-  });
-
   loadConsignors$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TbrActions.loadConsignors),

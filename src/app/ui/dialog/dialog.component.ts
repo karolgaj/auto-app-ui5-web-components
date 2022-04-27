@@ -24,8 +24,6 @@ export class DialogComponent {
   @Input()
   hideDefaultFooter = false;
 
-  constructor() {}
-
   closeDialog(): void {
     this.dialog.nativeElement.close();
   }

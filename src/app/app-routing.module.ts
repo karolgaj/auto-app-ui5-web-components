@@ -45,6 +45,10 @@ const routes: Routes = [
     ],
   },
   {
+    path: 'health',
+    component: TbrEmptyStateComponent,
+  },
+  {
     path: 'volvooauth/callback',
     component: TbrEmptyStateComponent,
   },

@@ -8,7 +8,6 @@ import { filter, take } from 'rxjs/operators';
 
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import {
-  createTbr,
   loadAvailableNetworks,
   loadConsignors,
   loadShipItems,
@@ -22,7 +21,7 @@ import { TbrLightDetails } from '../../models/tbr-light.model';
 import { NetworkForm } from '../../models/network-form.model';
 import { CustomAddress } from '../../models/custom-address.model';
 import { TbrNetwork } from '../../models/tbr-network.model';
-import { PLANNING_TYPE_OPTIONS, SERVICE_LEVEL_OPTIONS, TRANSPORT_TYPE_OPTIONS } from './constants';
+import { NEW_XTR, PLANNING_TYPE_OPTIONS, SERVICE_LEVEL_OPTIONS, TRANSPORT_TYPE_OPTIONS } from './constants';
 import { CommonValidators } from '../../utils/validators';
 
 @UntilDestroy()
@@ -31,11 +30,6 @@ import { CommonValidators } from '../../utils/validators';
   templateUrl: './tbr-network-form.component.html',
 })
 export class TbrNetworkFormComponent implements AfterViewInit {
-  private fb: IFormBuilder;
-  private parmaSelection?: 'consignor' | 'consignee';
-  private addressSelection?: 'shipFrom' | 'shipTo';
-  private loadingPointSelection?: 'loadingPoint' | 'unloadingPoint';
-
   @ViewChild('parmaDialog')
   parmaDialog!: DialogComponent;
 
@@ -47,6 +41,11 @@ export class TbrNetworkFormComponent implements AfterViewInit {
 
   @ViewChild('unloadingPointDialog')
   unloadingPointDialog!: DialogComponent;
+
+  private fb: IFormBuilder;
+  private parmaSelection?: 'consignor' | 'consignee';
+  private addressSelection?: 'shipFrom' | 'shipTo';
+  private loadingPointSelection?: 'loadingPoint' | 'unloadingPoint';
 
   consignors$ = this.store.select(selectConsignors);
   availableNetworks$ = this.store.select(selectNetworks);
@@ -70,43 +69,6 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   serviceLevelOptions = SERVICE_LEVEL_OPTIONS;
   transportTypeOptions = TRANSPORT_TYPE_OPTIONS;
   planningTypesOptions = PLANNING_TYPE_OPTIONS;
-
-  get parmaDialogAccessibleName(): string {
-    if (this.parmaSelection === 'consignor') {
-      return 'Consignor Value Help';
-    }
-    if (this.parmaSelection === 'consignee') {
-      return 'Consignees Value Help';
-    }
-    return '';
-  }
-  get parmaDialogHeader(): string {
-    if (this.parmaSelection === 'consignor') {
-      return 'Consignors';
-    }
-    if (this.parmaSelection === 'consignee') {
-      return 'Consignees';
-    }
-    return '';
-  }
-  get addressDialogHeader(): string {
-    if (this.addressSelection === 'shipFrom') {
-      return 'Custom Ship From Address';
-    }
-    if (this.addressSelection === 'shipTo') {
-      return 'Custom Ship To Address';
-    }
-    return '';
-  }
-  get shipListDialogHeader(): string {
-    if (this.addressSelection === 'shipFrom') {
-      return 'Ship From';
-    }
-    if (this.addressSelection === 'shipTo') {
-      return 'Ship To';
-    }
-    return '';
-  }
 
   constructor(fb: FormBuilder, private router: Router, private store: Store) {
     this.fb = fb;
@@ -155,18 +117,52 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     });
   }
 
+  get parmaDialogAccessibleName(): string {
+    if (this.parmaSelection === 'consignor') {
+      return 'Consignor Value Help';
+    }
+    if (this.parmaSelection === 'consignee') {
+      return 'Consignees Value Help';
+    }
+    return '';
+  }
+  get parmaDialogHeader(): string {
+    if (this.parmaSelection === 'consignor') {
+      return 'Consignors';
+    }
+    if (this.parmaSelection === 'consignee') {
+      return 'Consignees';
+    }
+    return '';
+  }
+  get addressDialogHeader(): string {
+    if (this.addressSelection === 'shipFrom') {
+      return 'Custom Ship From Address';
+    }
+    if (this.addressSelection === 'shipTo') {
+      return 'Custom Ship To Address';
+    }
+    return '';
+  }
+  get shipListDialogHeader(): string {
+    if (this.addressSelection === 'shipFrom') {
+      return 'Ship From';
+    }
+    if (this.addressSelection === 'shipTo') {
+      return 'Ship To';
+    }
+    return '';
+  }
+
   closeCustomAddressDialog(): void {
     this.customAddressDialog.closeDialog();
   }
-
   closeShipListDialog(): void {
     this.shipListDialog.closeDialog();
   }
-
   closeParmaDialog(): void {
     this.parmaDialog.closeDialog();
   }
-
   closeUnloadingPointDialog(): void {
     this.unloadingPointDialog.closeDialog();
   }
@@ -222,7 +218,11 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       ...this.networkForm.getRawValue(),
     };
 
-    this.store.dispatch(createTbr({ data: payload }));
+    console.log(payload);
+
+    console.log(NEW_XTR);
+
+    // this.store.dispatch(createTbr({ data: payload }));
   }
 
   selectParma(parma: { parma: string }): void {

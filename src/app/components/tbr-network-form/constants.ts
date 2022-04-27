@@ -48,3 +48,38 @@ export const PLANNING_TYPE_OPTIONS: SelectionOption<PlanningType>[] = [
     value: 'OUTBOUND',
   },
 ];
+
+export const NEW_XTR: any = {
+  details: {
+    consignee: {},
+    consignor: {},
+    involvedParties: [],
+    otmTransmissionAcks: [],
+    advancedShippingNotices: [],
+    shipFrom: {
+      address: {},
+    },
+    shipTo: {
+      category: 'UNLOADING_POINT',
+    },
+    transportNetwork: {
+      valid: true,
+    },
+    shipUnitLines: [],
+    orderReleaseLines: [],
+    transportBookings: [],
+    tbrType: 'MANUAL_EXPRESS',
+    expressType: 'NORMAL',
+    orderType: 'TBR',
+    shipitStatus: 'CREATED',
+    shipitStatusType: 'DRAFT',
+    qualifiersTBR: [],
+    calloffMode: false,
+    totals: {
+      totalCount: 0,
+      totalVolume: 0,
+      totalWeight: 0,
+    },
+  },
+  status: 'NEW',
+};

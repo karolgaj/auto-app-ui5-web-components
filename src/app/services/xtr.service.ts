@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CountryCode } from '../models/country-code.model';
 import { Observable } from 'rxjs';
-import { ReasonCodesDetails } from '../models/reason-code.model';
-import { HazmatClass } from '../models/hazmat-class.model';
 import { TbrLightDetails } from '../models/tbr-light.model';
 import { OrderReleaseLine, ShipUnitLine, Tbr } from '../models/tbr.model';
 import { map } from 'rxjs/operators';
@@ -13,20 +10,87 @@ import { TbrLine } from '../models/tbr-line.model';
   providedIn: 'root',
 })
 export class XtrService {
-  constructor(private http: HttpClient) {
-    this.countryList().subscribe();
+  constructor(private http: HttpClient) {}
+
+  /**** POST METHODS ****/
+
+  saveXTR(): Observable<any> {
+    return this.http.delete('/api/xtr/v3/xtr');
   }
 
-  countryList(): Observable<CountryCode[]> {
-    return this.http.get<CountryCode[]>('/gateway/api/xtr/v1/country');
+  searchTBRs(search: string, consigneeIds: string[], consignorIds: string[]): Observable<any> {
+    return this.http.post('/api/xtr/v3/search/xtr', {
+      search,
+      consigneeIds,
+      consignorIds,
+    });
   }
 
-  reasonCodes(): Observable<ReasonCodesDetails[]> {
-    return this.http.get<ReasonCodesDetails[]>('/gateway/api/xtr/v1/reasoncodes');
+  searchTBs(search: string, consigneeIds: string[], consignorIds: string[]): Observable<any> {
+    return this.http.post('/api/xtr/v3/search/tb', {
+      search,
+      consigneeIds,
+      consignorIds,
+    });
   }
 
-  hazmatCodes(): Observable<HazmatClass[]> {
-    return this.http.get<HazmatClass[]>('/gateway/api/xtr/v1/hazmat/class');
+  /**** PUT METHODS ****/
+
+  setManualTHU(): Observable<any> {
+    return this.http.put('/api/xtr/v3/xtr/{shipitId}/manual/thu/{releaseLine}', {});
+  }
+
+  /**** PATCH METHODS ****/
+
+  updateReference(shipItId: string, pickupReference: string, messageToCarrier: string): Observable<any> {
+    return this.http.patch(`/gateway/api/xtr/v1/xtr/${shipItId}/pickup/references`, {
+      pickupReference,
+      messageToCarrier,
+    });
+  }
+
+  /**** DELETE METHODS ****/
+
+  deleteOldXTRs(): Observable<any> {
+    return this.http.delete('/api/xtr/v3/xtr');
+  }
+
+  /**** GET METHODS ****/
+
+  getXtrs(): Observable<TbrLightDetails[]> {
+    return this.http.get<TbrLightDetails[]>(`/gateway/api/xtr/v3/xtr`);
+  }
+
+  splitLinesAndTransferToNewTBR(): Observable<any> {
+    return this.http.get('/api/xtr/v3/xtr/{shipitId}/split/{shipUnitLines}');
+  }
+
+  setPickupAndDeadlineDate(): Observable<any> {
+    return this.http.get(`/v3/xtr/{shipitId}/pickup/{pickupDate}/deadline/{deadlineDate}/{deadlineTime}`);
+  }
+
+  mixPartsInTHU(shipItId: string, shipUnitLines: string[]): Observable<any> {
+    return this.http.get(`/api/xtr/v3/xtr/{shipitId}/lines/mix/{releaseLines}`);
+  }
+
+  breakMixedTHU(): Observable<any> {
+    return this.http.get('/api/xtr/v3/xtr/{shipitId}/lines/mix/break/{shipUnitLine}');
+  }
+
+  setPackagedQuantityForLine(): Observable<any> {
+    return this.http.get('/api/xtr/v3/xtr/{shipitId}/line/{releaseLine}/{quantity}');
+  }
+
+  splitLine(): Observable<any> {
+    return this.http.get('/api/xtr/v3/xtr/{shipitId}/line/split/{releaseLine}');
+  }
+
+  deleteLine(): Observable<any> {
+    return this.http.get('/api/xtr/v3/xtr/{shipitId}/line/delete/{releaseLineId}');
+  }
+
+  addLine(): Observable<any> {
+    return this.http.get('/api/xtr/v3/xtr/{shipitId}/line/add/{purchaseOrderNumber}/{partNumber}/{quantity}');
   }
 
   getXtrByShipItId(shipItId: string): Observable<Tbr> {
@@ -40,23 +104,12 @@ export class XtrService {
     );
   }
 
-  getXtrs(): Observable<TbrLightDetails[]> {
-    return this.http.get<TbrLightDetails[]>(`/gateway/api/xtr/v3/xtr`);
+  getXTRsForResponsibleOffice(): Observable<any> {
+    return this.http.get('/api/xtr/v3/xtr/responsibleoffice/{rtoPk}');
   }
 
-  updateReference(shipItId: string, pickupReference: string, messageToCarrier: string): Observable<any> {
-    return this.http.patch(`/gateway/api/xtr/v1/xtr/${shipItId}/pickup/references`, {
-      pickupReference,
-      messageToCarrier,
-    });
-  }
-
-  splitLine(shipItId: string, shipUnitLines: string[]): Observable<any> {
-    return this.http.get(`/v3/xtr/${shipItId}/split/${shipUnitLines}`);
-  }
-
-  setPickupAndDeadlineDate(): Observable<any> {
-    return this.http.get(`/v3/xtr/{shipitId}/pickup/{pickupDate}/deadline/{deadlineDate}/{deadlineTime}`);
+  getListOfConfirmedTbs(): Observable<any> {
+    return this.http.get('/api/xtr/v3/tb');
   }
 
   static mapToLines(tbr: Tbr): TbrLine[] {
