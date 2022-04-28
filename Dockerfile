@@ -7,8 +7,8 @@ COPY ./package.json /build
 COPY ./package-lock.json /build
 RUN npm install
 COPY . /build
-RUN ng test
-RUN ng build
+RUN npm test
+RUN npm build
 
 
 FROM nginx
