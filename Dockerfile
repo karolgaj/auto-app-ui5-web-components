@@ -6,6 +6,7 @@ WORKDIR /build
 COPY ./package.json /build
 COPY ./package-lock.json /build
 RUN npm install
+RUN npm install karma-chrome-launcher --save-sev
 COPY . /build
 RUN npm test
 RUN npm build
