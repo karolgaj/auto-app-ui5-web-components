@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xtr-frontend
+  namespace: supplier
+  labels:
+    app: xtr-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xtr-frontend
+  template:
+    metadata:
+      labels:
+        app: xtr-frontend
+    spec:
+      containers:
+        - name: xtr-frontend
+          image: mscpregistry.azurecr.io/xtr-frontend:latest
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              memory: "128M"
+            limits:
+              memory: "2560M"
+          env:
+            - name: ENV_VALUE
+              value: "Dev"
+            - name: BASE_URI
+              value: "https://shipitapi-dev.volvogroup.com/apigw"
+            - name: CLIENT_ID
+              value: "shipit"
+            - name: PING_URI
+              value: "https://federate-qa.volvo.com"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 10
+            failureThreshold: 10

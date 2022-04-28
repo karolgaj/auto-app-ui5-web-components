@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: xtr-frontend
+  namespace: supplier
+  labels:
+    app: xtr-frontend
+spec:
+  type: ClusterIP
+  selector:
+    app: xtr-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

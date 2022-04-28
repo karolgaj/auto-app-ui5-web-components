@@ -1,0 +1,9 @@
+deployment_files
+dist
+node_modules
+.dockerignore
+.gitignore
+.gitlab-ci.yml
+angus-client.iml
+Dockerfile*
+README.md

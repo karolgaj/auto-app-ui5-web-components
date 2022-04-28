@@ -19,6 +19,6 @@ ENV ROTATE_LOGS true
 
 COPY --from=builder /build/dist/ /usr/share/nginx/html/
 COPY --from=builder /build/dist/.htaccess /usr/share/nginx/html/
-#COPY --from=builder /build/nginx-conf/default.conf /etc/nginx/conf.d/
+COPY --from=builder /build/nginx-conf/default.conf /etc/nginx/conf.d/
 
 CMD nginx -g "daemon off;"
