@@ -15,8 +15,8 @@ COPY . /build
 RUN npm run test:ci
 RUN npm run build
 
-RUN ls /build
-RUN ls /build/dist
+RUN ls -al /build
+RUN ls -al /build/dist
 
 
 FROM nginx
@@ -27,6 +27,6 @@ ENV ROTATE_LOGS true
 
 COPY --from=builder /build/dist/ /usr/share/nginx/html/
 #COPY --from=builder /build/dist/.htaccess /usr/share/nginx/html/
-COPY --from=builder /build/nginx-conf/default.conf /etc/nginx/conf.d/
+COPY --from=builder /build/src/nginx-conf/default.conf /etc/nginx/conf.d/
 
 CMD nginx -g "daemon off;"
