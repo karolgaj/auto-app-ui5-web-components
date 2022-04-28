@@ -4,7 +4,7 @@ MAINTAINER a307793
 WORKDIR /build
 
 COPY ./package.json /build
-COPY ./package-lock.lock /build
+COPY ./package-lock.json /build
 RUN npm install
 COPY . /build
 RUN ng test
