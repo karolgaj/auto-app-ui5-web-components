@@ -12,7 +12,7 @@ COPY ./package-lock.json /build
 
 RUN npm ci
 COPY . /build
-RUN npm test:ci
+RUN npm run test:ci
 RUN npm build
 
 
