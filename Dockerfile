@@ -13,7 +13,7 @@ COPY ./package-lock.json /build
 RUN npm ci
 COPY . /build
 RUN npm run test:ci
-RUN npm build
+RUN npm run build
 
 
 FROM nginx
