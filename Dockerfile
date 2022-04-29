@@ -13,7 +13,7 @@ COPY ./package-lock.json /build
 RUN npm ci
 COPY . /build
 RUN npm run test:ci
-RUN npm run build
+RUN npm run build --base-href "/ui/xtr"
 
 
 FROM nginx
