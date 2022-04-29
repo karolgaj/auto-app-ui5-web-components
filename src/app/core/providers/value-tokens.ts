@@ -8,7 +8,7 @@ export const PING_URL = new InjectionToken<string>('PING_URL');
 const PING_URL_VALUE: string = environment.pingUrl;
 
 export const PING_REDIRECT_URL = new InjectionToken<string>('PING_URL');
-const PING_REDIRECT_URL_VALUE: string = environment.pingUrl;
+const PING_REDIRECT_URL_VALUE: string = environment.pingRedirectUrl;
 
 export const CLIENT_ID = new InjectionToken<string>('CLIENT_ID');
 const CLIENT_ID_VALUE: string = environment.clientId;
