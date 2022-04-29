@@ -35,6 +35,8 @@ spec:
               value: "shipit"
             - name: PING_URI
               value: "https://federate-qa.volvo.com"
+            - name: PING_REDIRECT_URI
+              value: "https://shipitapi-test.volvogroup.com/ui/xtr"
           readinessProbe:
             httpGet:
               path: /health
