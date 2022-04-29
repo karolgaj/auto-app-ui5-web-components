@@ -6,6 +6,7 @@ import { TbrNetwork } from '../../models/tbr-network.model';
 import { Consignor } from '../../models/consignor.model';
 import { UnloadingPoint } from '../../models/unloading-point.model';
 import { ShipItem } from '../../models/ship-item.model';
+import { ShipPoint } from '../../models/ship-point.model';
 
 export const loadTbrs = createAction('[Tbr] Load Tbrs', props<{ data: { query: string } }>());
 export const loadTbrsSuccess = createAction('[Tbr] Load Tbrs Success', props<{ data: TbrLightDetails[] }>());
@@ -31,9 +32,16 @@ export const loadConsignors = createAction('[Networks] Load consignors', props<{
 export const loadConsignorsSuccess = createAction('[Networks] Load consignors Success', props<{ data: Consignor[] }>());
 export const loadConsignorsFailure = createAction('[Networks] Load consignors Failure', props<{ error: unknown }>());
 
-export const loadUnloadingPoints = createAction('[Networks] Load unloading points', props<{ data: NetworkForm }>());
+export const loadUnloadingPoints = createAction(
+  '[Networks] Load unloading points',
+  props<{ data: { consignor: string; shipFrom: string } }>()
+);
 export const loadUnloadingPointsSuccess = createAction('[Networks] Load unloading points Success', props<{ data: UnloadingPoint[] }>());
 export const loadUnloadingPointsFailure = createAction('[Networks] Load unloading points Failure', props<{ error: unknown }>());
+
+export const loadShipPoints = createAction('[Networks] Load unloading points', props<{ data: string }>());
+export const loadShipPointsSuccess = createAction('[Networks] Load unloading points Success', props<{ data: ShipPoint[] }>());
+export const loadShipPointsFailure = createAction('[Networks] Load unloading points Failure', props<{ error: unknown }>());
 
 export const loadShipItems = createAction('[Networks] Load ship items');
 export const loadShipItemsSuccess = createAction('[Networks] Load ship items Success', props<{ data: ShipItem[] }>());

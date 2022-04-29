@@ -1,18 +1,20 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { EMPTY, Observable, tap } from 'rxjs';
+import { EMPTY, Observable, Subject, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LOCAL_STORAGE, WINDOW } from '../core';
-import { CLIENT_ID, PING_URL, REFRESH_TOKEN_KEY, TOKEN_KEY } from '../core/providers/value-tokens';
+import { CLIENT_ID, PING_REDIRECT_URL, PING_URL, REFRESH_TOKEN_KEY, TOKEN_KEY } from '../core/providers/value-tokens';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private pingRedirectUrl = `${this.window.origin}/volvooauth/callback`;
+  private tokenGranted = new Subject<void>();
+  tokenGranted$ = this.tokenGranted.asObservable();
 
   constructor(
     private httpClient: HttpClient,
     @Inject(WINDOW) private window: Window,
     @Inject(PING_URL) private pingUrl: string,
+    @Inject(PING_REDIRECT_URL) private pingRedirectUrl: string,
     @Inject(CLIENT_ID) private clientId: string,
     @Inject(REFRESH_TOKEN_KEY) private refreshTokenKey: string,
     @Inject(TOKEN_KEY) private tokenKey: string,
@@ -46,6 +48,7 @@ export class AuthService {
           this.localStorage.removeItem('code_verifier');
           this.localStorage.setItem(this.tokenKey, data.access_token);
           this.localStorage.setItem(this.refreshTokenKey, data.refresh_token);
+          this.tokenGranted.next();
         })
       );
   }
@@ -67,6 +70,7 @@ export class AuthService {
         tap((data) => {
           this.localStorage.setItem(this.tokenKey, data.access_token);
           this.localStorage.setItem(this.refreshTokenKey, data.refresh_token);
+          this.tokenGranted.next();
         }),
         catchError(() => {
           this.login();

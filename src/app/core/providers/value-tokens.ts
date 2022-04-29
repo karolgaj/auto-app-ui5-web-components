@@ -7,6 +7,9 @@ const HTTP_BASE_URL_VALUE: string = environment.baseUrl;
 export const PING_URL = new InjectionToken<string>('PING_URL');
 const PING_URL_VALUE: string = environment.pingUrl;
 
+export const PING_REDIRECT_URL = new InjectionToken<string>('PING_URL');
+const PING_REDIRECT_URL_VALUE: string = environment.pingUrl;
+
 export const CLIENT_ID = new InjectionToken<string>('CLIENT_ID');
 const CLIENT_ID_VALUE: string = environment.clientId;
 
@@ -24,6 +27,10 @@ export const TOKENS: ValueProvider[] = [
   {
     provide: PING_URL,
     useValue: PING_URL_VALUE,
+  },
+  {
+    provide: PING_REDIRECT_URL,
+    useValue: PING_REDIRECT_URL_VALUE,
   },
   {
     provide: CLIENT_ID,

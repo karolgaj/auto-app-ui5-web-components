@@ -4,13 +4,13 @@ import { IFormBuilder, IFormGroup } from '@rxweb/types';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { filter, take } from 'rxjs/operators';
+import { filter, startWith, take } from 'rxjs/operators';
 
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import {
-  loadAvailableNetworks,
   loadConsignors,
   loadShipItems,
+  loadShipPoints,
   loadUnloadingPoints,
   selectConsignors,
   selectNetworks,
@@ -23,6 +23,7 @@ import { CustomAddress } from '../../models/custom-address.model';
 import { TbrNetwork } from '../../models/tbr-network.model';
 import { NEW_XTR, PLANNING_TYPE_OPTIONS, SERVICE_LEVEL_OPTIONS, TRANSPORT_TYPE_OPTIONS } from './constants';
 import { CommonValidators } from '../../utils/validators';
+import { combineLatest } from 'rxjs';
 
 @UntilDestroy()
 @Component({
@@ -274,13 +275,27 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   }
 
   private watchForms(): void {
-    this.networkForm.valueChanges.pipe(untilDestroyed(this)).subscribe((data) => {
-      if (!data) {
-        return;
-      }
-      this.store.dispatch(loadAvailableNetworks({ data }));
-      this.store.dispatch(loadUnloadingPoints({ data }));
-    });
+    combineLatest([
+      this.networkForm.controls.consignor.valueChanges.pipe(startWith(this.networkForm.controls.consignor.value)),
+      this.networkForm.controls.shipFrom.valueChanges.pipe(startWith(this.networkForm.controls.shipFrom.value)),
+    ])
+      .pipe(untilDestroyed(this))
+      .subscribe(([consignor, shipFrom]) => {
+        if (consignor) {
+          this.store.dispatch(loadShipPoints({ data: consignor }));
+
+          if (shipFrom) {
+            this.store.dispatch(
+              loadUnloadingPoints({
+                data: {
+                  shipFrom,
+                  consignor,
+                },
+              })
+            );
+          }
+        }
+      });
   }
 
   private static openDialog(dialog: DialogComponent): void {

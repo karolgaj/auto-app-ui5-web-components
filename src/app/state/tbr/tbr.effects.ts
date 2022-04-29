@@ -9,6 +9,7 @@ import { selectTbr } from './tbr.actions';
 import { TbrService } from '../../services';
 import { Store } from '@ngrx/store';
 import { XtrService } from '../../services/xtr.service';
+import { TransportNetworkService } from '../../services/transport-network.service';
 
 @Injectable()
 export class TbrEffects {
@@ -60,11 +61,24 @@ export class TbrEffects {
     );
   });
 
+  loadShipPoints$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.loadShipPoints),
+      concatMap(({ data }) =>
+        this.transportNetworkService.getActiveShipPointByParma(data).pipe(
+          tap(console.log),
+          map((res) => TbrActions.loadShipPointsSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.loadShipPointsFailure({ error })))
+        )
+      )
+    );
+  });
+
   loadUnloadingPoints$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TbrActions.loadUnloadingPoints),
       concatMap(({ data }) =>
-        this.tbrService.getUnloadingPoints(data).pipe(
+        this.transportNetworkService.getUnloadingPoints(data.consignor, data.shipFrom).pipe(
           map((data) => TbrActions.loadUnloadingPointsSuccess({ data })),
           catchError((error: unknown) => of(TbrActions.loadUnloadingPointsFailure({ error })))
         )
@@ -90,7 +104,7 @@ export class TbrEffects {
       return this.actions$.pipe(
         ofType(TbrActions.selectTbrSuccess),
         tap(({ data }) => {
-          void this.router.navigate(['/', 'xtr', data.shipitId]);
+          this.router.navigate(['/', 'xtr', data.shipitId]);
         })
       );
     },
@@ -132,6 +146,7 @@ export class TbrEffects {
     private actions$: Actions,
     private tbrService: TbrService,
     private xtrService: XtrService,
+    private transportNetworkService: TransportNetworkService,
     private router: Router,
     private store: Store
   ) {}

@@ -31,7 +31,7 @@ export class TransportNetworkService {
   getUnloadingPoints(consignor: string, shipFrom: string, consignee?: string): Observable<any> {
     const baseUrl = `/gateway/api/tnd/v1/transportnetwork/active/relations/unloadingPoints/${consignor}`;
     const url = consignee ? `${baseUrl}/${consignee}/${shipFrom}` : `${baseUrl}/${shipFrom}`;
-    return this.http.get(url);
+    return this.http.get(`${url}?requestedApp=MANUAL_TBR`);
   }
 
   getActiveShipFromList(consignor: string): Observable<any> {
