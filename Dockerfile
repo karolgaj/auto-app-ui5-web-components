@@ -15,9 +15,6 @@ COPY . /build
 RUN npm run test:ci
 RUN npm run build
 
-RUN ls -al /build
-RUN ls -al /build/dist
-
 
 FROM nginx
 MAINTAINER a307793
@@ -25,7 +22,8 @@ MAINTAINER a307793
 ENV ALLOW_HUP true
 ENV ROTATE_LOGS true
 
-COPY --from=builder /build/dist/ /usr/share/nginx/html/
+COPY --from=builder /build/dist/50x.html /usr/share/nginx/html/
+COPY --from=builder /build/dist/aotu-app-ui5-web-components/ /usr/share/nginx/html/
 #COPY --from=builder /build/dist/.htaccess /usr/share/nginx/html/
 COPY --from=builder /build/src/nginx-conf/default.conf /etc/nginx/conf.d/
 
