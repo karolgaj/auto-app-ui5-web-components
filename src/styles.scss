@@ -3,6 +3,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
+  overflow: hidden;
 }
 
 .ui5-panel-content {
@@ -83,6 +84,10 @@ ui5-wizard-step {
   height: 100% !important;
 }
 
+.text-align--center {
+  text-align: center
+}
+
 .main-font-color {
   color: #2b7c2b
 }
@@ -97,4 +102,24 @@ ui5-wizard-step {
 
 main {
   height: calc(100vh - 44px); max-height: calc(100vh - 44px)
+}
+
+.tbr-details {
+  &__footer {
+    position: sticky;
+    bottom: 0;
+    right: 0;
+    left: 20rem;
+    width: unset;
+  }
+}
+
+.tbr-list {
+  &__footer {
+    position: sticky;
+    bottom: 0;
+    right: 20rem;
+    left: 0;
+    width: unset;
+  }
 }

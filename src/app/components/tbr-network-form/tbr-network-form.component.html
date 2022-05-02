@@ -129,11 +129,11 @@
 <app-dialog #unloadingPointDialog dialogHeader="Unloading point" [hideDefaultFooter]="true" accessibleName="Unloading point value help">
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
-      *ngFor="let consignor of unloadingPoints$ | async"
-      [description]="consignor.info"
-      [additionalText]="consignor.parma"
-      (click)="selectLoadingPoint(consignor.parma)">
-      {{ consignor.name }}
+      *ngFor="let unloadPoint of unloadingPoints$ | async"
+      [description]="unloadPoint.unloadingPoint"
+      [additionalText]="unloadPoint.serviceLevel"
+      (click)="selectLoadingPoint(unloadPoint)">
+      {{ unloadPoint.shipToName }}
     </ui5-li>
   </ui5-list>
 

@@ -1,22 +1,39 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 import { TbrService } from '../../services';
-import { TbrType } from '../../models/tbr-type.model';
+import { ShipItStatusTypeName } from '../../models/tbr-type.model';
 import { TbrLightDetails } from '../../models/tbr-light.model';
-import { loadTbrs, refreshTbrList, selectTbr, selectTbrs } from '../../state';
+import { loadTbrs, refreshTbrList, selectTbr, selectTbrsByType } from '../../state';
+import { ShipItStatusTypeMap } from './constants';
 
 @Component({
   selector: 'app-tbr-list',
   templateUrl: './tbr-list.component.html',
 })
 export class TbrListComponent {
-  public tbrList = this.store.select(selectTbrs);
-  public readonly tbrTypes: TbrType[] = ['Drafts', 'For Approval', 'Approved', 'Rejected', 'Planning', 'Confirmed', 'Planned'];
+  readonly tbrTypes: ShipItStatusTypeName[] = [
+    'Speedups',
+    'Drafts',
+    'For Approval',
+    'Approved',
+    'Rejected',
+    'Planning',
+    'Confirmed',
+    'Planned',
+  ];
+
+  tbrTypesLists: Record<ShipItStatusTypeName, Observable<TbrLightDetails[]>>;
 
   constructor(private tbrService: TbrService, private router: Router, private store: Store) {
     this.store.dispatch(loadTbrs({ data: { query: '' } }));
+
+    this.tbrTypesLists = {} as Record<ShipItStatusTypeName, Observable<TbrLightDetails[]>>;
+    this.tbrTypes.forEach((tbrType) => {
+      this.tbrTypesLists[tbrType] = this.store.select(selectTbrsByType(ShipItStatusTypeMap[tbrType]));
+    });
   }
 
   selectTbr(data: TbrLightDetails): void {
@@ -24,7 +41,7 @@ export class TbrListComponent {
   }
 
   goToNetworkForm(): void {
-    void this.router.navigate(['/', 'xtr', 'network']);
+    this.router.navigate(['/', 'xtr', 'network']);
   }
 
   refreshList(): void {

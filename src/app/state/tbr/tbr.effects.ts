@@ -1,27 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, concatMap, exhaustMap, map, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError, concatMap, exhaustMap, filter, map, switchMap, tap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
 
 import * as TbrActions from './tbr.actions';
 import { selectTbr } from './tbr.actions';
 import { TbrService } from '../../services';
-import { Store } from '@ngrx/store';
 import { XtrService } from '../../services/xtr.service';
 import { TransportNetworkService } from '../../services/transport-network.service';
+import { PackItService } from '../../services/packit.service';
 
 @Injectable()
 export class TbrEffects {
   loadTbrs$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TbrActions.loadTbrs, TbrActions.refreshTbrList),
-      concatMap(({ data }) => {
+      concatMap(() => {
         return this.xtrService.getXtrs().pipe(
-          map((data) => TbrActions.loadTbrsSuccess({ data })),
+          switchMap((res) => from([TbrActions.loadTbrsSuccess({ data: res }), TbrActions.refreshTbrListSuccess()])),
           catchError((error: unknown) => of(TbrActions.loadTbrsFailure({ error })))
         );
       })
+    );
+  });
+
+  refreshTbrsSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.refreshTbrListSuccess),
+      map(() => TbrActions.selectTbr({ data: null }))
     );
   });
 
@@ -30,7 +37,7 @@ export class TbrEffects {
       ofType(TbrActions.loadAvailableNetworks),
       concatMap(({ data }) =>
         this.tbrService.getTbrNetworks().pipe(
-          map((data) => TbrActions.loadAvailableNetworksSuccess({ data })),
+          map((res) => TbrActions.loadAvailableNetworksSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.loadAvailableNetworksFailure({ error })))
         )
       )
@@ -42,7 +49,7 @@ export class TbrEffects {
       ofType(TbrActions.loadConsignors),
       concatMap(({ data }) =>
         this.tbrService.getConsignors().pipe(
-          map((data) => TbrActions.loadConsignorsSuccess({ data })),
+          map((res) => TbrActions.loadConsignorsSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.loadConsignorsFailure({ error })))
         )
       )
@@ -79,7 +86,7 @@ export class TbrEffects {
       ofType(TbrActions.loadUnloadingPoints),
       concatMap(({ data }) =>
         this.transportNetworkService.getUnloadingPoints(data.consignor, data.shipFrom).pipe(
-          map((data) => TbrActions.loadUnloadingPointsSuccess({ data })),
+          map((res) => TbrActions.loadUnloadingPointsSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.loadUnloadingPointsFailure({ error })))
         )
       )
@@ -89,35 +96,83 @@ export class TbrEffects {
   selectTbr$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TbrActions.selectTbr),
-      tap((data) => console.log(data.data)),
-      exhaustMap(({ data }) =>
-        this.xtrService.getXtrByShipItId(data).pipe(
-          map((data) => TbrActions.selectTbrSuccess({ data })),
+      filter((data) => data.data != null),
+      exhaustMap(({ data }) => {
+        const shipItId = data as string;
+        return this.xtrService.getXtrByShipItId(shipItId).pipe(
+          map((res) => TbrActions.selectTbrSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.selectTbrFailure({ error })))
-        )
-      )
+        );
+      })
     );
   });
 
-  selectTbrSuccess$ = createEffect(
+  resetSelectedValue$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(TbrActions.selectTbrSuccess),
-        tap(({ data }) => {
-          this.router.navigate(['/', 'xtr', data.shipitId]);
+        ofType(TbrActions.selectTbr),
+        filter((data) => data.data == null),
+        tap(() => {
+          this.router.navigate(['/', 'xtr']);
         })
       );
     },
     { dispatch: false }
   );
 
+  selectTbrSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.selectTbrSuccess),
+      switchMap(({ data }) => {
+        this.router.navigate(['/', 'xtr', data.shipitId]);
+        return of(TbrActions.loadThuList({ data: data.shipFrom.parma }));
+      })
+    );
+  });
+
+  loadTHUList$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.loadThuList),
+      concatMap(({ data }) =>
+        this.packItService.getTHUListByShipFrom(data).pipe(
+          map((res) => TbrActions.loadThuListSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.loadThuListFailure({ error })))
+        )
+      )
+    );
+  });
+
   createTbr$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TbrActions.createTbr),
       concatMap(({ data }) =>
         this.tbrService.createTbr(data).pipe(
-          map((data) => TbrActions.createTbrSuccess({ data })),
+          map((res) => TbrActions.createTbrSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.createTbrFailure({ error })))
+        )
+      )
+    )
+  );
+
+  addLine$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.addLine),
+      concatMap(({ data }) =>
+        this.xtrService.addLine(data.shipItId, data.poNumber, data.partNo, data.plannedQty).pipe(
+          map((res) => TbrActions.addLineSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.addLineFailure({ error })))
+        )
+      )
+    )
+  );
+
+  splitLine$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.splitLine),
+      concatMap(({ data }) =>
+        this.xtrService.splitLine(data.shipItId, data.releaseLines).pipe(
+          map((res) => TbrActions.splitLineSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.splitLineFailure({ error })))
         )
       )
     )
@@ -135,7 +190,7 @@ export class TbrEffects {
       ofType(TbrActions.updateReference),
       concatMap(({ data }) =>
         this.xtrService.updateReference(data.shipitId, data.pickupRef, data.msgToCarrier).pipe(
-          map((data) => TbrActions.updateReferenceSuccess(data)),
+          map((res) => TbrActions.updateReferenceSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.updateReferenceFailure({ error })))
         )
       )
@@ -146,8 +201,8 @@ export class TbrEffects {
     private actions$: Actions,
     private tbrService: TbrService,
     private xtrService: XtrService,
+    private packItService: PackItService,
     private transportNetworkService: TransportNetworkService,
-    private router: Router,
-    private store: Store
+    private router: Router
   ) {}
 }

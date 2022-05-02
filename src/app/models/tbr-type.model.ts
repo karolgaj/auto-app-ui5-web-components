@@ -1,12 +1,24 @@
-export type TbrType = 'Drafts' | 'For Approval' | 'Approved' | 'Rejected' | 'Planning' | 'Confirmed' | 'Planned';
+export type ShipItStatusTypeName =
+  | 'Speedups'
+  | 'Drafts'
+  | 'For Approval'
+  | 'Approved'
+  | 'Rejected'
+  | 'Planning'
+  | 'Confirmed'
+  | 'Planned'
+  | 'Approval Request';
 
-export type TbrTypes =
+export type ShipItStatusType =
+  | 'SPEEDUP'
   | 'DRAFT'
   | 'APPROVAL_REQUEST'
+  | 'APPROVAL_WORKFLOW'
   | 'APPROVED'
   | 'FOR_APPROVAL'
   | 'PLANNING'
   | 'CONFIRMED'
+  | 'CREATED'
   | 'PLANNED'
   | 'REJECTED'
   | 'DELETED'

@@ -13,7 +13,7 @@
           <img src="assets/volvo-logo.png" alt="volvoLogo" />
           <ui5-title level="H2"> {{ line.articleName }} </ui5-title>
         </div>
-        <ui5-label> {{ line.weightSUL }} {{ line.weightSULUom }} </ui5-label>
+        <ui5-label> {{ line.weightSUL }} {{ line.weightSULuom }} </ui5-label>
       </div>
       <div fxLayout="column" fxLayoutAlign="center end">
         <ui5-title level="H2" class="main-font-color"> {{ line.requestedQuantity }} </ui5-title>
@@ -66,10 +66,10 @@
         </div>
         <div slot="endContent">
           <ui5-label class="margin-right-1">
-            {{ 'COMMON.WEIGHT' | translate }}/{{ 'COMMON.THU' | translate }}: <b> {{ line.weightSUL }} </b> {{ line.weightSULUom }}
+            {{ 'COMMON.WEIGHT' | translate }}/{{ 'COMMON.THU' | translate }}: <b> {{ line.weightSUL }} </b> {{ line.weightSULuom }}
           </ui5-label>
           <ui5-label>
-            {{ 'COMMON.VOLUME' | translate }}/{{ 'COMMON.THU' | translate }}: <b> {{ line.volumeSUL }} </b> {{ line.volumeSULUom }}
+            {{ 'COMMON.VOLUME' | translate }}/{{ 'COMMON.THU' | translate }}: <b> {{ line.volumeSUL }} </b> {{ line.volumeSULuom }}
           </ui5-label>
         </div>
       </ui5-bar>

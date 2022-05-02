@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { IFormBuilder, IFormControl, IFormGroup } from '@rxweb/types';
-import { map, switchMap } from 'rxjs/operators';
+import { IFormBuilder, IFormGroup } from '@rxweb/types';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { DialogComponent } from 'src/app/ui/dialog/dialog.component';
 
 import { TbrService } from '../../services';
@@ -55,6 +55,7 @@ export class ThuDetailsComponent {
     );
 
     this.thuList$ = this.store.select(selectedTbr).pipe(
+      filter((tbrDetails) => !!tbrDetails),
       map((tbrDetails) => {
         const thus = tbrDetails?.shipUnitLines.map((slu) => slu.transportHandlingUnits).reduce((acc, curr) => acc.concat(curr));
         return thus ? thus[0] : null;
@@ -67,7 +68,7 @@ export class ThuDetailsComponent {
 
   goBack(): void {
     this.route.paramMap.subscribe((paramMap) => {
-      void this.router.navigate(['/', 'xtr', paramMap.get('shipItId')]);
+      this.router.navigate(['/', 'xtr', paramMap.get('shipItId')]);
     });
   }
 

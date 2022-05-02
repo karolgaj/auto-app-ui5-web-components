@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IFormBuilder, IFormControl, IFormGroup } from '@rxweb/types';
@@ -8,14 +8,14 @@ import { filter, take } from 'rxjs/operators';
 
 import { TbrService } from '../../services';
 import { TbrLine } from '../../models/tbr-line.model';
-import { selectedTbr, updateReference } from '../../state';
+import { addLine, selectedTbr, selectThuList, splitLine, updateReference } from '../../state';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { Tbr } from '../../models/tbr.model';
 import { CommonValidators } from '../../utils/validators';
 
 interface AddLineForm {
   partNo: string;
-  plannedQty: string;
+  plannedQty: number;
   poNumber: string;
 }
 
@@ -39,9 +39,14 @@ export class TbrDetailsComponent {
   @ViewChild('addReferencesDialog')
   addReferencesDialog!: DialogComponent;
 
+  @ViewChild('linesTable')
+  linesTable!: ElementRef;
+
   private details$ = this.store.select(selectedTbr);
+  thuList$ = this.store.select(selectThuList);
   tbrDetails?: Tbr;
   lines?: any[];
+  selectedRowsIndexes: number[] = [];
   addLineFormGroup!: IFormGroup<AddLineForm>;
   addRefFormGroup!: IFormGroup<AddRefForm>;
   deliveryDateFormControl!: IFormControl<string>;
@@ -52,9 +57,12 @@ export class TbrDetailsComponent {
     this.fb = fb;
     this.details$.pipe(untilDestroyed(this)).subscribe((value) => {
       this.tbrDetails = value;
+      if (this.tbrDetails == null) {
+        return;
+      }
       this.lines = value?.lines.map((line) => {
-        const packagedQuantityControl = this.fb.control<number>(line.packagedQuantity, [Validators.required]);
-        const typeControl = this.fb.control<number>(line.type, [Validators.required]);
+        const packagedQuantityControl = this.fb.control<string>(line.packagedQuantity, [Validators.required]);
+        const typeControl = this.fb.control<string>(line.type, [Validators.required]);
 
         return {
           ...line,
@@ -80,6 +88,16 @@ export class TbrDetailsComponent {
     this.addLineFormGroup.reset();
     this.addLineFormGroup.markAsPristine();
 
+    if (this.tbrDetails) {
+      this.store.dispatch(
+        addLine({
+          data: {
+            shipItId: this.tbrDetails.shipitId,
+            ...newLineData,
+          },
+        })
+      );
+    }
     this.cancelAddLine();
   }
 
@@ -109,17 +127,44 @@ export class TbrDetailsComponent {
     this.addReferencesDialog.closeDialog();
   }
 
-  navigateToThuDetails(line: TbrLine, shipitId: string) {
+  navigateToThuDetails(event: MouseEvent, line: TbrLine, shipitId: string) {
+    const anyEvent = event as any;
+    const pathHasCheckbox = anyEvent.path
+      .map((path: { classList: DOMTokenList }) => path.classList?.toString() || '')
+      .includes('ui5-checkbox-inner');
+
+    if (pathHasCheckbox || anyEvent.target.id.includes('custom-input')) {
+      return;
+    }
     this.router.navigate(['/', 'xtr', shipitId, line.articleNumber]);
   }
 
   split() {
-    //add logic
-    console.log('Split a line into two via an Interface in XTR MS');
+    if (this.tbrDetails == null) {
+      return;
+    }
+
+    const releaseLines = this.lines
+      ?.filter((_, i) => this.selectedRowsIndexes.includes(i))
+      .map((line) => line.releaseLineId)
+      .toString();
+
+    if (releaseLines == null) {
+      return;
+    }
+
+    const data = {
+      shipItId: this.tbrDetails.shipitId,
+      releaseLines,
+    };
+    this.store.dispatch(splitLine({ data }));
   }
 
-  log(e: any) {
-    console.log(e);
+  selectionChange(e: Event) {
+    this.selectedRowsIndexes = (e as any).detail.selectedRows
+      .map((row: HTMLElement) => row.getAttribute('data-index'))
+      .filter((index: string | null) => index != null)
+      .map((index: string) => parseInt(index, 10));
   }
 
   goToWorkflow(shipitId: string) {

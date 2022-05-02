@@ -4,6 +4,7 @@ import { IFormBuilder, IFormGroup } from '@rxweb/types';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { combineLatest } from 'rxjs';
 import { filter, startWith, take } from 'rxjs/operators';
 
 import { DialogComponent } from '../../ui/dialog/dialog.component';
@@ -23,7 +24,7 @@ import { CustomAddress } from '../../models/custom-address.model';
 import { TbrNetwork } from '../../models/tbr-network.model';
 import { NEW_XTR, PLANNING_TYPE_OPTIONS, SERVICE_LEVEL_OPTIONS, TRANSPORT_TYPE_OPTIONS } from './constants';
 import { CommonValidators } from '../../utils/validators';
-import { combineLatest } from 'rxjs';
+import { UnloadingPoint } from '../../models/unloading-point.model';
 
 @UntilDestroy()
 @Component({
@@ -168,11 +169,11 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     this.unloadingPointDialog.closeDialog();
   }
 
-  selectLoadingPoint(loadingPoint: string): void {
+  selectLoadingPoint(loadingPoint: UnloadingPoint): void {
     if (this.loadingPointSelection === 'unloadingPoint') {
-      this.networkForm.controls.unloadingPoint.setValue(loadingPoint);
+      this.networkForm.controls.unloadingPoint.setValue(loadingPoint.unloadingPoint);
     } else {
-      this.networkForm.controls.loadingPoint.setValue(loadingPoint);
+      this.networkForm.controls.loadingPoint.setValue(loadingPoint.unloadingPoint);
     }
     this.closeUnloadingPointDialog();
   }
@@ -284,7 +285,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
         if (consignor) {
           this.store.dispatch(loadShipPoints({ data: consignor }));
 
-          if (shipFrom) {
+          if (shipFrom != null) {
             this.store.dispatch(
               loadUnloadingPoints({
                 data: {

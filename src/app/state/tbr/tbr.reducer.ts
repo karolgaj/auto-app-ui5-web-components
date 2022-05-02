@@ -6,6 +6,7 @@ import { TbrNetwork } from '../../models/tbr-network.model';
 import { Consignor } from '../../models/consignor.model';
 import { UnloadingPoint } from '../../models/unloading-point.model';
 import { ShipItem } from '../../models/ship-item.model';
+import { TransportHandlingUnit } from '../../models/transport-handling-unit.model';
 
 export const tbrFeatureKey = 'tbr';
 
@@ -16,6 +17,7 @@ export interface State {
   unloadingPoints?: UnloadingPoint[];
   shipItems?: ShipItem[];
   selectedTbr?: Tbr;
+  thuList?: TransportHandlingUnit[];
   error?: any;
 }
 
@@ -37,33 +39,37 @@ export const reducer = createReducer(
     ...state,
     selectedTbr: undefined,
   })),
-  on(TbrActions.selectTbrSuccess, (state, action) => ({
+  on(TbrActions.selectTbrSuccess, TbrActions.addLineSuccess, TbrActions.splitLineSuccess, (state, action) => ({
     ...state,
     selectedTbr: action.data,
   })),
-  on(TbrActions.updateSelectedTbr, (state, action) => {
-    let selectedTbr = { ...state.selectedTbr } as Tbr;
-    const data = { ...action.data };
-
-    if (data.approvalDecision) {
-      selectedTbr.approvalDecision = {
-        ...selectedTbr.approvalDecision,
-        ...data.approvalDecision,
-      };
-
-      delete data.approvalDecision;
-    }
-
-    selectedTbr = {
-      ...selectedTbr,
-      ...data,
-    };
-
-    return {
-      ...state,
-      selectedTbr,
-    };
-  }),
+  on(TbrActions.loadThuListSuccess, (state, action) => ({
+    ...state,
+    thuList: action.data,
+  })),
+  // on(TbrActions.updateSelectedTbr, (state, action) => {
+  //   let selectedTbr = { ...state.selectedTbr } as Tbr;
+  //   const data = { ...action.data };
+  //
+  //   if (data.approvalDecision) {
+  //     selectedTbr.approvalDecision = {
+  //       ...selectedTbr.approvalDecision,
+  //       ...data.approvalDecision,
+  //     };
+  //
+  //     delete data.approvalDecision;
+  //   }
+  //
+  //   selectedTbr = {
+  //     ...selectedTbr,
+  //     ...data,
+  //   };
+  //
+  //   return {
+  //     ...state,
+  //     selectedTbr,
+  //   };
+  // }),
 
   on(
     TbrActions.loadTbrsFailure,

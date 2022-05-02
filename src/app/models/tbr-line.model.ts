@@ -6,6 +6,9 @@ export interface TbrLine {
   requestedQuantity: string;
   packagedQuantity: string;
   purchaseOrderNumber: string;
+  width: string;
+  length: string;
+  height: string;
   weight: string;
   weightUOM: string;
   notDelivered: boolean;

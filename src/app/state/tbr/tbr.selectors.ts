@@ -1,13 +1,32 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as fromTbr from './tbr.reducer';
+import { mapToLines } from '../../utils/map-lines';
+import { ShipItStatusType } from '../../models/tbr-type.model';
 
 export const selectTbrState = createFeatureSelector<fromTbr.State>(fromTbr.tbrFeatureKey);
 
 export const selectTbrs = createSelector(selectTbrState, (state) => state.tbrs);
+export const selectTbrsByType = (type: ShipItStatusType | ShipItStatusType[]) =>
+  createSelector(selectTbrState, (state) =>
+    state.tbrs.filter((tbr) => {
+      if (Array.isArray(type)) {
+        return type.includes(tbr.shipitStatusType);
+      }
+      return tbr.shipitStatusType === type;
+    })
+  );
 export const selectNetworks = createSelector(selectTbrState, (state) => state.networks);
 export const selectConsignors = createSelector(selectTbrState, (state) => state.consignors);
 export const selectUnloadingPoints = createSelector(selectTbrState, (state) => state.unloadingPoints);
 export const selectShipItems = createSelector(selectTbrState, (state) => state.shipItems);
-export const selectedTbr = createSelector(selectTbrState, (state) => state.selectedTbr);
+export const selectThuList = createSelector(selectTbrState, (state) => state.thuList);
+export const selectedTbr = createSelector(selectTbrState, (state) =>
+  state.selectedTbr
+    ? {
+        ...state.selectedTbr,
+        lines: mapToLines(state.selectedTbr),
+      }
+    : undefined
+);
 
 export const selectError = createSelector(selectTbrState, (state) => state.error);
