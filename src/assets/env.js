@@ -1,5 +1,5 @@
 (function (window) {
   window['env'] = window['env'] || {};
-  window['env'].ENV = '${ENV_VALUE}'; // not actualized, for local testing
-  window['env'].BASE_URI = '${BASE_URI}'; // not actualized, for local testing
+  window['env'].ENV = 'TEST'; // not actualized, for local testing
+  window['env'].BASE_URI = 'TEST URI'; // not actualized, for local testing
 })(this);

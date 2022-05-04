@@ -1,0 +1,8 @@
+
+apiVersion: v1
+data:
+  ENV_VALUE: Dev
+  BASE_URI: https://shipitapi-dev.volvogroup.com/apigw
+kind: ConfigMap
+metadata:
+  name: the_configmap_name_id

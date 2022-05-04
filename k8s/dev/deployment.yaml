@@ -19,6 +19,9 @@ spec:
         - name: xtr-frontend
           image: mscpregistry.azurecr.io/xtr-frontend:latest
           command: [ "/bin/sh", "-c", "env" ]
+          envFrom:
+            - configMapRef:
+                name: the_configmap_name_id
           ports:
             - name: http
               containerPort: 80

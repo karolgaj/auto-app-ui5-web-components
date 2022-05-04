@@ -26,4 +26,4 @@ COPY --from=builder /build/dist/aotu-app-ui5-web-components/ /usr/share/nginx/ht
 #COPY --from=builder /build/dist/.htaccess /usr/share/nginx/html/
 COPY --from=builder /build/src/nginx-conf/default.conf /etc/nginx/conf.d/
 
-CMD nginx -g "daemon off;"
+CMD ["/bin/sh",  "-c",  "envsubst < /env.template.js > / env.js && exec nginx -g 'daemon off;'"]
