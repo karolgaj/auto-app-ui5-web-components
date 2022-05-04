@@ -154,9 +154,9 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
 
   chooseSecondSubCode(secondSubCode: SecondSubCode): void {
     if (this.editingIndex.value != null) {
-      this.form.at(this.editingIndex.value).get('subCode')?.setValue(secondSubCode.code);
+      this.form.at(this.editingIndex.value).get('secondSubCode')?.setValue(secondSubCode.code);
     }
-    this.closeSubCodesDialog();
+    this.closeSecondSubCodesDialog();
   }
 
   assignEditingIndex(editingIndex: number): void {

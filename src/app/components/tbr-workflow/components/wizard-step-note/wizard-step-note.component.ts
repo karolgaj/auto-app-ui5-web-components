@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { WizardStepAbstract } from '../wizard-step-abstract';
 import { IFormGroup } from '@rxweb/types';
 import { FormBuilder } from '@angular/forms';
+import { WizardStepAbstract } from '../wizard-step-abstract';
 import { Tbr } from '../../../../models/tbr.model';
 
 @Component({
@@ -20,7 +20,7 @@ export class WizardStepNoteComponent extends WizardStepAbstract implements OnIni
   }
 
   protected createForm(): void {
-    this.fb.group({
+    this.form = this.fb.group({
       internalNote: null,
     });
   }
