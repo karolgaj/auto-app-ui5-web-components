@@ -25,6 +25,7 @@ import { TbrNetwork } from '../../models/tbr-network.model';
 import { NEW_XTR, PLANNING_TYPE_OPTIONS, SERVICE_LEVEL_OPTIONS, TRANSPORT_TYPE_OPTIONS } from './constants';
 import { CommonValidators } from '../../utils/validators';
 import { UnloadingPoint } from '../../models/unloading-point.model';
+import {TranslateService} from "@ngx-translate/core";
 
 @UntilDestroy()
 @Component({
@@ -72,12 +73,13 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   transportTypeOptions = TRANSPORT_TYPE_OPTIONS;
   planningTypesOptions = PLANNING_TYPE_OPTIONS;
 
-  constructor(fb: FormBuilder, private router: Router, private store: Store) {
+  constructor(fb: FormBuilder, private router: Router, private store: Store, private translate: TranslateService) {
     this.fb = fb;
     this.store.dispatch(loadConsignors({}));
     this.store.dispatch(loadShipItems());
     this.createForms();
     this.watchForms();
+    
   }
 
   ngAfterViewInit(): void {
@@ -130,28 +132,28 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   }
   get parmaDialogHeader(): string {
     if (this.parmaSelection === 'consignor') {
-      return 'Consignors';
+      return 'COMMON.CONSIGNOR';
     }
     if (this.parmaSelection === 'consignee') {
-      return 'Consignees';
+      return 'COMMON.CONSIGNEE';
     }
     return '';
   }
   get addressDialogHeader(): string {
     if (this.addressSelection === 'shipFrom') {
-      return 'Custom Ship From Address';
+      return 'COMMON.SHIP_FROM' ;
     }
     if (this.addressSelection === 'shipTo') {
-      return 'Custom Ship To Address';
+      return 'COMMON.SHIP_TO';
     }
     return '';
   }
   get shipListDialogHeader(): string {
     if (this.addressSelection === 'shipFrom') {
-      return 'Ship From';
+      return 'COMMON.SHIP_FROM';
     }
     if (this.addressSelection === 'shipTo') {
-      return 'Ship To';
+      return 'COMMON.SHIP_TO';
     }
     return '';
   }
