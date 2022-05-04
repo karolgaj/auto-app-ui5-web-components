@@ -18,10 +18,6 @@ spec:
       containers:
         - name: xtr-frontend
           image: mscpregistry.azurecr.io/xtr-frontend:latest
-          command: [ "/bin/sh", "-c", "env" ]
-          envFrom:
-            - configMapRef:
-                name: the_configmap_name_id
           ports:
             - name: http
               containerPort: 80
@@ -30,6 +26,7 @@ spec:
               memory: "128M"
             limits:
               memory: "2560M"
+          command: [ "/bin/sh", "-c", "env" ]
           env:
             - name: ENV_VALUE
               value: "Dev"
