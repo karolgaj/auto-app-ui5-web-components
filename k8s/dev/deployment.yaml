@@ -18,6 +18,7 @@ spec:
       containers:
         - name: xtr-frontend
           image: mscpregistry.azurecr.io/xtr-frontend:latest
+          command: [ "/bin/sh", "-c", "env" ]
           ports:
             - name: http
               containerPort: 80
