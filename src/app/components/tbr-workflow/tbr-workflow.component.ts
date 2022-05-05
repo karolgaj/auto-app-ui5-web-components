@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { WizardStepAbstract } from './components/wizard-step-abstract';
 import { selectedTbr, updateSelectedTbr } from '../../state';
@@ -7,7 +7,7 @@ import { selectedTbr, updateSelectedTbr } from '../../state';
   selector: 'app-tbr-workflow',
   templateUrl: './tbr-workflow.component.html',
 })
-export class TbrWorkflowComponent implements OnInit, AfterViewInit {
+export class TbrWorkflowComponent {
   @ViewChild('wizard')
   wizard!: ElementRef;
 
@@ -19,12 +19,6 @@ export class TbrWorkflowComponent implements OnInit, AfterViewInit {
   details$ = this.store.select(selectedTbr);
 
   constructor(private store: Store) {}
-
-  ngOnInit(): void {}
-
-  ngAfterViewInit() {
-    console.log();
-  }
 
   goToStep(index: number) {
     const steps: any[] = Array.from(this.wizard.nativeElement.children as HTMLCollection);

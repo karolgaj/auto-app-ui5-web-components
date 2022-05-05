@@ -7,7 +7,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "aotu-app-ui5-web-components": {
+    "express-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -28,7 +28,7 @@
               "path": "./extra-webpack.config.js",
               "replaceDuplicatePlugins": true
             },
-            "outputPath": "dist/aotu-app-ui5-web-components",
+            "outputPath": "dist/express-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -79,15 +79,15 @@
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "browserTarget": "aotu-app-ui5-web-components:build:development",
+            "browserTarget": "express-app:build:development",
             "ssl": true
           },
           "configurations": {
             "production": {
-              "browserTarget": "aotu-app-ui5-web-components:build:production"
+              "browserTarget": "express-app:build:production"
             },
             "development": {
-              "browserTarget": "aotu-app-ui5-web-components:build:development"
+              "browserTarget": "express-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -95,7 +95,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "aotu-app-ui5-web-components:build"
+            "browserTarget": "express-app:build"
           }
         },
         "test": {
@@ -119,5 +119,5 @@
       }
     }
   },
-  "defaultProject": "aotu-app-ui5-web-components"
+  "defaultProject": "express-app"
 }

@@ -25,8 +25,6 @@ export class CommonValidators {
 
   static IsHourInBetweenHours<T extends GenericWithStrings<T>>(checkDateKey: keyof T, betweenFromKey: keyof T, betweenToKey: keyof T) {
     return (control: IFormGroup<T>) => {
-      console.log(control.getRawValue());
-
       const checkDate = DateTime.fromFormat((control.controls[checkDateKey].value as string) ?? '', TIME_FORMAT);
       const betweenFrom = DateTime.fromFormat((control.controls[betweenFromKey].value as string) ?? '', TIME_FORMAT);
       const betweenTo = DateTime.fromFormat((control.controls[betweenToKey].value as string) ?? '', TIME_FORMAT);

@@ -73,7 +73,6 @@ export class TbrEffects {
       ofType(TbrActions.loadShipPoints),
       concatMap(({ data }) =>
         this.transportNetworkService.getActiveShipPointByParma(data).pipe(
-          tap(console.log),
           map((res) => TbrActions.loadShipPointsSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.loadShipPointsFailure({ error })))
         )

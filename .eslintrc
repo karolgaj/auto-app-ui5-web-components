@@ -48,6 +48,7 @@
             "props": false
           }
         ],
+        "no-console": ["error", { "allow": ["warn", "error"] }],
         "prefer-arrow-callback": "warn",
         "prefer-destructuring": "warn",
         "sort-class-members/sort-class-members": [

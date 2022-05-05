@@ -76,9 +76,9 @@ export class WizardStepAdditionalContactsComponent extends WizardStepAbstract im
 
   protected createForm(): void {
     this.form = this.fb.array<AdditionalContact>([]);
-    this.form.valueChanges.subscribe((val) => {
-      console.log(val);
-    });
+    // this.form.valueChanges.subscribe((val) => {
+    //   console.log(val);
+    // });
   }
 
   protected patchInitialForm(): void {

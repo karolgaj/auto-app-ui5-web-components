@@ -107,11 +107,11 @@ export class WizardStepCostOwnerComponent extends WizardStepAbstract implements 
   }
 
   consignorCostChanged($event: any) {
-    console.log($event.target._stateStorage.value);
+    // console.log($event.target._stateStorage.value);
   }
 
   consigneeCostChanged($event: any) {
-    console.log($event.target._stateStorage.value);
+    // console.log($event.target._stateStorage.value);
   }
 
   getData(): Partial<Tbr> {

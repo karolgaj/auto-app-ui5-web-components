@@ -22,7 +22,7 @@ import { TbrLightDetails } from '../../models/tbr-light.model';
 import { NetworkForm } from '../../models/network-form.model';
 import { CustomAddress } from '../../models/custom-address.model';
 import { TbrNetwork } from '../../models/tbr-network.model';
-import { NEW_XTR, PLANNING_TYPE_OPTIONS, SERVICE_LEVEL_OPTIONS, TRANSPORT_TYPE_OPTIONS } from './constants';
+import { PLANNING_TYPE_OPTIONS, SERVICE_LEVEL_OPTIONS, TRANSPORT_TYPE_OPTIONS } from './constants';
 import { CommonValidators } from '../../utils/validators';
 import { UnloadingPoint } from '../../models/unloading-point.model';
 
@@ -220,9 +220,9 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       ...this.networkForm.getRawValue(),
     };
 
-    console.log(payload);
+    // console.log(payload);
 
-    console.log(NEW_XTR);
+    // console.log(NEW_XTR);
 
     // this.store.dispatch(createTbr({ data: payload }));
   }
