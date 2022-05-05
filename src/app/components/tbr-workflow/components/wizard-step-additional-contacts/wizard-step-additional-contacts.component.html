@@ -1,20 +1,20 @@
 <div class="wizard-step">
   <ui5-title>{{ title }}</ui5-title>
 
-  <ui5-button icon="add" (click)="addAdditionalContact()"> Add Additional Contact </ui5-button>
+  <ui5-button icon="add" (click)="addAdditionalContact()"> {{ 'COMMON.ADDITIONAL_CONTACTS_ADD' | translate }} </ui5-button>
   <div fxLayout="column" fxFlex fxLayoutAlign="stretch end" class="wizard-step__content" style="width: 100%">
     <ui5-table>
       <ui5-table-column slot="columns">
-        <span> {{ 'Type' }} </span>
+        <span> {{ 'COMMON.ADDITIONAL_CONTACTS_TYPE' | translate }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ 'Email' }} </span>
+        <span> {{ 'COMMON.CONTACT_PERSON_EMAIL' | translate  }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ 'Name' }} </span>
+        <span> {{ 'COMMON.CONTACT_PERSON_NAME' | translate  }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ 'Phone' }} </span>
+        <span> {{ 'COMMON.CONTACT_PERSON_PHONE' | translate  }} </span>
       </ui5-table-column>
 
       <ui5-table-row
@@ -24,18 +24,18 @@
         [formGroup]="getFormGroup(rowForm)">
         <ui5-table-cell>
           <app-input
-            [placeholder]="'Type'"
+            [placeholder]="'COMMON.ADDITIONAL_CONTACTS_TYPE' | translate"
             formControlName="contactType"
             [icons]="[{ icon: 'value-help', action: openTypeDialog }]"></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
-          <app-input [placeholder]="'Email'" formControlName="email"></app-input>
+          <app-input [placeholder]="'COMMON.CONTACT_PERSON_EMAIL' | translate" formControlName="email"></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
-          <app-input [placeholder]="'Name'" formControlName="name"></app-input>
+          <app-input [placeholder]="'COMMON.CONTACT_PERSON_NAME' | translate" formControlName="name"></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
-          <app-input [placeholder]="'Phone'" formControlName="phone"></app-input>
+          <app-input [placeholder]="'COMMON.CONTACT_PERSON_PHONE' | translate" formControlName="phone"></app-input>
         </ui5-table-cell>
       </ui5-table-row>
     </ui5-table>
