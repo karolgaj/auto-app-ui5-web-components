@@ -1,17 +1,68 @@
-import { InjectionToken, ValueProvider } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { FactoryProvider, InjectionToken, ValueProvider } from '@angular/core';
+import { WINDOW } from '../window.provider';
+
+interface EnvConfig {
+  baseUrl: string;
+  pingUrl: string;
+  pingRedirectUrl: string;
+  clientId: string;
+  production: boolean;
+}
+
+export const ENVIRONMENT = new InjectionToken('ENVIRONMENT');
+function getEnvironment(window: Window): EnvConfig {
+  const { host } = window.location;
+  const options = {
+    pingUrl: 'https://federate-qa.volvo.com',
+    pingRedirectUrl: 'https://shipitapi-qa.volvogroup.com/ui/xtr',
+    clientId: 'shipit',
+    production: false,
+  };
+
+  switch (host) {
+    case 'localhost:4200':
+      return {
+        ...options,
+        baseUrl: 'https://shipitapi-dev.volvogroup.com/apigw',
+        pingRedirectUrl: 'https://localhost:4200',
+      };
+    case 'shipitapi-dev.volvogroup.com':
+      return {
+        ...options,
+        baseUrl: 'https://shipitapi-dev.volvogroup.com/apigw',
+        pingRedirectUrl: 'https://shipitapi-dev.volvogroup.com/ui/xtr',
+      };
+    case 'shipitapi-test.volvogroup.com':
+      return {
+        ...options,
+        baseUrl: 'https://shipitapi-test.volvogroup.com/apigw',
+        pingRedirectUrl: 'https://shipitapi-test.volvogroup.com/ui/xtr',
+      };
+    case 'shipitapi-qa.volvogroup.com':
+      return {
+        ...options,
+        baseUrl: 'https://shipitapi-qa.volvogroup.com/apigw',
+        pingRedirectUrl: 'https://shipitapi-qa.volvogroup.com/ui/xtr',
+      };
+    case 'shipitapi.volvogroup.com':
+      return {
+        ...options,
+        baseUrl: 'https://shipitapi.volvogroup.com/apigw',
+        pingUrl: 'https://federate.volvo.com',
+        pingRedirectUrl: 'https://shipitapi.volvogroup.com/ui/xtr',
+      };
+    default:
+      throw new Error(`unexpected host: ${host}`);
+  }
+}
 
 export const HTTP_BASE_URL = new InjectionToken<string>('HTTP_BASE_URL');
-const HTTP_BASE_URL_VALUE: string = environment.baseUrl;
 
 export const PING_URL = new InjectionToken<string>('PING_URL');
-const PING_URL_VALUE: string = environment.pingUrl;
 
 export const PING_REDIRECT_URL = new InjectionToken<string>('PING_URL');
-const PING_REDIRECT_URL_VALUE: string = environment.pingRedirectUrl;
 
 export const CLIENT_ID = new InjectionToken<string>('CLIENT_ID');
-const CLIENT_ID_VALUE: string = environment.clientId;
 
 export const TOKEN_KEY = new InjectionToken<string>('TOKEN_KEY');
 const TOKEN_KEY_VALUE = 'access_token';
@@ -19,22 +70,31 @@ const TOKEN_KEY_VALUE = 'access_token';
 export const REFRESH_TOKEN_KEY = new InjectionToken<string>('REFRESH_TOKEN_KEY');
 const REFRESH_TOKEN_KEY_VALUE = 'refresh_token';
 
-export const TOKENS: ValueProvider[] = [
+export const TOKENS: (ValueProvider | FactoryProvider)[] = [
+  {
+    provide: ENVIRONMENT,
+    deps: [WINDOW],
+    useFactory: getEnvironment,
+  },
   {
     provide: HTTP_BASE_URL,
-    useValue: HTTP_BASE_URL_VALUE,
+    deps: [ENVIRONMENT],
+    useFactory: (env: EnvConfig) => env.baseUrl,
   },
   {
     provide: PING_URL,
-    useValue: PING_URL_VALUE,
+    deps: [ENVIRONMENT],
+    useFactory: (env: EnvConfig) => env.pingUrl,
   },
   {
     provide: PING_REDIRECT_URL,
-    useValue: PING_REDIRECT_URL_VALUE,
+    deps: [ENVIRONMENT],
+    useFactory: (env: EnvConfig) => env.pingRedirectUrl,
   },
   {
     provide: CLIENT_ID,
-    useValue: CLIENT_ID_VALUE,
+    deps: [ENVIRONMENT],
+    useFactory: (env: EnvConfig) => env.clientId,
   },
   {
     provide: TOKEN_KEY,
