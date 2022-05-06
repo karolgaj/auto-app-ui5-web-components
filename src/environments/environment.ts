@@ -8,7 +8,6 @@ export const environment = {
   pingUrl: 'https://federate-qa.volvo.com',
   pingRedirectUrl: 'https://localhost:4200',
   clientId: 'shipit',
-  envValue: 'development',
 };
 
 /*

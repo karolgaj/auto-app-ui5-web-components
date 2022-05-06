@@ -8,6 +8,7 @@ module.exports = {
       CLIENT_ID: JSON.stringify(process.env.CLIENT_ID),
       PING_URI: JSON.stringify(process.env.PING_URI),
       PING_REDIRECT_URI: JSON.stringify(process.env.PING_REDIRECT_URI),
+      USERNAME: JSON.stringify(process.env.USERNAME),
     }),
   ],
 };
