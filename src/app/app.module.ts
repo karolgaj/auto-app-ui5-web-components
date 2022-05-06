@@ -28,14 +28,15 @@ import { SharedModule } from './shared';
 
 import { environment } from '../environments/environment';
 import { CoreModule } from './core/core.module';
+import { BASE_URL } from './core/providers/value-tokens';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
 setTheme('sap_belize');
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
 setLanguage('en');
 
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+export function createTranslateLoader(http: HttpClient, baseUrl: string) {
+  return new TranslateHttpLoader(http, `${baseUrl}assets/i18n/`, '.json');
 }
 
 @NgModule({
@@ -51,8 +52,8 @@ export function createTranslateLoader(http: HttpClient) {
       defaultLanguage: 'en',
       loader: {
         provide: TranslateLoader,
+        deps: [HttpClient, BASE_URL],
         useFactory: createTranslateLoader,
-        deps: [HttpClient],
       },
     }),
     StoreModule.forRoot([]),

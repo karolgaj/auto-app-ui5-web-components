@@ -1,4 +1,5 @@
 import { FactoryProvider, InjectionToken, ValueProvider } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { WINDOW } from '../window.provider';
 
 interface EnvConfig {
@@ -58,6 +59,11 @@ function getEnvironment(window: Window): EnvConfig {
 
 export const HTTP_BASE_URL = new InjectionToken<string>('HTTP_BASE_URL');
 
+export const BASE_URL = new InjectionToken<string>('BASE_URL');
+function baseUrl(document: Document) {
+  return document.getElementsByTagName('base')[0].href;
+}
+
 export const PING_URL = new InjectionToken<string>('PING_URL');
 
 export const PING_REDIRECT_URL = new InjectionToken<string>('PING_URL');
@@ -103,5 +109,10 @@ export const TOKENS: (ValueProvider | FactoryProvider)[] = [
   {
     provide: REFRESH_TOKEN_KEY,
     useValue: REFRESH_TOKEN_KEY_VALUE,
+  },
+  {
+    provide: BASE_URL,
+    deps: [DOCUMENT],
+    useFactory: baseUrl,
   },
 ];
