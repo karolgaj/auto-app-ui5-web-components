@@ -2,12 +2,59 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
-  production: false,
-  baseUrl: 'https://shipitapi-dev.volvogroup.com/apigw',
-  pingUrl: 'https://federate-qa.volvo.com',
-  pingRedirectUrl: 'https://localhost:4200',
-  clientId: 'shipit',
+interface EnvConfig {
+  baseUrl: String,
+  pingUrl: String,
+  pingRedirectUrl: String,
+  clientId: String,
+  envValue: String,
+}
+
+export const environment = (host: string): EnvConfig => {
+  const options = {
+    baseUrl: 'https://shipitapi-qa.volvogroup.com/apigw',
+    pingUrl: 'https://federate-qa.volvo.com',
+    pingRedirectUrl: 'https://shipitapi-qa.volvogroup.com/ui/xtr',
+    clientId: 'shipit',
+    envValue: 'qa',
+  }
+
+  switch (host) {
+    case 'localhost':
+      return {
+        ...options,
+        pingRedirectUrl: 'https://localhost:4200',
+        envValue: 'local',
+      }
+    case 'https://shipitapi-dev.volvogroup.com':
+      return {
+        ...options,
+        pingRedirectUrl: 'https://shipitapi-dev.volvogroup.com/ui/xtr',
+        envValue: 'development',
+      }
+    case 'https://shipitapi-test.volvogroup.com':
+      return {
+        ...options,
+        pingRedirectUrl: 'https://shipitapi-test.volvogroup.com/ui/xtr',
+        envValue: 'test',
+      }
+    case 'https://shipitapi-qa.volvogroup.com':
+      return {
+        ...options,
+        pingRedirectUrl: 'https://shipitapi-qa.volvogroup.com/ui/xtr',
+        envValue: 'qa',
+      }
+    case 'https://shipitapi.volvogroup.com':
+      return {
+        ...options,
+        baseUrl: 'https://shipitapi.volvogroup.com/apigw',
+        pingUrl: 'https://federate.volvo.com',
+        pingRedirectUrl: 'https://shipitapi.volvogroup.com/ui/xtr',
+        envValue: 'prod',
+      }
+    default:
+      throw new Error(`unexpected host: ${host}`)
+  }
 };
 
 /*
