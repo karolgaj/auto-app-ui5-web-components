@@ -1,13 +1,10 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { IFormArray, IFormBuilder, IFormGroup } from '@rxweb/types';
 import { Tbr } from '../../../models/tbr.model';
-import { FormBuilder } from '@angular/forms';
 
 @Directive()
 export abstract class WizardStepAbstract implements OnInit {
-  @Output()
-  nextStep = new EventEmitter<number>();
-
   @Input()
   titleText!: string;
 
@@ -17,19 +14,23 @@ export abstract class WizardStepAbstract implements OnInit {
   @Input()
   data!: Tbr;
 
+  @Output()
+  nextStep = new EventEmitter<number>();
+
   title = '';
   nextStepIndex = 0;
   protected fb: IFormBuilder;
-
-  abstract form: IFormGroup<any> | IFormArray<any>;
-  abstract getData(): Partial<Tbr>;
-  protected abstract createForm(): void;
-  protected abstract patchInitialForm(): void;
 
   protected constructor(fb: FormBuilder) {
     this.fb = fb;
     this.createForm();
   }
+
+  abstract form: IFormGroup<any> | IFormArray<any>;
+  abstract getData(): Partial<Tbr>;
+
+  protected abstract createForm(): void;
+  protected abstract patchInitialForm(): void;
 
   ngOnInit() {
     this.title = `${this.stepIndex + 1}. ${this.titleText}`;

@@ -15,12 +15,21 @@ import { PackItService } from '../../services/packit.service';
 export class TbrEffects {
   loadTbrs$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(TbrActions.loadTbrs, TbrActions.refreshTbrList),
+      ofType(TbrActions.loadTbrs),
       concatMap(() => {
         return this.xtrService.getXtrs().pipe(
-          switchMap((res) => from([TbrActions.loadTbrsSuccess({ data: res }), TbrActions.refreshTbrListSuccess()])),
+          switchMap((res) => from([TbrActions.loadTbrsSuccess({ data: res })])),
           catchError((error: unknown) => of(TbrActions.loadTbrsFailure({ error })))
         );
+      })
+    );
+  });
+
+  refreshTbrs$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.refreshTbrList),
+      concatMap(() => {
+        return this.xtrService.getXtrs().pipe(map(() => TbrActions.refreshTbrListSuccess()));
       })
     );
   });

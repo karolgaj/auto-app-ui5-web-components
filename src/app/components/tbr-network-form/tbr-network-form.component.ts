@@ -25,7 +25,6 @@ import { TbrNetwork } from '../../models/tbr-network.model';
 import { PLANNING_TYPE_OPTIONS, SERVICE_LEVEL_OPTIONS, TRANSPORT_TYPE_OPTIONS } from './constants';
 import { CommonValidators } from '../../utils/validators';
 import { UnloadingPoint } from '../../models/unloading-point.model';
-import {TranslateService} from "@ngx-translate/core";
 
 @UntilDestroy()
 @Component({
@@ -73,13 +72,12 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   transportTypeOptions = TRANSPORT_TYPE_OPTIONS;
   planningTypesOptions = PLANNING_TYPE_OPTIONS;
 
-  constructor(fb: FormBuilder, private router: Router, private store: Store, private translate: TranslateService) {
+  constructor(fb: FormBuilder, private router: Router, private store: Store) {
     this.fb = fb;
     this.store.dispatch(loadConsignors({}));
     this.store.dispatch(loadShipItems());
     this.createForms();
     this.watchForms();
-    
   }
 
   ngAfterViewInit(): void {
@@ -141,7 +139,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   }
   get addressDialogHeader(): string {
     if (this.addressSelection === 'shipFrom') {
-      return 'COMMON.SHIP_FROM' ;
+      return 'COMMON.SHIP_FROM';
     }
     if (this.addressSelection === 'shipTo') {
       return 'COMMON.SHIP_TO';
@@ -200,6 +198,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   }
 
   goBack(): void {
+    console.log('asd');
     this.router.navigate(['../']);
   }
 

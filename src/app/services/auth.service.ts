@@ -60,7 +60,7 @@ export class AuthService {
     body.set('grant_type', 'refresh_token');
     body.set('refresh_token', this.localStorage.getItem(this.refreshTokenKey) as string);
     body.set('client_id', this.clientId);
-    body.set('redirect_uri', this.pingRedirectUrl);
+    body.set('redirect_uri', `${this.pingRedirectUrl}${this.window.location.pathname}`);
 
     return this.httpClient
       .post<{ access_token: string; refresh_token: string }>(`${this.pingUrl}/as/token.oauth2`, body.toString(), {

@@ -8,7 +8,7 @@ import {
   ThuDetailsComponent,
 } from './components';
 import { LayoutComponent } from './ui';
-import { AuthenticatedGuard } from './shared';
+import { AuthenticatedGuard, LoadedExpressGuard } from './shared';
 
 const routes: Routes = [
   {
@@ -33,14 +33,17 @@ const routes: Routes = [
       {
         path: 'workflow/:shipItId',
         component: TbrWorkflowComponent,
+        canActivate: [LoadedExpressGuard],
       },
       {
         path: ':shipItId',
         component: TbrDetailsComponent,
+        canActivate: [LoadedExpressGuard],
       },
       {
         path: ':shipItId/:articleNumber',
         component: ThuDetailsComponent,
+        canActivate: [LoadedExpressGuard],
       },
     ],
   },

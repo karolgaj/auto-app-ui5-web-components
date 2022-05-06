@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
-import { UserRole } from '../models/user.model';
 import { Store } from '@ngrx/store';
-import { selectUserData } from '../state';
+import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { UserRole } from '../models/user.model';
+import { selectUserData } from '../state';
 
 @Injectable({
   providedIn: 'root',
