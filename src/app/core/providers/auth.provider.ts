@@ -26,7 +26,7 @@ export const AuthProvider: Provider = {
         if (code) {
           authService.getToken(code).subscribe(() => {
             store.dispatch(loadUserData());
-            router.navigate(['']);
+            router.navigate(['/']);
           });
         }
         return;

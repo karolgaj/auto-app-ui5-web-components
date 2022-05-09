@@ -15,7 +15,7 @@ function getEnvironment(window: Window): EnvConfig {
   const { host } = window.location;
   const options = {
     pingUrl: 'https://federate-qa.volvo.com',
-    pingRedirectUrl: 'https://shipitapi-qa.volvogroup.com/ui/xtr',
+    pingRedirectUrl: 'https://shipitapi-qa.volvogroup.com',
     clientId: 'shipit',
     production: false,
   };
@@ -31,26 +31,26 @@ function getEnvironment(window: Window): EnvConfig {
       return {
         ...options,
         baseUrl: 'https://shipitapi-dev.volvogroup.com/apigw',
-        pingRedirectUrl: 'https://shipitapi-dev.volvogroup.com/ui/xtr',
+        pingRedirectUrl: 'https://shipitapi-dev.volvogroup.com',
       };
     case 'shipitapi-test.volvogroup.com':
       return {
         ...options,
         baseUrl: 'https://shipitapi-test.volvogroup.com/apigw',
-        pingRedirectUrl: 'https://shipitapi-test.volvogroup.com/ui/xtr',
+        pingRedirectUrl: 'https://shipitapi-test.volvogroup.com',
       };
     case 'shipitapi-qa.volvogroup.com':
       return {
         ...options,
         baseUrl: 'https://shipitapi-qa.volvogroup.com/apigw',
-        pingRedirectUrl: 'https://shipitapi-qa.volvogroup.com/ui/xtr',
+        pingRedirectUrl: 'https://shipitapi-qa.volvogroup.com',
       };
     case 'shipitapi.volvogroup.com':
       return {
         ...options,
         baseUrl: 'https://shipitapi.volvogroup.com/apigw',
         pingUrl: 'https://federate.volvo.com',
-        pingRedirectUrl: 'https://shipitapi.volvogroup.com/ui/xtr',
+        pingRedirectUrl: 'https://shipitapi.volvogroup.com',
       };
     default:
       throw new Error(`unexpected host: ${host}`);
