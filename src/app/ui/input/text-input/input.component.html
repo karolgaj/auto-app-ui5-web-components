@@ -11,7 +11,7 @@
     [id]="getId()"
     [placeholder]="placeholder"
     [showSuggestions]="showSuggestions"
-    [value]="value"
+    [value]="formatValue ? formattedValue : value "
     [disabled]="disabled"
     [valueState]="valueState">
     <ng-container *ngFor="let icon of icons">

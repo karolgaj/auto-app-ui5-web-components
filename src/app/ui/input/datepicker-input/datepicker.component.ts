@@ -1,8 +1,12 @@
-import { Component, forwardRef, Injector } from '@angular/core';
-import { CustomInputAbstract } from '../custom-input.abstract';
+import { AfterViewInit, Component, forwardRef, Injector, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { selectUserDateFormat } from '../../../state';
 import { Store } from '@ngrx/store';
+import { DateTime } from 'luxon';
+import { filter, take } from 'rxjs/operators';
+
+import { CustomInputAbstract } from '../custom-input.abstract';
+import { selectUserDateFormat } from '../../../state';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-datepicker',
@@ -16,14 +20,49 @@ import { Store } from '@ngrx/store';
     },
   ],
 })
-export class DatepickerComponent extends CustomInputAbstract {
+export class DatepickerComponent extends CustomInputAbstract implements OnInit, AfterViewInit {
   dateFormat$ = this.store.select(selectUserDateFormat);
+  dateFormat = 'yyyyMMdd';
 
   constructor(injector: Injector, private store: Store) {
     super(injector);
   }
 
+  ngAfterViewInit(): void {
+    // @ts-ignore
+    fromEvent(this.customInput.nativeElement, 'change').subscribe((e: any) => {
+      const date =
+        e.detail.value?.length === 8 ? e.detail.value : DateTime.fromFormat(e.detail.value, this.dateFormat).toFormat('yyyyMMdd');
+      if (date.includes('Invalid')) {
+        return;
+      }
+      this.writeValue(date);
+      this.onChange(this.value);
+      this.markAsTouched();
+    });
+  }
+
+  ngOnInit(): void {
+    super.ngOnInit();
+    this.dateFormat$.pipe(filter(Boolean), take(1)).subscribe((format) => {
+      this.dateFormat = format;
+    });
+
+    this.formControl.valueChanges.subscribe((value) => {
+      if (value && value.length === 8) {
+        this.writeValue(value);
+      }
+    });
+  }
+
   getId(): string {
     return `custom-datepicker-${this._id}`;
   }
+
+  formatValue = (value: string): string => {
+    if (value && value.length === 8) {
+      return DateTime.fromFormat(value, 'yyyyMMdd').toFormat(this.dateFormat);
+    }
+    return value;
+  };
 }

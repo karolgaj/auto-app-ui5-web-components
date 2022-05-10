@@ -8,6 +8,7 @@ import { UnloadingPoint } from '../../models/unloading-point.model';
 import { ShipItem } from '../../models/ship-item.model';
 import { ShipPoint } from '../../models/ship-point.model';
 import { TransportHandlingUnit } from '../../models/transport-handling-unit.model';
+import { ShipitStatus } from '../../models/tbr-type.model';
 
 export const loadTbrs = createAction('[Tbr] Load Tbrs', props<{ data: { query: string } }>());
 export const loadTbrsSuccess = createAction('[Tbr] Load Tbrs Success', props<{ data: TbrLightDetails[] }>());
@@ -25,6 +26,10 @@ export const selectTbrSuccess = createAction('[Tbr] Select Tbr Success', props<{
 export const selectTbrFailure = createAction('[Tbr] Select Tbr Failure', props<{ error: unknown }>());
 
 export const updateSelectedTbr = createAction('[Tbr] Update Selected Tbr', props<{ data: Partial<Tbr> }>());
+
+export const updateTbr = createAction('[Tbr] Update Tbr');
+export const updateTbrSuccess = createAction('[Tbr] Update Tbr Success', props<{ data: Tbr }>());
+export const updateTbrFailure = createAction('[Tbr] Update Tbr Failure', props<{ error: unknown }>());
 
 export const loadAvailableNetworks = createAction('[Networks] Load network', props<{ data: NetworkForm }>());
 export const loadAvailableNetworksSuccess = createAction('[Networks] Load network Success', props<{ data: TbrNetwork[] }>());
@@ -82,3 +87,6 @@ export const updateReferenceFailure = createAction('[Express] Update Reference F
 export const loadThuList = createAction('[Networks] Load thu list', props<{ data: string }>());
 export const loadThuListSuccess = createAction('[Networks] Load thu list Success', props<{ data: TransportHandlingUnit[] }>());
 export const loadThuListFailure = createAction('[Networks] Load thu list Failure', props<{ error: unknown }>());
+
+export const goToWorkflow = createAction('[XTR] Go to workflow', props<{ data: ShipitStatus }>());
+export const goToWorkflowSuccess = createAction('[XTR] Go to workflow Success', props<{ data: Tbr }>());

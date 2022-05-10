@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { WizardStepAbstract } from '../wizard-step-abstract';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Tbr } from '../../../../models/tbr.model';
 import { IFormGroup } from '@rxweb/types';
+import { WizardStepAbstract } from '../wizard-step-abstract';
+import { Tbr } from '../../../../models/tbr.model';
 import { CommonValidators } from '../../../../utils/validators';
 
 interface PickupInfoForm {
@@ -18,16 +18,11 @@ interface PickupInfoForm {
   selector: 'app-wizard-step-pickup-info',
   templateUrl: './wizard-step-pickup-info.component.html',
 })
-export class WizardStepPickupInfoComponent extends WizardStepAbstract implements OnInit {
+export class WizardStepPickupInfoComponent extends WizardStepAbstract {
   form!: IFormGroup<PickupInfoForm>;
 
   constructor(fb: FormBuilder) {
     super(fb);
-  }
-
-  ngOnInit() {
-    super.ngOnInit();
-    this.patchInitialForm();
   }
 
   getData(): Partial<Tbr> {

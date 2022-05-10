@@ -26,18 +26,21 @@
           <app-input
             [placeholder]="'COMMON.REASON_CODE_CAUSE' | translate"
             formControlName="cause"
+            [formatValue]="causeFormatter"
             [icons]="[{ icon: 'value-help', action: openReasonCodesDialog }]"></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
           <app-input
             [placeholder]="'COMMON.REASON_CODE' | translate"
             formControlName="subCode"
+            [formatValue]="reasonCodeFormatter"
             [icons]="[{ icon: 'value-help', action: openSubCodesDialog }]"></app-input>
         </ui5-table-cell>
         <ui5-table-cell>
           <app-input
             [placeholder]="'COMMON.REASON_CODE_SUB' | translate"
             formControlName="secondSubCode"
+            [formatValue]="subReasonCodeFormatter"
             [icons]="[{ icon: 'value-help', action: openSecondSubCodesDialog }]"></app-input>
         </ui5-table-cell>
         <ui5-table-cell>

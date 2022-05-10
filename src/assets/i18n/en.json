@@ -1,5 +1,20 @@
 {
   "HELLO": "Hello",
+  "VALIDATORS": {
+    "REQUIRED": "Field cannot be empty",
+    "EMAIL": "Enter valid email address",
+    "PHONE": "Enter valid phone",
+    "MAXLENGTH": "Max length is {MAX_LENGTH}",
+    "MINLENGTH": "Min length is {MIN_LENGTH}",
+    "MAX": "Max value is {MAX_VALUE}",
+    "MIN": "Min value is {MIN_VALUE}",
+    "IS_PAST_DATE": "Date must not be in the past",
+    "IS_BETWEEN_TIMES": "Hours must be between {BETWEEN_FROM} and {BETWEEN_TO}",
+    "IS_HOUR_AFTER_HOUR": "Hour must be after {AFTER_HOUR}",
+    "IS_DATE_AFTER_DATE": "Date must be after {AFTER_DATE}",
+    "INVALID_DATE": "Enter valid date",
+    "INVALID": "Invalid value"
+  },
   "COMMON": {
     "EXPRESS_TRANSPORT_REQUEST": "Express Transport Requests",
     "SELECT_DRAFT": "Select a Draft",
@@ -118,7 +133,7 @@
     "VALID_FROM_TO": "valid from - to",
     "LOADING_POINT": "loading point"
   },
-  "TBR_DETAILS":{
+  "TBR_DETAILS": {
     "ADD_REFERENCES": "Add References",
     "ADD_LINE": "Add Line",
     "SPLIT": "Split",
@@ -129,15 +144,13 @@
     "BUTTON_DO_NOT_DELIVER_FULL": "Do not deliver full shipment",
     "BUTTON_CONTINUE_TO_DETAILS": "Continue to details"
   },
-  "HAZMAT_DETAILS":{
-
+  "HAZMAT_DETAILS": {
     "ADD_HAZMAT": "Add Hazmat",
-    "HAZMAT_CLASS":"Hazmat Class",
-    "HAZMAT_PACKAGING_GROUP":"Packaging Group",
-    "HAZMAT_PROPPER_SHIPPING_NAME":"Shipping Name",
-    "HAZMAT_UNCODE":"Hazmat Uncode",
-    "LOADING_METERS":"Loading Meters",
-    "TEMPERATURE_CONTROL":"Temperature Control"
-
+    "HAZMAT_CLASS": "Hazmat Class",
+    "HAZMAT_PACKAGING_GROUP": "Packaging Group",
+    "HAZMAT_PROPPER_SHIPPING_NAME": "Shipping Name",
+    "HAZMAT_UNCODE": "Hazmat Uncode",
+    "LOADING_METERS": "Loading Meters",
+    "TEMPERATURE_CONTROL": "Temperature Control"
   }
 }

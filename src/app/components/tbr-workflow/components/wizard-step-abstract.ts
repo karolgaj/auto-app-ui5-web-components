@@ -32,7 +32,7 @@ export abstract class WizardStepAbstract implements OnInit {
   protected abstract createForm(): void;
   protected abstract patchInitialForm(): void;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.title = `${this.stepIndex + 1}. ${this.titleText}`;
     this.nextStepIndex = this.stepIndex + 2;
     this.patchInitialForm();

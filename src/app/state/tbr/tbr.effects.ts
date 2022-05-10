@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, concatMap, exhaustMap, filter, map, switchMap, tap } from 'rxjs/operators';
-import { from, of } from 'rxjs';
+import { catchError, concatMap, exhaustMap, filter, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { EMPTY, from, of } from 'rxjs';
 
 import * as TbrActions from './tbr.actions';
 import { selectTbr } from './tbr.actions';
@@ -10,6 +10,10 @@ import { TbrService } from '../../services';
 import { XtrService } from '../../services/xtr.service';
 import { TransportNetworkService } from '../../services/transport-network.service';
 import { PackItService } from '../../services/packit.service';
+import { Store } from '@ngrx/store';
+import { selectedTbr } from './tbr.selectors';
+import { Tbr } from '../../models/tbr.model';
+import { ShipitStatus } from '../../models/tbr-type.model';
 
 @Injectable()
 export class TbrEffects {
@@ -205,8 +209,54 @@ export class TbrEffects {
     )
   );
 
+  goToWorkflow$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.goToWorkflow),
+      withLatestFrom(this.store.select(selectedTbr)),
+      concatMap(([{ data }, tbr]: [{ data: ShipitStatus }, Tbr | undefined]) => {
+        if (tbr == null) {
+          return EMPTY;
+        }
+        const updatedTbr: Tbr = {
+          ...tbr,
+          shipitStatus: data,
+        };
+        return this.xtrService.saveXTR(updatedTbr).pipe(map((res) => TbrActions.goToWorkflowSuccess({ data: res })));
+      })
+    )
+  );
+
+  goToWorkflowSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(TbrActions.goToWorkflowSuccess),
+        tap(({ data }) => {
+          this.router.navigate(['/', 'xtr', 'workflow', data.shipitId]);
+        })
+      ),
+    {
+      dispatch: false,
+    }
+  );
+
+  updateTbr$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.updateTbr),
+      withLatestFrom(this.store.select(selectedTbr)),
+      concatMap(([_, tbr]) =>
+        tbr
+          ? this.xtrService.saveXTR(tbr).pipe(
+              map((res) => TbrActions.updateTbrSuccess({ data: res })),
+              catchError((error: unknown) => of(TbrActions.updateTbrFailure({ error })))
+            )
+          : EMPTY
+      )
+    )
+  );
+
   constructor(
     private actions$: Actions,
+    private store: Store,
     private tbrService: TbrService,
     private xtrService: XtrService,
     private packItService: PackItService,

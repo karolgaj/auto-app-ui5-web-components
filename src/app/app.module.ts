@@ -29,6 +29,7 @@ import { SharedModule } from './shared';
 import { environment } from '../environments/environment';
 import { CoreModule } from './core/core.module';
 import { BASE_URL } from './core/providers/value-tokens';
+import { ErrorMessagePipe } from './pipes/error-message.pipe';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
 setTheme('sap_belize');
@@ -41,7 +42,7 @@ export function createTranslateLoader(http: HttpClient, baseUrl: string) {
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  declarations: [AppComponent, ...PIPES, ...UI_COMPONENTS, ...COMPONENTS, LayoutComponent],
+  declarations: [AppComponent, ...PIPES, ...UI_COMPONENTS, ...COMPONENTS, LayoutComponent, ErrorMessagePipe],
   imports: [
     BrowserModule,
     CommonModule,

@@ -12,7 +12,6 @@
         #wizardStep
         [titleText]="'COMMON.PICKUP_INFO' | translate | titlecase"
         [stepIndex]="0"
-        [tbrDetails]="tbrDetails"
         [data]="tbrDetails"
         (nextStep)="goToStep($event)"></app-wizard-step-pickup-info>
     </ui5-wizard-step>
@@ -46,6 +45,7 @@
         [titleText]="'COMMON.REASON_CODE' | translate | titlecase"
         [stepIndex]="4"
         [data]="tbrDetails"
+        payer="VOLVO"
         (nextStep)="goToStep($event)"></app-wizard-step-reason-code>
     </ui5-wizard-step>
     <ui5-wizard-step [titleText]="'COMMON.NOTE' | translate | titlecase" disabled>
@@ -101,6 +101,7 @@
         [titleText]="'COMMON.REASON_CODE' | translate | titlecase"
         [stepIndex]="4"
         [data]="tbrDetails"
+        payer="SUPPLIER"
         (nextStep)="goToStep($event)"></app-wizard-step-reason-code>
     </ui5-wizard-step>
     <ui5-wizard-step [titleText]="'COMMON.ADDITIONAL_CONTACTS' | translate | titlecase" disabled>

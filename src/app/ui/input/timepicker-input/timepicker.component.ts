@@ -1,8 +1,10 @@
-import { Component, forwardRef, Injector } from '@angular/core';
-import { CustomInputAbstract } from '../custom-input.abstract';
+import { Component, forwardRef, Injector, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { DateTime } from 'luxon';
+import { CustomInputAbstract } from '../custom-input.abstract';
 import { selectUserTimeFormat } from '../../../state';
+import { filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-timepicker',
@@ -16,14 +18,34 @@ import { selectUserTimeFormat } from '../../../state';
     },
   ],
 })
-export class TimepickerComponent extends CustomInputAbstract {
+export class TimepickerComponent extends CustomInputAbstract implements OnInit {
   timeFormat$ = this.store.select(selectUserTimeFormat);
+  timeFormat = 'HH:mm';
 
   constructor(injector: Injector, private store: Store) {
     super(injector);
   }
 
+  ngOnInit(): void {
+    super.ngOnInit();
+    this.timeFormat$.pipe(filter(Boolean), take(1)).subscribe((format) => {
+      this.timeFormat = format;
+    });
+    this.formControl.valueChanges.subscribe((value) => {
+      if (value && value.length === 8) {
+        this.writeValue(value);
+      }
+    });
+  }
+
   getId(): string {
     return `custom-datepicker-${this._id}`;
   }
+
+  formatValue = (value: string): string => {
+    if (value && value.length === 5 && value.includes(':')) {
+      return DateTime.fromFormat(value, 'HH:mm').toFormat(this.timeFormat);
+    }
+    return value;
+  };
 }

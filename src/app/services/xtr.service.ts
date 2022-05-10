@@ -12,8 +12,8 @@ export class XtrService {
 
   /* POST METHODS */
 
-  saveXTR(): Observable<any> {
-    return this.http.delete('/gateway/api/xtr/v3/xtr');
+  saveXTR(tbr: Tbr): Observable<Tbr> {
+    return this.http.post<Tbr>('/gateway/api/xtr/v3/xtr', tbr);
   }
 
   searchTBRs(search: string, consigneeIds: string[], consignorIds: string[]): Observable<any> {

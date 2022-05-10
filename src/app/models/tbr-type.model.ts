@@ -25,4 +25,10 @@ export type ShipItStatusType =
   | 'CANCELED'
   | 'SENT_BACK_TO_TBR';
 
-export type ShipitStatus = 'CREATED' | 'IN_PROCESS';
+export type ShipitStatus =
+  | 'CREATED'
+  | 'IN_PROCESS'
+  | 'APPROVAL_CONFIRM'
+  | 'SENT_FOR_APPROVAL'
+  | 'RO_APPROVAL_REJECTED'
+  | 'APPROVAL_IN_PROCESS';

@@ -198,7 +198,6 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   }
 
   goBack(): void {
-    console.log('asd');
     this.router.navigate(['../']);
   }
 

@@ -4,7 +4,7 @@
     [ngClass]="inputClasses"
     #customInput
     [id]="getId()"
-    [value]="value"
+    [value]="formatValue ? formattedValue : value "
     [valueState]="valueState"
     [disabled]="disabled"
     [formatPattern]="dateFormat$ | async"></ui5-date-picker>

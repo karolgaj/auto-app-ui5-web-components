@@ -5,14 +5,11 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 let id = 0;
 
-type ValueState = 'Success' | 'Error';
+type ValueState = 'Success' | 'Error' | 'Warning' | 'None';
 
 @UntilDestroy()
 @Directive()
 export abstract class CustomInputAbstract implements ControlValueAccessor, AfterViewInit, OnInit {
-  @ViewChild('customInput')
-  customInput!: ElementRef;
-
   @Input()
   inputClasses: string[] = [];
 
@@ -26,7 +23,7 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   label!: string;
 
   @Input()
-  placeholder: string = '';
+  placeholder = '';
 
   @Input()
   required = false;
@@ -40,12 +37,13 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   @Input()
   formatValue?: (value: any) => any;
 
-  onChange = (value: any) => {};
-  onTouched = () => {};
+  @ViewChild('customInput')
+  customInput!: ElementRef;
+
   disabled = false;
   touched = false;
 
-  formattedValue!: any;
+  formattedValue: any;
 
   value: any;
   formControl!: FormControl;
@@ -54,6 +52,15 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
 
   protected constructor(private injector?: Injector) {
     this._id = ++id;
+  }
+
+  ngAfterViewInit(): void {
+    // @ts-ignore
+    fromEvent(this.customInput.nativeElement, 'change').subscribe((e: any) => {
+      this.writeValue(e.detail.value);
+      this.onChange(this.value);
+      this.markAsTouched();
+    });
   }
 
   ngOnInit(): void {
@@ -69,28 +76,20 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
     }
   }
 
-  ngAfterViewInit(): void {
-    // @ts-ignore
-    fromEvent(this.customInput.nativeElement, 'change').subscribe((e: InputEvent) => {
-      this.value = (e.target as HTMLInputElement).value;
-      this.formattedValue = this.formatValue ? this.formattedValue(this.value) : this.value;
-      this.onChange(this.value);
-      this.markAsTouched();
-    });
-  }
-
   get valueState(): ValueState | null {
     if (this.disabled) {
-      return null;
+      return 'None';
     }
 
     if (this.formControl?.touched) {
-      return this.formControl.invalid ? 'Error' : 'Success';
+      return this.formControl.invalid ? 'Warning' : 'Success';
     }
-    return null;
+
+    return 'None';
   }
 
   writeValue(value: any): void {
+    this.formattedValue = this.formatValue ? this.formatValue(value) : value;
     this.value = value;
   }
 
@@ -114,4 +113,7 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   }
 
   abstract getId(): string;
+
+  onChange = (value: any) => {};
+  onTouched = () => {};
 }

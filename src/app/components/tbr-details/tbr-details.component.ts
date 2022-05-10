@@ -4,11 +4,10 @@ import { Router } from '@angular/router';
 import { IFormBuilder, IFormControl, IFormGroup } from '@rxweb/types';
 import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { filter, take } from 'rxjs/operators';
 
 import { TbrService } from '../../services';
 import { TbrLine } from '../../models/tbr-line.model';
-import { addLine, selectedTbr, selectThuList, splitLine, updateReference } from '../../state';
+import { addLine, goToWorkflow, selectedTbr, splitLine, updateReference } from '../../state';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { Tbr } from '../../models/tbr.model';
 import { CommonValidators } from '../../utils/validators';
@@ -43,7 +42,6 @@ export class TbrDetailsComponent {
   linesTable!: ElementRef;
 
   private details$ = this.store.select(selectedTbr);
-  thuList$ = this.store.select(selectThuList);
   tbrDetails?: Tbr;
   lines?: any[];
   selectedRowsIndexes: number[] = [];
@@ -55,6 +53,8 @@ export class TbrDetailsComponent {
 
   constructor(private router: Router, private tbrService: TbrService, private store: Store, fb: FormBuilder) {
     this.fb = fb;
+    this.createForm();
+
     this.details$.pipe(untilDestroyed(this)).subscribe((value) => {
       this.tbrDetails = value;
       if (this.tbrDetails == null) {
@@ -70,20 +70,19 @@ export class TbrDetailsComponent {
           typeControl,
         };
       });
+      this.patchForm(this.tbrDetails);
     });
-    this.createForm();
-    this.patchForm();
   }
 
-  goBack() {
+  goBack(): void {
     this.router.navigate(['../']);
   }
 
-  openAddDialog() {
+  openAddDialog(): void {
     this.addLineDialog.openDialog();
   }
 
-  saveAddLine() {
+  saveAddLine(): void {
     const newLineData = this.addLineFormGroup.getRawValue();
     this.addLineFormGroup.reset();
     this.addLineFormGroup.markAsPristine();
@@ -101,15 +100,15 @@ export class TbrDetailsComponent {
     this.cancelAddLine();
   }
 
-  cancelAddLine() {
+  cancelAddLine(): void {
     this.addLineDialog.closeDialog();
   }
 
-  openAddRefDialog() {
+  openAddRefDialog(): void {
     this.addReferencesDialog.openDialog();
   }
 
-  saveAddRef() {
+  saveAddRef(): void {
     this.store.dispatch(
       updateReference({
         data: {
@@ -121,13 +120,13 @@ export class TbrDetailsComponent {
     this.cancelAddRef();
   }
 
-  cancelAddRef() {
+  cancelAddRef(): void {
     this.addRefFormGroup.reset();
     this.addRefFormGroup.markAsPristine();
     this.addReferencesDialog.closeDialog();
   }
 
-  navigateToThuDetails(event: MouseEvent, line: TbrLine, shipitId: string) {
+  navigateToThuDetails(event: MouseEvent, line: TbrLine, shipitId: string): void {
     const anyEvent = event as any;
     const pathHasCheckbox = anyEvent.path
       .map((path: { classList: DOMTokenList }) => path.classList?.toString() || '')
@@ -139,7 +138,7 @@ export class TbrDetailsComponent {
     this.router.navigate(['/', 'xtr', shipitId, line.articleNumber]);
   }
 
-  split() {
+  split(): void {
     if (this.tbrDetails == null) {
       return;
     }
@@ -167,7 +166,7 @@ export class TbrDetailsComponent {
       .map((index: string) => parseInt(index, 10));
   }
 
-  goToWorkflow(shipitId: string) {
+  goToWorkflow() {
     const areLinesInvalid: boolean =
       this.lines == null ||
       this.lines?.length === 0 ||
@@ -177,7 +176,13 @@ export class TbrDetailsComponent {
       return;
     }
     // this.store.dispatch go to workflow, change status, navigate to workflow
-    this.router.navigate(['/', 'xtr', 'workflow', shipitId]);
+    const currentStatus = this.tbrDetails?.shipitStatus;
+    if (currentStatus == null || currentStatus === 'SENT_FOR_APPROVAL' || currentStatus === 'APPROVAL_CONFIRM') {
+      return;
+    }
+
+    const status = this.tbrDetails?.shipitStatus === 'RO_APPROVAL_REJECTED' ? 'APPROVAL_IN_PROCESS' : 'IN_PROCESS';
+    this.store.dispatch(goToWorkflow({ data: status }));
   }
 
   private createForm(): void {
@@ -195,17 +200,10 @@ export class TbrDetailsComponent {
       pickupRef: [null],
     });
 
-    this.deliveryDateFormControl = this.fb.control<string>(null, [Validators.required, CommonValidators.IsNotPastDateValidator]);
+    this.deliveryDateFormControl = this.fb.control<string>(null, [Validators.required, CommonValidators.IsNotPastDateValidator()]);
   }
 
-  private patchForm(): void {
-    this.details$
-      .pipe(
-        filter((value) => !!value),
-        take(1)
-      )
-      .subscribe((value) => {
-        this.deliveryDateFormControl.patchValue(value?.deliveryDate ?? null);
-      });
+  private patchForm(value: Tbr): void {
+    this.deliveryDateFormControl.patchValue(value?.deliveryDate ?? null);
   }
 }

@@ -13,6 +13,8 @@ export class ShipitStatusPipe implements PipeTransform {
           return 'Created';
         case 'IN_PROCESS':
           return 'In Process';
+        default:
+          return '';
       }
     } else {
       switch (value) {
@@ -20,6 +22,8 @@ export class ShipitStatusPipe implements PipeTransform {
           return '#e78c07';
         case 'IN_PROCESS':
           return '#2b7c2b';
+        default:
+          return '';
       }
     }
   }

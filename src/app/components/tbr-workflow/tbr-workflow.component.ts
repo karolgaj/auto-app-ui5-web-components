@@ -1,7 +1,7 @@
 import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { WizardStepAbstract } from './components/wizard-step-abstract';
-import { selectedTbr, updateSelectedTbr } from '../../state';
+import { selectedTbr, selectTbr, updateSelectedTbr, updateTbr } from '../../state';
 
 @Component({
   selector: 'app-tbr-workflow',
@@ -29,33 +29,26 @@ export class TbrWorkflowComponent {
     }
 
     this.activeStep = index;
-    steps.forEach((step, index) => {
-      step.selected = this.activeStep === index;
+
+    if (this.activeStep === steps.length) {
+      this.finalize();
+      return;
+    }
+    steps.forEach((step, i) => {
+      step.selected = this.activeStep === i;
     });
     steps[this.activeStep].disabled = false;
   }
 
   finalize(): void {
-    // this.details$.pipe(take(1)).subscribe((details) => {
-    //   let payload = {
-    //     ...details,
-    //   };
-    //
-    //   this.wizardSteps.forEach((step) => {
-    //     const newData = step.getData();
-    //     payload = {
-    //       ...payload,
-    //       ...newData,
-    //     };
-    //   });
-    //
-    //   // this.store.dispatch();
-    // });
+    this.store.dispatch(updateTbr());
   }
 
-  stepChange($event: any) {
+  stepChange($event: any): void {
     this.activeStep = Array.from(this.wizard.nativeElement.children as HTMLCollection).findIndex((step: any) => step.selected);
   }
 
-  goBack() {}
+  goBack(): void {
+    this.store.dispatch(selectTbr({ data: null }));
+  }
 }
