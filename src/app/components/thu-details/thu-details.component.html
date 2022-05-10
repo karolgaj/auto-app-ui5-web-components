@@ -52,6 +52,14 @@
         <ui5-table-column slot="columns">
           <span> {{ 'HAZMAT_DETAILS.HAZMAT_UNCODE' | translate }} </span>
         </ui5-table-column>
+
+        <ui5-table-row *ngFor="let hazmat of addHazmatFormGroup.controls" [formGroup]="getFormGroup(hazmat)">
+          <ui5-table-cell><app-input formControlName="hazmatClass"></app-input> </ui5-table-cell>
+          <ui5-table-cell><app-input formControlName="hazmatPackagingGroup"></app-input> </ui5-table-cell>
+          <ui5-table-cell><app-input formControlName="hazmatPropperShippingName"></app-input></ui5-table-cell>
+          <!-- <ui5-table-cell><app-input formControlName="hazmatUnode"></app-input></ui5-table-cell> -->
+          <ui5-table-cell>{{hazmat.value|json}}</ui5-table-cell>
+        </ui5-table-row>
       </ui5-table>
     </ui5-panel>
     <ui5-panel [attr.header-text]="'COMMON.THU_LONG' | translate | titlecase">
@@ -132,7 +140,13 @@
   [dialogHeader]="'HAZMAT_DETAILS.ADD_HAZMAT' | translate | titlecase"
   (close)="cancelAddHazmat()"
   (save)="saveAddHazmat()">
-  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="addHazmatFormGroup">
+  <div
+    *ngIf="addHazmatFormGroup.controls.length"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="1rem"
+    class="custom-address-form"
+    [formGroup]="getFormGroup(addHazmatFormGroup.controls[0])">
     <app-input
       formControlName="hazmatClass"
       [inputClasses]="['w-100']"

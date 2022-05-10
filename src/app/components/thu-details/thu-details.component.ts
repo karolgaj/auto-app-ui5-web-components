@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { IFormBuilder, IFormGroup } from '@rxweb/types';
+import { IFormArray, IFormBuilder, IFormGroup } from '@rxweb/types';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { DialogComponent } from 'src/app/ui/dialog/dialog.component';
 
@@ -28,8 +28,8 @@ export class ThuDetailsComponent {
 
   public line$;
   public thuList$;
-  addHazmatFormGroup!: IFormGroup<AddHazmatForm>;
-
+  addHazmatFormGroup!: IFormArray<AddHazmatForm>;
+  hazmatDetails?:any[];
   private fb: IFormBuilder;
 
   constructor(
@@ -73,25 +73,29 @@ export class ThuDetailsComponent {
   }
 
   saveAddHazmat() {
-    const newLineData = this.addHazmatFormGroup.getRawValue();
-    this.addHazmatFormGroup.reset();
-    this.addHazmatFormGroup.markAsPristine();
+console.log(this.addHazmatFormGroup.value)
 
     this.cancelAddHazmat();
   }
   openAddHazmatDialog() {
+    if(this.addHazmatFormGroup.length === 1) return;
+    this.addHazmatFormGroup.push(this.fb.group<AddHazmatForm>({  hazmatClass: ["1"],
+      hazmatPackagingGroup: ["1"],
+      hazmatPropperShippingName: ["2"],
+      hazmatUnode: ["2"]}))
     this.addHazmatDialog.openDialog();
   }
 
   cancelAddHazmat() {
     this.addHazmatDialog.closeDialog();
   }
+
+  getFormGroup(rowForm: any): FormGroup {
+    return rowForm as FormGroup;
+  }
   private createForm(): void {
-    this.addHazmatFormGroup = this.fb.group<AddHazmatForm>({
-      hazmatClass: [null],
-      hazmatPackagingGroup: [null],
-      hazmatPropperShippingName: [null],
-      hazmatUnode: [null],
-    });
+    this.addHazmatFormGroup = this.fb.array<AddHazmatForm>([
+
+    ]);
   }
 }
