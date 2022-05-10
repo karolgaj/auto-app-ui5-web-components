@@ -57,7 +57,8 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   ngAfterViewInit(): void {
     // @ts-ignore
     fromEvent(this.customInput.nativeElement, 'change').subscribe((e: any) => {
-      this.writeValue(e.detail.value);
+      const value = e.detail?.value ?? e.target.value;
+      this.writeValue(value);
       this.onChange(this.value);
       this.markAsTouched();
     });
