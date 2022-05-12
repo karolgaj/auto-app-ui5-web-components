@@ -29,7 +29,7 @@ export class ThuDetailsComponent {
   public line$;
   public thuList$;
   addHazmatFormGroup!: IFormArray<AddHazmatForm>;
-  hazmatDetails?:any[];
+  hazmatDetails?: any[];
   private fb: IFormBuilder;
 
   constructor(
@@ -73,16 +73,20 @@ export class ThuDetailsComponent {
   }
 
   saveAddHazmat() {
-console.log(this.addHazmatFormGroup.value)
+    console.log(this.addHazmatFormGroup.value);
 
     this.cancelAddHazmat();
   }
   openAddHazmatDialog() {
-    if(this.addHazmatFormGroup.length === 1) return;
-    this.addHazmatFormGroup.push(this.fb.group<AddHazmatForm>({  hazmatClass: ["1"],
-      hazmatPackagingGroup: ["1"],
-      hazmatPropperShippingName: ["2"],
-      hazmatUnode: ["2"]}))
+    if (this.addHazmatFormGroup.length === 1) return;
+    this.addHazmatFormGroup.push(
+      this.fb.group<AddHazmatForm>({
+        hazmatClass: [null],
+        hazmatPackagingGroup: [null],
+        hazmatPropperShippingName: [null],
+        hazmatUnode: [null],
+      })
+    );
     this.addHazmatDialog.openDialog();
   }
 
@@ -94,8 +98,6 @@ console.log(this.addHazmatFormGroup.value)
     return rowForm as FormGroup;
   }
   private createForm(): void {
-    this.addHazmatFormGroup = this.fb.array<AddHazmatForm>([
-
-    ]);
+    this.addHazmatFormGroup = this.fb.array<AddHazmatForm>([]);
   }
 }
