@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { catchError, concatMap, exhaustMap, filter, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { EMPTY, from, of } from 'rxjs';
 
@@ -10,10 +11,8 @@ import { TbrService } from '../../services';
 import { XtrService } from '../../services/xtr.service';
 import { TransportNetworkService } from '../../services/transport-network.service';
 import { PackItService } from '../../services/packit.service';
-import { Store } from '@ngrx/store';
 import { selectedTbr } from './tbr.selectors';
 import { Tbr } from '../../models/tbr.model';
-import { ShipitStatus } from '../../models/tbr-type.model';
 
 @Injectable()
 export class TbrEffects {
@@ -213,13 +212,14 @@ export class TbrEffects {
     this.actions$.pipe(
       ofType(TbrActions.goToWorkflow),
       withLatestFrom(this.store.select(selectedTbr)),
-      concatMap(([{ data }, tbr]: [{ data: ShipitStatus }, Tbr | undefined]) => {
+      concatMap(([{ data }, tbr]) => {
         if (tbr == null) {
           return EMPTY;
         }
         const updatedTbr: Tbr = {
           ...tbr,
-          shipitStatus: data,
+          shipitStatus: data.status,
+          deliveryDate: data.deliveryDate,
         };
         return this.xtrService.saveXTR(updatedTbr).pipe(map((res) => TbrActions.goToWorkflowSuccess({ data: res })));
       })

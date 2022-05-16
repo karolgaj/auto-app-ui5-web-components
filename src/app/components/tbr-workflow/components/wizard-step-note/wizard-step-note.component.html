@@ -4,5 +4,5 @@
     <ui5-label>{{ 'COMMON.NOTE_DETAILS' | translate }}</ui5-label>
     <ui5-textarea rows="10"></ui5-textarea>
   </div>
-  <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
+  <ui5-button (click)="goToNextStep()"> {{ nextButtonText | translate: { step: nextStepIndex } }} </ui5-button>
 </div>

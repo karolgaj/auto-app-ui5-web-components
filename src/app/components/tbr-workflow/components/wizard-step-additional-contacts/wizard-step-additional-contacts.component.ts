@@ -1,25 +1,24 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { WizardStepAbstract } from '../wizard-step-abstract';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IFormArray } from '@rxweb/types';
 import { BehaviorSubject } from 'rxjs';
 import { DialogComponent } from '../../../../ui/dialog/dialog.component';
-import { contactTypes, requesterContactTypes } from '../../constants';
 import { AdditionalContact, Tbr } from '../../../../models/tbr.model';
+import { contactTypes, requesterContactTypes } from '../../constants';
+import { WizardStepAbstract } from '../wizard-step-abstract';
 
 @Component({
   selector: 'app-wizard-step-additional-contacts',
   templateUrl: './wizard-step-additional-contacts.component.html',
 })
 export class WizardStepAdditionalContactsComponent extends WizardStepAbstract implements OnInit, AfterViewInit {
-  private editingIndex = new BehaviorSubject<number | null>(null);
+  @Input()
+  isRequester = false;
 
   @ViewChild('contactTypeDialog')
   contactTypeDialog!: DialogComponent;
 
-  @Input()
-  isRequester = false;
-
+  private editingIndex = new BehaviorSubject<number | null>(null);
   form!: IFormArray<AdditionalContact>;
   openTypeDialog!: () => void;
   contactTypes = contactTypes;
@@ -28,13 +27,13 @@ export class WizardStepAdditionalContactsComponent extends WizardStepAbstract im
     super(fb);
   }
 
+  ngAfterViewInit(): void {
+    this.openTypeDialog = WizardStepAdditionalContactsComponent.openDialog.bind(this, this.contactTypeDialog);
+  }
+
   ngOnInit(): void {
     super.ngOnInit();
     this.contactTypes = this.isRequester ? requesterContactTypes : contactTypes;
-  }
-
-  ngAfterViewInit(): void {
-    this.openTypeDialog = WizardStepAdditionalContactsComponent.openDialog.bind(this, this.contactTypeDialog);
   }
 
   addAdditionalContact(): void {

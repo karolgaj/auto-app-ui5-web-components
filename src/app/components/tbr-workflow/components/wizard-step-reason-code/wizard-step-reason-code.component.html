@@ -50,7 +50,7 @@
     </ui5-table>
   </div>
 
-  <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
+  <ui5-button (click)="goToNextStep()"> {{ nextButtonText | translate: { step: nextStepIndex } }} </ui5-button>
 </div>
 
 <app-dialog #reasonCodeDialog [dialogHeader]= "'COMMON.REASON_CODE_CAUSE' | translate " [hideDefaultFooter]="true" accessibleName="Reason codes point value help">

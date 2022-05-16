@@ -173,6 +173,7 @@ export class TbrDetailsComponent {
       this.lines?.some((line) => line.packagedQuantityControl.invalid || line.typeControl.invalid);
 
     if (this.deliveryDateFormControl.invalid && areLinesInvalid) {
+      this.deliveryDateFormControl.markAsTouched();
       return;
     }
     // this.store.dispatch go to workflow, change status, navigate to workflow
@@ -182,7 +183,7 @@ export class TbrDetailsComponent {
     }
 
     const status = this.tbrDetails?.shipitStatus === 'RO_APPROVAL_REJECTED' ? 'APPROVAL_IN_PROCESS' : 'IN_PROCESS';
-    this.store.dispatch(goToWorkflow({ data: status }));
+    this.store.dispatch(goToWorkflow({ data: { status, deliveryDate: this.deliveryDateFormControl.value as string } }));
   }
 
   private createForm(): void {

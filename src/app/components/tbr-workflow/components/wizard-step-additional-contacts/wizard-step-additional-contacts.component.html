@@ -8,13 +8,13 @@
         <span> {{ 'COMMON.ADDITIONAL_CONTACTS_TYPE' | translate }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ 'COMMON.CONTACT_PERSON_EMAIL' | translate  }} </span>
+        <span> {{ 'COMMON.CONTACT_PERSON_EMAIL' | translate }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ 'COMMON.CONTACT_PERSON_NAME' | translate  }} </span>
+        <span> {{ 'COMMON.CONTACT_PERSON_NAME' | translate }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ 'COMMON.CONTACT_PERSON_PHONE' | translate  }} </span>
+        <span> {{ 'COMMON.CONTACT_PERSON_PHONE' | translate }} </span>
       </ui5-table-column>
 
       <ui5-table-row
@@ -41,7 +41,7 @@
     </ui5-table>
   </div>
 
-  <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
+  <ui5-button (click)="goToNextStep()"> {{ nextButtonText | translate: { step: nextStepIndex } }} </ui5-button>
 </div>
 
 <app-dialog #contactTypeDialog dialogHeader="Contact type" [hideDefaultFooter]="true" accessibleName="Contact type point value help">

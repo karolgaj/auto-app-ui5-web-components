@@ -62,6 +62,7 @@
         [titleText]="'COMMON.ADDITIONAL_CONTACTS' | translate | titlecase"
         [stepIndex]="6"
         [data]="tbrDetails"
+        [isLastStep]="true"
         (nextStep)="goToStep($event)"></app-wizard-step-additional-contacts>
     </ui5-wizard-step>
   </ui5-wizard>
@@ -111,6 +112,7 @@
         [stepIndex]="6"
         [data]="tbrDetails"
         [isRequester]="true"
+        [isLastStep]="true"
         (nextStep)="goToStep($event)"></app-wizard-step-additional-contacts>
     </ui5-wizard-step>
   </ui5-wizard>

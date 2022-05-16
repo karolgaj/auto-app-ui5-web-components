@@ -88,5 +88,5 @@ export const loadThuList = createAction('[Networks] Load thu list', props<{ data
 export const loadThuListSuccess = createAction('[Networks] Load thu list Success', props<{ data: TransportHandlingUnit[] }>());
 export const loadThuListFailure = createAction('[Networks] Load thu list Failure', props<{ error: unknown }>());
 
-export const goToWorkflow = createAction('[XTR] Go to workflow', props<{ data: ShipitStatus }>());
+export const goToWorkflow = createAction('[XTR] Go to workflow', props<{ data: { status: ShipitStatus; deliveryDate: string } }>());
 export const goToWorkflowSuccess = createAction('[XTR] Go to workflow Success', props<{ data: Tbr }>());
