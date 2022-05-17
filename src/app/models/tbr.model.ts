@@ -105,6 +105,7 @@ export enum AtedBy {
 }
 
 export interface OrderReleaseLine {
+  [x: string]: any;
   releaseLineId: string;
   hashkey: string;
   articleName: string;
@@ -126,6 +127,8 @@ export interface OrderReleaseLine {
   mixId: null;
   userThu: boolean;
   addedManually: null;
+  dangerousGoods: boolean;
+  hazmatDetails: HazmatDetails;
   id: number;
   version: number;
   createdAt: Date;
@@ -137,12 +140,21 @@ export interface OrderReleaseLine {
 export enum WeightUom {
   Kg = 'KG',
 }
-
-export interface ShipUnitLine {
-  shipUnitLineId: string;
+export interface HazmatDetails {
+  id: number;
   dgClass: null;
   dgPackagingGroup: null;
   dgProperName: null;
+  hazmatUncode: null;
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: AtedBy;
+  updatedBy: AtedBy;
+}
+
+export interface ShipUnitLine {
+  shipUnitLineId: string;
   quantity: string;
   sequence: null;
   weight: string;
@@ -161,8 +173,6 @@ export interface ShipUnitLine {
 
 export interface TransportHandlingUnit {
   baseType: string;
-  dangerousGoods: boolean;
-  hazmatUncode: null;
   description: string;
   dimensions: null;
   dimensionsUom: string;

@@ -2,13 +2,14 @@ import { Component, ViewChild } from '@angular/core';
 
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
-import { IFormArray, IFormBuilder, IFormGroup } from '@rxweb/types';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { IFormArray, IFormBuilder } from '@rxweb/types';
+import { filter, map, pluck, switchMap } from 'rxjs/operators';
 import { DialogComponent } from 'src/app/ui/dialog/dialog.component';
 
 import { TbrService } from '../../services';
-import { selectedTbr } from '../../state';
+import { addHazmatDetails, deleteHazmatDetails, selectedTbr } from '../../state';
 
 interface AddHazmatForm {
   hazmatClass: string;
@@ -16,7 +17,7 @@ interface AddHazmatForm {
   hazmatPropperShippingName: string;
   hazmatUnode: string;
 }
-
+@UntilDestroy()
 @Component({
   selector: 'app-thu-details',
   templateUrl: './thu-details.component.html',
@@ -27,9 +28,11 @@ export class ThuDetailsComponent {
   addHazmatDialog!: DialogComponent;
 
   public line$;
+
   public thuList$;
+  private shipitId?: string;
+  private releaseLineId?: any;
   addHazmatFormGroup!: IFormArray<AddHazmatForm>;
-  hazmatDetails?: any[];
   private fb: IFormBuilder;
 
   constructor(
@@ -45,7 +48,6 @@ export class ThuDetailsComponent {
         return this.store.select(selectedTbr).pipe(
           map((tbr) => {
             if (tbr) {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-return
               return tbr.lines.find((line: { articleNumber: string }) => line.articleNumber === articleNumber);
             }
             return undefined;
@@ -54,9 +56,12 @@ export class ThuDetailsComponent {
       })
     );
 
+    this.releaseLineId = this.line$.pipe(pluck('releaseLineId'));
     this.thuList$ = this.store.select(selectedTbr).pipe(
       filter((tbrDetails) => !!tbrDetails),
       map((tbrDetails) => {
+        this.shipitId = tbrDetails?.shipitId;
+        // console.log('lineId', this.line$.pipe(take(1)).subscribe);
         const thus = tbrDetails?.shipUnitLines.map((slu) => slu.transportHandlingUnits).reduce((acc, curr) => acc.concat(curr));
         return thus ? thus[0] : null;
       })
@@ -73,9 +78,36 @@ export class ThuDetailsComponent {
   }
 
   saveAddHazmat() {
-    console.log(this.addHazmatFormGroup.value);
+    this.releaseLineId.subscribe((value: string) => {
+      this.store.dispatch(
+        addHazmatDetails({
+          data: {
+            shipItId: this.shipitId,
+            releaseLineId: value,
+            payload: { ...this.addHazmatFormGroup.getRawValue() },
+          },
+        })
+      );
+    });
 
     this.cancelAddHazmat();
+  }
+
+  removeHazmatDetails() {
+    this.addHazmatFormGroup.reset();
+    this.addHazmatFormGroup.markAsPristine();
+    this.releaseLineId.subscribe((value: string) => {
+      this.store.dispatch(
+        deleteHazmatDetails({
+          data: {
+            shipItId: this.shipitId,
+            releaseLineId: value,
+          },
+        })
+      );
+    });
+
+    this.createForm();
   }
   openAddHazmatDialog() {
     if (this.addHazmatFormGroup.length === 1) return;
@@ -91,6 +123,9 @@ export class ThuDetailsComponent {
   }
 
   cancelAddHazmat() {
+    this.addHazmatFormGroup.reset();
+    this.addHazmatFormGroup.markAsPristine();
+    this.createForm();
     this.addHazmatDialog.closeDialog();
   }
 

@@ -90,3 +90,11 @@ export const loadThuListFailure = createAction('[Networks] Load thu list Failure
 
 export const goToWorkflow = createAction('[XTR] Go to workflow', props<{ data: ShipitStatus }>());
 export const goToWorkflowSuccess = createAction('[XTR] Go to workflow Success', props<{ data: Tbr }>());
+
+export const addHazmatDetails = createAction('[Express] Add hazmat details', props<{ data: any }>());
+export const addHazmatDetailsSuccess = createAction('[Express] Addd hazmat details Success', props<{ data: any }>());
+export const addHazmatDetailsFailure = createAction('[Express] Add hazmat details Failure', props<{ error: unknown }>());
+
+export const deleteHazmatDetails = createAction('[Express] Add hazmat details', props<{ data: any }>());
+export const deleteHazmatDetailsSuccess = createAction('[Express] Addd hazmat details Success', props<{ data: any }>());
+export const deleteHazmatDetailsFailure = createAction('[Express] Add hazmat details Failure', props<{ error: unknown }>());

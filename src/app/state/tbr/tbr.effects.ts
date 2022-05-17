@@ -4,13 +4,13 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, concatMap, exhaustMap, filter, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { EMPTY, from, of } from 'rxjs';
 
+import { Store } from '@ngrx/store';
 import * as TbrActions from './tbr.actions';
 import { selectTbr } from './tbr.actions';
 import { TbrService } from '../../services';
 import { XtrService } from '../../services/xtr.service';
 import { TransportNetworkService } from '../../services/transport-network.service';
 import { PackItService } from '../../services/packit.service';
-import { Store } from '@ngrx/store';
 import { selectedTbr } from './tbr.selectors';
 import { Tbr } from '../../models/tbr.model';
 import { ShipitStatus } from '../../models/tbr-type.model';
@@ -204,6 +204,30 @@ export class TbrEffects {
         this.xtrService.updateReference(data.shipitId, data.pickupRef, data.msgToCarrier).pipe(
           map((res) => TbrActions.updateReferenceSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.updateReferenceFailure({ error })))
+        )
+      )
+    )
+  );
+
+  addHazmatDetails$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.addHazmatDetails),
+      concatMap(({ data }) =>
+        this.xtrService.addHazmatDetails(data).pipe(
+          map((res) => TbrActions.addHazmatDetailsSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.addHazmatDetailsFailure({ error })))
+        )
+      )
+    )
+  );
+
+  deleteHazmatDetails$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.deleteHazmatDetails),
+      concatMap(({ data }) =>
+        this.xtrService.deleteHazmatDetails(data).pipe(
+          map((res) => TbrActions.deleteHazmatDetailsSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.addHazmatDetailsFailure({ error })))
         )
       )
     )

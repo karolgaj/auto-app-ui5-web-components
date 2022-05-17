@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -38,6 +39,10 @@ export class XtrService {
     return this.http.put(`/gateway/api/xtr/v3/xtr/${shipItId}/manual/thu/{releaseLine}`, {});
   }
 
+  addHazmatDetails(data: any): Observable<any> {
+    return this.http.put(`/gateway/api/xtr/v3/xtr/${data.shipItId}/hazmat/${data.releaseLineId}`, data.payload);
+  }
+
   /* PATCH METHODS */
 
   updateReference(shipItId: string, pickupReference: string, messageToCarrier: string): Observable<any> {
@@ -51,6 +56,10 @@ export class XtrService {
 
   deleteOldXTRs(): Observable<any> {
     return this.http.delete('/gateway/api/xtr/v3/xtr');
+  }
+
+  deleteHazmatDetails(data:any): Observable<any> {
+    return this.http.delete(`/gateway/api/xtr/v3/xtr/${data.shipItId}/hazmat/${data.releaseLineId}`);
   }
 
   /* GET METHODS */

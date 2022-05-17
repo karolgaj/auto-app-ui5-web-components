@@ -140,6 +140,7 @@
     "SPLIT_LINES": "Split Lines",
     "NO_DELIVERY": "No Del",
     "WH_LOCATION": "WH Loc",
+    "HAZMAT": "Hazmat",
     "MIX": "MIX",
     "BUTTON_DO_NOT_DELIVER_FULL": "Do not deliver full shipment",
     "BUTTON_CONTINUE_TO_DETAILS": "Continue to details"
