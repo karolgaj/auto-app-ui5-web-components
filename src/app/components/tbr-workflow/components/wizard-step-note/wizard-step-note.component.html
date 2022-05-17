@@ -2,7 +2,7 @@
   <ui5-title>{{ title }}</ui5-title>
   <div class="wizard-step__content" style="width: 100%">
     <ui5-label>{{ 'COMMON.NOTE_DETAILS' | translate }}</ui5-label>
-    <ui5-textarea rows="10"></ui5-textarea>
+    <app-textarea [formControl]="internalNote"></app-textarea>
   </div>
   <ui5-button (click)="goToNextStep()"> {{ nextButtonText | translate: { step: nextStepIndex } }} </ui5-button>
 </div>

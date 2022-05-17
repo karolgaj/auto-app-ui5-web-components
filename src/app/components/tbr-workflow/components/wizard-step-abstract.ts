@@ -17,6 +17,9 @@ export abstract class WizardStepAbstract implements OnInit {
   @Input()
   isLastStep = false;
 
+  @Input()
+  isStandaloneComponent = false;
+
   @Output()
   nextStep = new EventEmitter<number>();
 
@@ -46,8 +49,7 @@ export abstract class WizardStepAbstract implements OnInit {
   }
 
   isValid(): boolean {
-    // return this.form.valid;
-    return true;
+    return this.form.valid;
   }
 
   goToNextStep(): void {

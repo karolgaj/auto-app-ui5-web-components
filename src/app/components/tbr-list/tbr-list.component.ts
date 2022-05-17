@@ -37,7 +37,7 @@ export class TbrListComponent {
   }
 
   selectTbr(data: TbrLightDetails): void {
-    this.store.dispatch(selectTbr({ data: data.shipitId }));
+    this.store.dispatch(selectTbr({ data: data.shipitId, redirect: true }));
   }
 
   goToNetworkForm(): void {

@@ -7,10 +7,12 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { TbrService } from '../../services';
 import { TbrLine } from '../../models/tbr-line.model';
-import { addLine, goToWorkflow, selectedTbr, splitLine, updateReference } from '../../state';
+import { addLine, goToWorkflow, goToWorkflowSummary, selectedTbr, splitLine, updateReference } from '../../state';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { Tbr } from '../../models/tbr.model';
 import { CommonValidators } from '../../utils/validators';
+
+const WORKFLOW_STATUSES_FOR_SUMMARY = ['SENT_FOR_APPROVAL', 'CREATED', 'APPROVAL_REJECTED', 'RO_APPROVAL_REJECTED', 'APPROVAL_IN_PROCESS'];
 
 interface AddLineForm {
   partNo: string;
@@ -24,6 +26,11 @@ interface AddRefForm {
   dispatchAdviceNumber: string;
   orderNumber: string;
   doNotMerge: string;
+}
+
+interface ExtendedTbrLine extends TbrLine {
+  packagedQuantityControl: IFormControl<string>;
+  typeControl: IFormControl<string>;
 }
 
 @UntilDestroy()
@@ -43,7 +50,7 @@ export class TbrDetailsComponent {
 
   private details$ = this.store.select(selectedTbr);
   tbrDetails?: Tbr;
-  lines?: any[];
+  lines?: ExtendedTbrLine[];
   selectedRowsIndexes: number[] = [];
   addLineFormGroup!: IFormGroup<AddLineForm>;
   addRefFormGroup!: IFormGroup<AddRefForm>;
@@ -60,7 +67,7 @@ export class TbrDetailsComponent {
       if (this.tbrDetails == null) {
         return;
       }
-      this.lines = value?.lines.map((line) => {
+      this.lines = value?.lines?.map((line) => {
         const packagedQuantityControl = this.fb.control<string>(line.packagedQuantity, [Validators.required]);
         const typeControl = this.fb.control<string>(line.type, [Validators.required]);
 
@@ -176,9 +183,14 @@ export class TbrDetailsComponent {
       this.deliveryDateFormControl.markAsTouched();
       return;
     }
-    // this.store.dispatch go to workflow, change status, navigate to workflow
+
     const currentStatus = this.tbrDetails?.shipitStatus;
     if (currentStatus == null || currentStatus === 'SENT_FOR_APPROVAL' || currentStatus === 'APPROVAL_CONFIRM') {
+      return;
+    }
+
+    if (WORKFLOW_STATUSES_FOR_SUMMARY.includes(currentStatus)) {
+      this.store.dispatch(goToWorkflowSummary({ data: this.tbrDetails }));
       return;
     }
 
@@ -206,5 +218,10 @@ export class TbrDetailsComponent {
 
   private patchForm(value: Tbr): void {
     this.deliveryDateFormControl.patchValue(value?.deliveryDate ?? null);
+    this.addRefFormGroup.patchValue({
+      msgToCarrier: value.messageToCarrier,
+      dispatchAdviceNumber: value.dispatchAdviceNumber,
+      pickupRef: value.pickupReference,
+    });
   }
 }

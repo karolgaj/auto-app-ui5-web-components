@@ -1,7 +1,7 @@
 import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { WizardStepAbstract } from './components/wizard-step-abstract';
-import { selectedTbr, selectTbr, updateSelectedTbr, updateTbr } from '../../state';
+import { finishWorkflow, selectedTbr, selectTbr, updateSelectedTbr } from '../../state';
 
 @Component({
   selector: 'app-tbr-workflow',
@@ -41,7 +41,13 @@ export class TbrWorkflowComponent {
   }
 
   finalize(): void {
-    this.store.dispatch(updateTbr());
+    this.store.dispatch(
+      finishWorkflow({
+        data: {
+          shipitStatus: 'APPROVAL_IN_PROCESS',
+        },
+      })
+    );
   }
 
   stepChange($event: any): void {

@@ -9,7 +9,7 @@ interface PickupInfoForm {
   deliveryDate: string;
   collectionTime: string;
   openingHourAtCollection: string;
-  closingHourAtCollection: string;
+  closeHourAtCollection: string;
   pickupReference: string;
   messageToCarrier: string;
 }
@@ -31,7 +31,7 @@ export class WizardStepPickupInfoComponent extends WizardStepAbstract {
       approvalDecision: {
         collectionTime: payload.collectionTime,
         openingHourAtCollection: payload.openingHourAtCollection,
-        closingHourAtCollection: payload.closingHourAtCollection,
+        closingHourAtCollection: payload.closeHourAtCollection,
       },
       pickupReference: payload.pickupReference,
       messageToCarrier: payload.messageToCarrier,
@@ -42,7 +42,7 @@ export class WizardStepPickupInfoComponent extends WizardStepAbstract {
     this.form = this.fb.group<PickupInfoForm>(
       {
         deliveryDate: null,
-        closingHourAtCollection: [null, [Validators.required]],
+        closeHourAtCollection: [null, [Validators.required]],
         openingHourAtCollection: [null, [Validators.required]],
         collectionTime: [null, [Validators.required]],
         pickupReference: [null, [Validators.maxLength(70)]],
@@ -50,8 +50,8 @@ export class WizardStepPickupInfoComponent extends WizardStepAbstract {
       },
       {
         validators: [
-          CommonValidators.IsHourInBetweenHours<PickupInfoForm>('deliveryDate', 'openingHourAtCollection', 'closingHourAtCollection'),
-          CommonValidators.IsHourBeforeHour<PickupInfoForm>('openingHourAtCollection', 'closingHourAtCollection'),
+          CommonValidators.IsHourInBetweenHours<PickupInfoForm>('deliveryDate', 'openingHourAtCollection', 'closeHourAtCollection'),
+          CommonValidators.IsHourBeforeHour<PickupInfoForm>('openingHourAtCollection', 'closeHourAtCollection'),
         ],
       }
     );
@@ -60,11 +60,9 @@ export class WizardStepPickupInfoComponent extends WizardStepAbstract {
 
   protected patchInitialForm(): void {
     const data = {
-      approvalDecision: {
-        collectionTime: this.data.approvalDecision?.collectionTime,
-        openingHourAtCollection: this.data.approvalDecision?.openingHourAtCollection,
-        closingHourAtCollection: this.data.approvalDecision?.closingHourAtCollection,
-      },
+      collectionTime: this.data.approvalDecision?.collectionTime,
+      openingHourAtCollection: this.data.approvalDecision?.openingHourAtCollection,
+      closeHourAtCollection: this.data.approvalDecision?.closeHourAtCollection,
       pickupReference: this.data.pickupReference,
       messageToCarrier: this.data.messageToCarrier,
       deliveryDate: this.data.deliveryDate,

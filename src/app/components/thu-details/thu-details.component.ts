@@ -46,7 +46,7 @@ export class ThuDetailsComponent {
           map((tbr) => {
             if (tbr) {
               // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-              return tbr.lines.find((line: { articleNumber: string }) => line.articleNumber === articleNumber);
+              return tbr.lines?.find((line: { articleNumber: string }) => line.articleNumber === articleNumber);
             }
             return undefined;
           })

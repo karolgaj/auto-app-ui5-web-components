@@ -29,6 +29,7 @@ export const reducer = createReducer(
   initialState,
 
   on(TbrActions.loadTbrsSuccess, (state, action) => ({ ...state, tbrs: action.data })),
+  on(TbrActions.refreshTbrListSuccess, (state, action) => ({ ...state, tbrs: action.data })),
   on(TbrActions.loadAvailableNetworksSuccess, (state, action) => ({ ...state, networks: action.data })),
   on(TbrActions.loadConsignorsSuccess, (state, action) => ({ ...state, consignors: action.data })),
   on(TbrActions.loadUnloadingPointsSuccess, (state, action) => ({ ...state, unloadingPoints: action.data })),

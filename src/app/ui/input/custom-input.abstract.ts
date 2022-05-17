@@ -1,14 +1,13 @@
 import { AfterViewInit, Directive, ElementRef, Injector, Input, OnInit, ViewChild } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormControlDirective, FormControlName, FormGroupDirective, NgControl } from '@angular/forms';
 import { fromEvent } from 'rxjs';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { untilDestroyed } from '@ngneat/until-destroy';
 import { filter } from 'rxjs/operators';
 
 let id = 0;
 
 type ValueState = 'Success' | 'Error' | 'Warning' | 'None';
 
-@UntilDestroy()
 @Directive()
 export abstract class CustomInputAbstract implements ControlValueAccessor, AfterViewInit, OnInit {
   @Input()

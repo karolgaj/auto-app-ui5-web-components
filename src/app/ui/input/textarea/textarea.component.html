@@ -1,0 +1,18 @@
+<div
+  [fxLayout]="vertical ? 'column' : 'row'"
+  [fxLayoutAlign]="vertical ? '' : 'end center'"
+  [fxLayoutGap]="vertical ? '0.25rem' : '0.5rem'"
+  [ngClass]="inputContainerClasses">
+  <ui5-label *ngIf="label" [ngClass]="labelClasses" [for]="getId()" [required]="required" [showColon]="showColon"> {{ label }} </ui5-label>
+  <ui5-textarea
+    [ngClass]="inputClasses"
+    #customInput
+    [id]="getId()"
+    [placeholder]="placeholder"
+    [showSuggestions]="showSuggestions"
+    [value]="formatValue ? formattedValue : value "
+    [disabled]="disabled"
+    [valueState]="valueState">
+  </ui5-textarea>
+  <ng-content [after]></ng-content>
+</div>

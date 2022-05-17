@@ -9,6 +9,7 @@ import {
 } from './components';
 import { LayoutComponent } from './ui';
 import { AuthenticatedGuard, LoadedExpressGuard } from './shared';
+import { WizardSummaryComponent } from './components/tbr-workflow';
 
 const routes: Routes = [
   {
@@ -35,6 +36,12 @@ const routes: Routes = [
         component: TbrWorkflowComponent,
         canActivate: [LoadedExpressGuard],
       },
+      {
+        path: 'workflow/:shipItId/summary',
+        component: WizardSummaryComponent,
+        canActivate: [LoadedExpressGuard],
+      },
+
       {
         path: ':shipItId',
         component: TbrDetailsComponent,

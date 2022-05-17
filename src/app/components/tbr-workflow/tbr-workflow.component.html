@@ -5,7 +5,7 @@
 </ui5-bar>
 
 <!--MATERIAL_CONTROLLER-->
-<ng-container *appUserHasRoles="['EXPRESS_APPROVER']">
+<ng-container *appUserHasRoles="['EXPRESS_APPROVER_OTHERS']">
   <ui5-wizard #wizard (stepChange)="stepChange($event)" *ngIf="details$ | async as tbrDetails">
     <ui5-wizard-step style="padding: 2rem" [titleText]="'COMMON.PICKUP_INFO' | translate | titlecase" selected>
       <app-wizard-step-pickup-info
@@ -69,7 +69,7 @@
 </ng-container>
 
 <!--MATERIAL_SUPPLIER-->
-<ng-container *appUserHasRoles="['EXPRESS_REQUESTER', 'SUPPORT']">
+<ng-container *appUserHasRoles="['EXPRESS_REQUESTER_UNLIMITED', 'SUPPORT']">
   <ui5-wizard #wizard (stepChange)="stepChange($event)" *ngIf="details$ | async as tbrDetails">
     <ui5-wizard-step style="padding: 2rem" [titleText]="'COMMON.PICKUP_INFO' | translate | titlecase" selected>
       <app-wizard-step-pickup-info

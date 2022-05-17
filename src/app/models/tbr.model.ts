@@ -1,4 +1,5 @@
 import { ShipitStatus } from './tbr-type.model';
+import { TbrLine } from './tbr-line.model';
 
 export interface Tbr {
   additionalContacts?: AdditionalContact[];
@@ -42,10 +43,10 @@ export interface Tbr {
   deleted: boolean;
   split: boolean;
   orderNumbers: any[];
-  dispatchAdviceNumber: null;
+  dispatchAdviceNumber?: string;
   pickupReference?: string;
   messageToCarrier?: string;
-  internalNote: null;
+  internalNote: string | null;
   splitFromId: null;
   splitToId: null;
   responsibleOffice: null;
@@ -58,7 +59,7 @@ export interface Tbr {
   createdBy: AtedBy;
   updatedBy: AtedBy;
   crossDock: null;
-  lines: any[];
+  lines?: TbrLine[];
 }
 
 export type ApprovalDecision = any;

@@ -1,9 +1,11 @@
-import { Component, forwardRef, Injector, Input } from '@angular/core';
-import { CustomInputAbstract } from '../custom-input.abstract';
+import { AfterViewInit, Component, forwardRef, Injector, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { SelectionOption } from '../../../models/selection-option.model';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { fromEvent } from 'rxjs';
+import { CustomInputAbstract } from '../custom-input.abstract';
+import { SelectionOption } from '../../../models/selection-option.model';
 
+@UntilDestroy()
 @Component({
   selector: 'app-select',
   templateUrl: './select.component.html',
@@ -16,7 +18,7 @@ import { fromEvent } from 'rxjs';
     },
   ],
 })
-export class SelectComponent extends CustomInputAbstract {
+export class SelectComponent extends CustomInputAbstract implements AfterViewInit {
   @Input()
   selectionOptions: SelectionOption<any>[] = [];
 
@@ -27,10 +29,6 @@ export class SelectComponent extends CustomInputAbstract {
     super(injector);
   }
 
-  getId(): string {
-    return `custom-select-${this._id}`;
-  }
-
   ngAfterViewInit(): void {
     // @ts-ignore
     fromEvent(this.customInput.nativeElement, 'change').subscribe((e: InputEvent) => {
@@ -39,5 +37,9 @@ export class SelectComponent extends CustomInputAbstract {
       this.onChange(this.value);
       this.markAsTouched();
     });
+  }
+
+  getId(): string {
+    return `custom-select-${this._id}`;
   }
 }

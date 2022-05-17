@@ -18,29 +18,13 @@ import { Tbr } from '../../models/tbr.model';
 export class TbrEffects {
   loadTbrs$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(TbrActions.loadTbrs),
+      ofType(TbrActions.loadTbrs, TbrActions.refreshTbrList),
       concatMap(() => {
         return this.xtrService.getXtrs().pipe(
           switchMap((res) => from([TbrActions.loadTbrsSuccess({ data: res })])),
           catchError((error: unknown) => of(TbrActions.loadTbrsFailure({ error })))
         );
       })
-    );
-  });
-
-  refreshTbrs$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(TbrActions.refreshTbrList),
-      concatMap(() => {
-        return this.xtrService.getXtrs().pipe(map(() => TbrActions.refreshTbrListSuccess()));
-      })
-    );
-  });
-
-  refreshTbrsSuccess$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(TbrActions.refreshTbrListSuccess),
-      map(() => TbrActions.selectTbr({ data: null }))
     );
   });
 
@@ -108,12 +92,30 @@ export class TbrEffects {
     return this.actions$.pipe(
       ofType(TbrActions.selectTbr),
       filter((data) => data.data != null),
-      exhaustMap(({ data }) => {
+      exhaustMap(({ data, redirect }) => {
         const shipItId = data as string;
         return this.xtrService.getXtrByShipItId(shipItId).pipe(
-          map((res) => TbrActions.selectTbrSuccess({ data: res })),
+          map((res) => TbrActions.selectTbrSuccess({ data: res, redirect })),
           catchError((error: unknown) => of(TbrActions.selectTbrFailure({ error })))
         );
+      })
+    );
+  });
+
+  updateTbr = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.updateTbr),
+      withLatestFrom(this.store.select(selectedTbr)),
+      concatMap(([{ data }, tbr]) => {
+        return this.xtrService
+          .saveXTR({
+            ...(tbr as Tbr),
+            ...data,
+          })
+          .pipe(
+            map((res) => TbrActions.updateTbrSuccess({ data: res })),
+            catchError((error: unknown) => of(TbrActions.updateTbrFailure({ error })))
+          );
       })
     );
   });
@@ -192,7 +194,7 @@ export class TbrEffects {
   createTbrSuccess$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TbrActions.createTbrSuccess),
-      map(({ data }) => selectTbr({ data: data.shipitId }))
+      map(({ data }) => selectTbr({ data: data.shipitId, redirect: true }))
     )
   );
 
@@ -239,18 +241,45 @@ export class TbrEffects {
     }
   );
 
-  updateTbr$ = createEffect(() =>
+  goToWorkflowSummary$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(TbrActions.goToWorkflowSummary),
+        tap(({ data }) => {
+          if (data) {
+            this.router.navigate(['/', 'xtr', 'workflow', data.shipitId, 'summary']);
+          }
+        })
+      ),
+    {
+      dispatch: false,
+    }
+  );
+
+  finishWorkflow$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(TbrActions.updateTbr),
+      ofType(TbrActions.finishWorkflow),
       withLatestFrom(this.store.select(selectedTbr)),
-      concatMap(([_, tbr]) =>
-        tbr
-          ? this.xtrService.saveXTR(tbr).pipe(
-              map((res) => TbrActions.updateTbrSuccess({ data: res })),
-              catchError((error: unknown) => of(TbrActions.updateTbrFailure({ error })))
-            )
-          : EMPTY
-      )
+      concatMap(([{ data }, tbr]) => {
+        if (tbr) {
+          return this.xtrService.saveXTR({ ...tbr, ...data }).pipe(
+            map((res) => {
+              return TbrActions.finishWorkflowSuccess({ data: res });
+            }),
+            catchError((error: unknown) => of(TbrActions.finishWorkflowFailure({ error })))
+          );
+        }
+        return EMPTY;
+      })
+    )
+  );
+
+  finishWorkflowSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.finishWorkflowSuccess),
+      map(({ data }) => {
+        return TbrActions.goToWorkflowSummary({ data });
+      })
     )
   );
 

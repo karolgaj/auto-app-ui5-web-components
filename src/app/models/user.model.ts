@@ -12,7 +12,9 @@ export type UserRole =
   | 'SUPER_USER'
   | 'SUPPORT'
   | 'TRANSPORT_OPERATIONS'
-  | 'USER_ADMINISTRATION';
+  | 'USER_ADMINISTRATION'
+  | 'EXPRESS_REQUESTER_UNLIMITED'
+  | 'EXPRESS_APPROVER_OTHERS';
 
 export type SystemOfMeasurement = 'METRIC' | 'IMPERIAL';
 

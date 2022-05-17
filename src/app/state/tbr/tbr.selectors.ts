@@ -2,6 +2,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as fromTbr from './tbr.reducer';
 import { mapToLines } from '../../utils/map-lines';
 import { ShipItStatusType } from '../../models/tbr-type.model';
+import { Tbr } from '../../models/tbr.model';
 
 export const selectTbrState = createFeatureSelector<fromTbr.State>(fromTbr.tbrFeatureKey);
 
@@ -22,10 +23,10 @@ export const selectShipItems = createSelector(selectTbrState, (state) => state.s
 export const selectThuList = createSelector(selectTbrState, (state) => state.thuList);
 export const selectedTbr = createSelector(selectTbrState, (state) =>
   state.selectedTbr
-    ? {
+    ? ({
         ...state.selectedTbr,
         lines: mapToLines(state.selectedTbr),
-      }
+      } as Tbr)
     : undefined
 );
 

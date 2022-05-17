@@ -1,11 +1,13 @@
 import { Component, forwardRef, Injector, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { DateTime } from 'luxon';
+import { filter, take } from 'rxjs/operators';
 import { CustomInputAbstract } from '../custom-input.abstract';
 import { selectUserTimeFormat } from '../../../state';
-import { filter, take } from 'rxjs/operators';
 
+@UntilDestroy()
 @Component({
   selector: 'app-timepicker',
   templateUrl: './timepicker.component.html',
@@ -31,7 +33,7 @@ export class TimepickerComponent extends CustomInputAbstract implements OnInit {
     this.timeFormat$.pipe(filter(Boolean), take(1)).subscribe((format) => {
       this.timeFormat = format;
     });
-    this.formControl.valueChanges.subscribe((value) => {
+    this.formControl.valueChanges.pipe(untilDestroyed(this)).subscribe((value) => {
       if (value && value.length === 8) {
         this.writeValue(value);
       }

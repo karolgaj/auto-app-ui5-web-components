@@ -24,6 +24,7 @@
         [formGroup]="getFormGroup(rowForm)">
         <ui5-table-cell>
           <app-input
+            [formatValue]="contactTypeFormatter"
             [placeholder]="'COMMON.ADDITIONAL_CONTACTS_TYPE' | translate"
             formControlName="contactType"
             [icons]="[{ icon: 'value-help', action: openTypeDialog }]"></app-input>

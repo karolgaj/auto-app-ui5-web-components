@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { WizardStepAbstract } from '../wizard-step-abstract';
 import { FormBuilder, Validators } from '@angular/forms';
 import { IFormGroup } from '@rxweb/types';
+import { WizardStepAbstract } from '../wizard-step-abstract';
 import { Tbr } from '../../../../models/tbr.model';
 
 interface ContactForm {
@@ -38,6 +38,6 @@ export class WizardStepContactComponent extends WizardStepAbstract implements On
   }
 
   protected patchInitialForm(): void {
-    this.form.patchValue(this.data.approvalDecision);
+    this.form.patchValue(this.data.approvalDecision?.contactAtSupplier);
   }
 }

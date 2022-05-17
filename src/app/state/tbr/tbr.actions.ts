@@ -15,21 +15,25 @@ export const loadTbrsSuccess = createAction('[Tbr] Load Tbrs Success', props<{ d
 export const loadTbrsFailure = createAction('[Tbr] Load Tbrs Failure', props<{ error: any }>());
 
 export const refreshTbrList = createAction('[Tbr] Refresh Tbr List', props<{ data: { query: string } }>());
-export const refreshTbrListSuccess = createAction('[Tbr] Refresh Tbr List Success');
+export const refreshTbrListSuccess = createAction('[Tbr] Refresh Tbr List Success', props<{ data: TbrLightDetails[] }>());
 
 export const createTbr = createAction('[Tbr] Create new Tbr', props<{ data: Partial<TbrLightDetails> }>());
 export const createTbrSuccess = createAction('[Tbr] Create new Tbr Success', props<{ data: any }>());
 export const createTbrFailure = createAction('[Tbr] Create new Tbr Failure', props<{ error: unknown }>());
 
-export const selectTbr = createAction('[Tbr] Select Tbr', props<{ data: string | null }>());
-export const selectTbrSuccess = createAction('[Tbr] Select Tbr Success', props<{ data: Tbr }>());
+export const selectTbr = createAction('[Tbr] Select Tbr', props<{ data: string | null; redirect?: boolean }>());
+export const selectTbrSuccess = createAction('[Tbr] Select Tbr Success', props<{ data: Tbr; redirect?: boolean }>());
 export const selectTbrFailure = createAction('[Tbr] Select Tbr Failure', props<{ error: unknown }>());
 
 export const updateSelectedTbr = createAction('[Tbr] Update Selected Tbr', props<{ data: Partial<Tbr> }>());
 
-export const updateTbr = createAction('[Tbr] Update Tbr');
-export const updateTbrSuccess = createAction('[Tbr] Update Tbr Success', props<{ data: Tbr }>());
-export const updateTbrFailure = createAction('[Tbr] Update Tbr Failure', props<{ error: unknown }>());
+export const updateTbr = createAction('[Tbr] Update Tbr', props<{ data: Partial<Tbr> }>());
+export const updateTbrSuccess = createAction('[Tbr] Update Selected Tbr Success', props<{ data: Partial<Tbr> }>());
+export const updateTbrFailure = createAction('[Tbr] Update Selected Tbr Failure', props<{ error: unknown }>());
+
+export const finishWorkflow = createAction('[Tbr] Finish workflow', props<{ data: Partial<Tbr> }>());
+export const finishWorkflowSuccess = createAction('[Tbr] Finish workflow Success', props<{ data: Tbr }>());
+export const finishWorkflowFailure = createAction('[Tbr] Finish workflow Failure', props<{ error: unknown }>());
 
 export const loadAvailableNetworks = createAction('[Networks] Load network', props<{ data: NetworkForm }>());
 export const loadAvailableNetworksSuccess = createAction('[Networks] Load network Success', props<{ data: TbrNetwork[] }>());
@@ -90,3 +94,5 @@ export const loadThuListFailure = createAction('[Networks] Load thu list Failure
 
 export const goToWorkflow = createAction('[XTR] Go to workflow', props<{ data: { status: ShipitStatus; deliveryDate: string } }>());
 export const goToWorkflowSuccess = createAction('[XTR] Go to workflow Success', props<{ data: Tbr }>());
+
+export const goToWorkflowSummary = createAction('[XTR] Go to workflow summary', props<{ data?: Tbr }>());

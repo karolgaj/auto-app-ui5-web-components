@@ -36,22 +36,26 @@ export class WizardStepAdditionalContactsComponent extends WizardStepAbstract im
     this.contactTypes = this.isRequester ? requesterContactTypes : contactTypes;
   }
 
-  addAdditionalContact(): void {
-    this.form.push(
-      this.fb.group<AdditionalContact>({
-        contactType: [null, [Validators.required]],
-        email: [null, [Validators.required, Validators.email]],
-        name: [null],
-        phone: [null, [Validators.pattern('/^\\+(?:[0-9] ?){6,14}[0-9]$/')]],
-      })
-    );
+  addAdditionalContact(additionalContact?: AdditionalContact): void {
+    const form = this.fb.group<AdditionalContact>({
+      contactType: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
+      name: [null],
+      phone: [null, [Validators.pattern('^\\+(?:[0-9] ?){6,14}[0-9]$')]],
+    });
+
+    if (additionalContact) {
+      form.patchValue(additionalContact);
+    }
+
+    this.form.push(form);
   }
 
   assignEditingIndex(editingIndex: number): void {
     this.editingIndex.next(editingIndex);
   }
 
-  getFormGroup(rowForm: any): FormGroup {
+  getFormGroup(rowForm: unknown): FormGroup {
     return rowForm as FormGroup;
   }
 
@@ -75,18 +79,21 @@ export class WizardStepAdditionalContactsComponent extends WizardStepAbstract im
 
   protected createForm(): void {
     this.form = this.fb.array<AdditionalContact>([]);
-    // this.form.valueChanges.subscribe((val) => {
-    //   console.log(val);
-    // });
   }
 
   protected patchInitialForm(): void {
-    if (this.data.additionalContacts) {
-      this.form.patchValue(this.data.additionalContacts);
-    }
+    setTimeout(() => {
+      this.data.approvalDecision?.additionalContacts?.forEach((additionalContact: AdditionalContact) => {
+        this.addAdditionalContact(additionalContact);
+      });
+    });
   }
 
   private static openDialog(dialog: DialogComponent): void {
     dialog.openDialog();
   }
+
+  contactTypeFormatter = (value: string) => {
+    return contactTypes.find((contactType) => contactType.value === value)?.title || value;
+  };
 }
