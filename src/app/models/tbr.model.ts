@@ -63,7 +63,7 @@ export interface Tbr {
 
 export type ApprovalDecision = any;
 
-export interface Consignee {
+export interface Consignee extends BaseEntity {
   parma: string;
   type: string;
   category: null | string;
@@ -74,6 +74,9 @@ export interface Consignee {
   timeZone: null | string;
   logisticsAddress: null;
   address: Address | null;
+}
+
+export interface BaseEntity {
   id: number;
   version: number;
   createdAt: Date;
@@ -105,7 +108,6 @@ export enum AtedBy {
 }
 
 export interface OrderReleaseLine {
-  [x: string]: any;
   releaseLineId: string;
   hashkey: string;
   articleName: string;
@@ -140,17 +142,11 @@ export interface OrderReleaseLine {
 export enum WeightUom {
   Kg = 'KG',
 }
-export interface HazmatDetails {
-  id: number;
-  dgClass: null;
-  dgPackagingGroup: null;
-  dgProperName: null;
-  hazmatUncode: null;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
+export interface HazmatDetails extends Partial<BaseEntity> {
+  dgClass: string;
+  dgPackagingGroup: string;
+  dgProperName: string;
+  hazmatUncode: string;
 }
 
 export interface ShipUnitLine {

@@ -5,18 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { IFormArray, IFormBuilder } from '@rxweb/types';
-import { filter, map, pluck, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { filter, map, pluck, switchMap, take } from 'rxjs/operators';
+import { TbrLine } from 'src/app/models/tbr-line.model';
+import { HazmatDetails } from 'src/app/models/tbr.model';
 import { DialogComponent } from 'src/app/ui/dialog/dialog.component';
 
 import { TbrService } from '../../services';
 import { addHazmatDetails, deleteHazmatDetails, selectedTbr } from '../../state';
 
-interface AddHazmatForm {
-  hazmatClass: string;
-  hazmatPackagingGroup: string;
-  hazmatPropperShippingName: string;
-  hazmatUnode: string;
-}
 @UntilDestroy()
 @Component({
   selector: 'app-thu-details',
@@ -30,9 +27,9 @@ export class ThuDetailsComponent {
   public line$;
 
   public thuList$;
-  private shipitId?: string;
-  private releaseLineId?: any;
-  addHazmatFormGroup!: IFormArray<AddHazmatForm>;
+  private shipitId!: string;
+  private releaseLineId$: Observable<string>;
+  addHazmatFormGroup!: IFormArray<HazmatDetails>;
   private fb: IFormBuilder;
 
   constructor(
@@ -56,12 +53,12 @@ export class ThuDetailsComponent {
       })
     );
 
-    this.releaseLineId = this.line$.pipe(pluck('releaseLineId'));
+    this.releaseLineId$ = this.line$.pipe(filter(Boolean), pluck<TbrLine>('releaseLineId')) as Observable<string>;
+
     this.thuList$ = this.store.select(selectedTbr).pipe(
-      filter((tbrDetails) => !!tbrDetails),
+      filter(Boolean),
       map((tbrDetails) => {
         this.shipitId = tbrDetails?.shipitId;
-        // console.log('lineId', this.line$.pipe(take(1)).subscribe);
         const thus = tbrDetails?.shipUnitLines.map((slu) => slu.transportHandlingUnits).reduce((acc, curr) => acc.concat(curr));
         return thus ? thus[0] : null;
       })
@@ -78,14 +75,12 @@ export class ThuDetailsComponent {
   }
 
   saveAddHazmat() {
-    this.releaseLineId.subscribe((value: string) => {
+    this.releaseLineId$.pipe(take(1)).subscribe((value: string) => {
       this.store.dispatch(
         addHazmatDetails({
-          data: {
-            shipItId: this.shipitId,
-            releaseLineId: value,
-            payload: { ...this.addHazmatFormGroup.getRawValue() },
-          },
+          shipitId: this.shipitId,
+          releaseLineId: value,
+          hazmatDetails: { ...this.addHazmatFormGroup.getRawValue()[0] },
         })
       );
     });
@@ -96,13 +91,12 @@ export class ThuDetailsComponent {
   removeHazmatDetails() {
     this.addHazmatFormGroup.reset();
     this.addHazmatFormGroup.markAsPristine();
-    this.releaseLineId.subscribe((value: string) => {
+
+    this.releaseLineId$.pipe(take(1)).subscribe((value: string) => {
       this.store.dispatch(
         deleteHazmatDetails({
-          data: {
-            shipItId: this.shipitId,
-            releaseLineId: value,
-          },
+          shipitId: this.shipitId,
+          releaseLineId: value,
         })
       );
     });
@@ -112,11 +106,11 @@ export class ThuDetailsComponent {
   openAddHazmatDialog() {
     if (this.addHazmatFormGroup.length === 1) return;
     this.addHazmatFormGroup.push(
-      this.fb.group<AddHazmatForm>({
-        hazmatClass: [null],
-        hazmatPackagingGroup: [null],
-        hazmatPropperShippingName: [null],
-        hazmatUnode: [null],
+      this.fb.group<HazmatDetails>({
+        dgClass: [null],
+        dgPackagingGroup: [null],
+        dgProperName: [null],
+        hazmatUncode: [null],
       })
     );
     this.addHazmatDialog.openDialog();
@@ -125,14 +119,13 @@ export class ThuDetailsComponent {
   cancelAddHazmat() {
     this.addHazmatFormGroup.reset();
     this.addHazmatFormGroup.markAsPristine();
-    this.createForm();
     this.addHazmatDialog.closeDialog();
   }
 
-  getFormGroup(rowForm: any): FormGroup {
+  getFormGroup(rowForm: unknown): FormGroup {
     return rowForm as FormGroup;
   }
   private createForm(): void {
-    this.addHazmatFormGroup = this.fb.array<AddHazmatForm>([]);
+    this.addHazmatFormGroup = this.fb.array<HazmatDetails>([]);
   }
 }

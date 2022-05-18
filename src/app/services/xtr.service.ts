@@ -1,9 +1,8 @@
-/* eslint-disable prettier/prettier */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TbrLightDetails } from '../models/tbr-light.model';
-import { Tbr } from '../models/tbr.model';
+import { HazmatDetails, Tbr } from '../models/tbr.model';
 
 @Injectable({
   providedIn: 'root',
@@ -39,8 +38,8 @@ export class XtrService {
     return this.http.put(`/gateway/api/xtr/v3/xtr/${shipItId}/manual/thu/{releaseLine}`, {});
   }
 
-  addHazmatDetails(data: any): Observable<any> {
-    return this.http.put(`/gateway/api/xtr/v3/xtr/${data.shipItId}/hazmat/${data.releaseLineId}`, data.payload);
+  addHazmatDetails(shipItId: string, releaseLineId: string, hazmatDetails: HazmatDetails): Observable<Tbr> {
+    return this.http.put<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/hazmat/${releaseLineId}`, hazmatDetails);
   }
 
   /* PATCH METHODS */
@@ -58,8 +57,8 @@ export class XtrService {
     return this.http.delete('/gateway/api/xtr/v3/xtr');
   }
 
-  deleteHazmatDetails(data:any): Observable<any> {
-    return this.http.delete(`/gateway/api/xtr/v3/xtr/${data.shipItId}/hazmat/${data.releaseLineId}`);
+  deleteHazmatDetails(shipItId: string, releaseLineId: string): Observable<Tbr> {
+    return this.http.delete<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/hazmat/${releaseLineId}`);
   }
 
   /* GET METHODS */
