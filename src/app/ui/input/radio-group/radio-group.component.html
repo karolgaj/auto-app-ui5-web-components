@@ -1,0 +1,24 @@
+<!--<div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem" [ngClass]="inputContainerClasses">-->
+<!--  <ui5-label *ngIf="label" [ngClass]="labelClasses" [for]="getId()" [required]="required" [showColon]="showColon"> {{ label }} </ui5-label>-->
+<!--  <ui5-select #customInput [valueState]="valueState" class="select">-->
+<!--    <ui5-option-->
+<!--      *ngFor="let option of selectionOptions"-->
+<!--      [icon]="option.icon"-->
+<!--      [value]="option.value"-->
+<!--      [selected]="option.value === value"-->
+<!--      [disabled]="disabled">-->
+<!--      {{ option.text }}-->
+<!--    </ui5-option>-->
+<!--    &lt;!&ndash;   sanitize innerHTML pipe with DOM sanitizer  &ndash;&gt;-->
+<!--    <div *ngIf="valueStateMessage" slot="valueStateMessage" [innerHTML]="valueStateMessage"></div>-->
+<!--  </ui5-select>-->
+<!--  <ng-content [after]></ng-content>-->
+<!--</div>-->
+
+<div #customInput role="radiogroup" id="radioGroup" *ngIf="formGroup && formGroup.controls.radio" [formGroup]="formGroup" [ngClass]="inputContainerClasses">
+  <ui5-label *ngIf="label" [ngClass]="labelClasses" [for]="getId()" [required]="required" [showColon]="showColon"> {{ label }} </ui5-label>
+  <div [fxLayout]="vertical ? 'column' : 'row'">
+    <ui5-radio-button *ngFor="let option of options" [text]="option.text" [value]="option.value" name="radioGroup" [checked]="value === option.value" formControlName="radio">
+    </ui5-radio-button>
+  </div>
+</div>

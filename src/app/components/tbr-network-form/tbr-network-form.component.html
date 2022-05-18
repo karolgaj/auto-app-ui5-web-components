@@ -7,11 +7,44 @@
 
   <div fxLayout="column" fxFlex fxLayoutAlign="stetch center" fxLayoutGap="1rem" class="network-form" [formGroup]="networkForm">
     <app-input
+      [placeholder]="'COMMON.SHIP_FROM' | translate | titlecase"
+      [label]="'COMMON.SHIP_FROM' | translate | titlecase"
+      formControlName="shipFrom"
+      [required]="true"
+      [icons]="[
+        { icon: 'add-contact', action: openCustomShipFromAddressDialogBound },
+        { icon: 'value-help', action: openShipFromListDialogBound }
+      ]"></app-input>
+
+    <app-input
+      [placeholder]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"
+      [label]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"
+      formControlName="loadingPoint"
+      [icons]="[{ icon: 'value-help', action: openLoadingPointDialogBound }]"></app-input>
+
+    <app-input
+      [placeholder]="'COMMON.SHIP_TO' | translate | titlecase"
+      [label]="'COMMON.SHIP_TO' | translate | titlecase"
+      formControlName="shipTo"
+      [required]="true"
+      [icons]="[
+        { icon: 'add-contact', action: openCustomShipToAddressDialogBound },
+        { icon: 'value-help', action: openShipToListDialogBound }
+      ]"></app-input>
+    <app-input
+      [placeholder]="'COMMON.UNLOADING_POINT' | translate | titlecase"
+      [label]="'COMMON.UNLOADING_POINT' | translate | titlecase"
+      formControlName="unloadingPoint"
+      [required]="true"
+      [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"></app-input>
+
+    <app-input
       [placeholder]="'COMMON.CONSIGNEE' | translate | titlecase"
       [label]="'COMMON.CONSIGNEE' | translate | titlecase"
       formControlName="consignee"
       [required]="true"
       [icons]="[{ icon: 'value-help', action: openConsigneeDialogBound }]"></app-input>
+
     <app-input
       class="after-icon"
       [placeholder]="'COMMON.CONSIGNOR' | translate | titlecase"
@@ -50,36 +83,6 @@
       </ui5-table>
     </div>
 
-    <app-input
-      [placeholder]="'COMMON.SHIP_FROM' | translate | titlecase"
-      [label]="'COMMON.SHIP_FROM' | translate | titlecase"
-      formControlName="shipFrom"
-      [required]="true"
-      [icons]="[
-        { icon: 'add-contact', action: openCustomShipFromAddressDialogBound },
-        { icon: 'value-help', action: openShipFromListDialogBound }
-      ]"></app-input>
-    <app-input
-      [placeholder]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"
-      [label]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"
-      formControlName="loadingPoint"
-      [icons]="[{ icon: 'value-help', action: openLoadingPointDialogBound }]"></app-input>
-    <app-input
-      [placeholder]="'COMMON.SHIP_TO' | translate | titlecase"
-      [label]="'COMMON.SHIP_TO' | translate | titlecase"
-      formControlName="shipTo"
-      [required]="true"
-      [icons]="[
-        { icon: 'add-contact', action: openCustomShipToAddressDialogBound },
-        { icon: 'value-help', action: openShipToListDialogBound }
-      ]"></app-input>
-    <app-input
-      [placeholder]="'COMMON.UNLOADING_POINT' | translate | titlecase"
-      [label]="'COMMON.UNLOADING_POINT' | translate | titlecase"
-      formControlName="unloadingPoint"
-      [required]="true"
-      [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"></app-input>
-
     <app-datepicker formControlName="pickupDate" [required]="true" [label]="'COMMON.PICKUP_DATE' | translate | titlecase"></app-datepicker>
 
     <app-select
@@ -99,7 +102,7 @@
       formControlName="transportType"></app-select>
 
     <app-checkbox formControlName="customs" [label]="'COMMON.CUSTOMS' | translate"></app-checkbox>
-    <app-checkbox formControlName="useLoadingMeters" [label]="'COMMON.USE_LOADING_METERS' | translate | titlecase"></app-checkbox>
+<!--    <app-checkbox formControlName="useLoadingMeters" [label]="'COMMON.USE_LOADING_METERS' | translate | titlecase"></app-checkbox>-->
   </div>
   <ui5-bar design="Footer">
     <div slot="endContent">
@@ -108,7 +111,11 @@
   </ui5-bar>
 </div>
 
-<app-dialog #parmaDialog [dialogHeader]="parmaDialogHeader | translate | titlecase" [hideDefaultFooter]="true" [accessibleName]="parmaDialogAccessibleName">
+<app-dialog
+  #parmaDialog
+  [dialogHeader]="parmaDialogHeader | translate | titlecase"
+  [hideDefaultFooter]="true"
+  [accessibleName]="parmaDialogAccessibleName">
   <!--  <app-input placeholder="Search" [control]="networkForm.controls.pickupDate" [icons]="[{ icon: 'clear' }]"></app-input>-->
 
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
@@ -158,7 +165,11 @@
   </div>
 </app-dialog>
 
-<app-dialog #customAddressDialog [dialogHeader]="addressDialogHeader | translate | titlecase"  (close)="closeCustomAddressDialog()" (save)="saveCustomAddress()">
+<app-dialog
+  #customAddressDialog
+  [dialogHeader]="addressDialogHeader | translate | titlecase"
+  (close)="closeCustomAddressDialog()"
+  (save)="saveCustomAddress()">
   <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="customAddressForm">
     <app-input
       formControlName="name"

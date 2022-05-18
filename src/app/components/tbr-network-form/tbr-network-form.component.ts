@@ -72,7 +72,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   transportTypeOptions = TRANSPORT_TYPE_OPTIONS;
   planningTypesOptions = PLANNING_TYPE_OPTIONS;
 
-  constructor(fb: FormBuilder, private router: Router, private store: Store) {
+  constructor(fb: FormBuilder, private router: Router, private store: Store, private commonValidators: CommonValidators) {
     this.fb = fb;
     this.store.dispatch(loadConsignors({}));
     this.store.dispatch(loadShipItems());

@@ -1,9 +1,13 @@
-import { ValidatorFn } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { FormGroup, ValidatorFn } from '@angular/forms';
 import { IFormGroup } from '@rxweb/types';
-import { DateTime } from 'luxon';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { DateTime } from 'luxon';
+import { switchMap } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { selectUserDateFormat, selectUserTimeFormat } from '../state';
+import { GOOGLE_API_KEY, GOOGLE_API_URL } from '../core/providers/value-tokens';
 
 const TIME_FORMAT = 'HH:mm';
 const DATE_FORMAT = 'yyyyMMdd';
@@ -18,7 +22,45 @@ export class CommonValidators {
   timeFormat$ = this.store.select(selectUserTimeFormat);
   dateFormat$ = this.store.select(selectUserDateFormat);
 
-  constructor(private store: Store) {}
+  constructor(
+    @Inject(GOOGLE_API_KEY) private googleApiKey: string,
+    @Inject(GOOGLE_API_URL) private googleApiUrl: string,
+    private store: Store,
+    private http: HttpClient
+  ) {}
+
+  validateAddressWithGoogle<T extends GenericWithStrings<T>>() {
+    return (formGroup: FormGroup) => {
+      const formValue = formGroup.getRawValue();
+
+      const address = formValue.street1
+        .concat(',+', formValue.postalCode, ',+', formValue.city, ',+', formValue.country)
+        .split('')
+        .map((char: string) => (char === ' ' ? '+' : char))
+        .join('');
+
+      return this.http.get(`${this.googleApiUrl}/geocode/json?address=${address}&key=${this.googleApiKey}`).pipe(
+        map((result: any) => (result.results[0] !== null || result.results[0].geometry.location ? result.results[0] : null)),
+        switchMap((result: any) => {
+          const { lat, lng } = result.geometry.location;
+          let timestamp = Date.now();
+          const len = timestamp.toString().length;
+
+          if (len > 12) {
+            timestamp = Number(timestamp.toString().substr(0, 12));
+          }
+          return this.http
+            .get(`${this.googleApiUrl}/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${this.googleApiKey}`)
+            .pipe(
+              map((value) => ({
+                ...value,
+                location: result,
+              }))
+            );
+        })
+      );
+    };
+  }
 
   init(): void {
     this.timeFormat$.subscribe((value) => {
