@@ -1,1 +1,236 @@
-<p>wizard-summary works!</p>
+<div fxLayout="column" class="h-100">
+  <ui5-bar design="Header" slot="header">
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="close()">
+      {{ 'COMMON.BUTTON_CLOSE' | translate | titlecase }}
+    </ui5-button>
+  </ui5-bar>
+
+  <div fxFlex style="overflow: auto" *ngIf="details$ | async as tbrDetails">
+    <app-tbr-network [tbrDetails]="tbrDetails"></app-tbr-network>
+    <ui5-panel accessible-role="Complementary" [headerText]="'COMMON.PICKUP_INFO' | translate | titlecase">
+      <div fxLayout>
+        <div fxFlex fxLayout="column" fxLayoutGap="1rem">
+          <ui5-label> {{ 'COMMON.SHIP_FROM' | translate | titlecase }}: {{ tbrDetails.shipFrom | address }} </ui5-label>
+          <ui5-label> {{ 'COMMON.ADDRESS' | translate | titlecase }}: {{ tbrDetails.shipFrom?.address?.street1 }} </ui5-label>
+          <ui5-label> {{ 'COMMON.POSTAL_CODE' | translate | titlecase }}: {{ tbrDetails.shipFrom?.address?.postalCode }} </ui5-label>
+          <ui5-label> {{ 'COMMON.CITY' | translate | titlecase }}: {{ tbrDetails.shipFrom?.address?.city }} </ui5-label>
+          <ui5-label> {{ 'COMMON.COUNTRY' | translate | titlecase }}: {{ tbrDetails.shipFrom?.address?.country }} </ui5-label>
+          <ui5-label>
+            {{ 'COMMON.PICKUP_READY_DATE' | translate | titlecase }}: {{ tbrDetails.approvalDecision?.collectionDate | parseDate }}
+          </ui5-label>
+          <ui5-label>
+            {{ 'COMMON.PICKUP_READY_TIME' | translate | titlecase }}: {{ tbrDetails.approvalDecision?.collectionTime }}
+          </ui5-label>
+          <ui5-label>
+            {{ 'COMMON.PICKUP_OPENING_HOURS' | translate | titlecase }}: {{ tbrDetails.approvalDecision?.openingHourAtCollection }} -
+            {{ tbrDetails.approvalDecision?.closeHourAtCollection }}
+          </ui5-label>
+        </div>
+        <div fxFlex="50px" style="padding: 0 1rem">
+          <ui5-button icon="edit" (click)="editSection('PICKUP_INFO')"></ui5-button>
+        </div>
+      </div>
+    </ui5-panel>
+    <ui5-panel accessible-role="Complementary" [headerText]="'COMMON.CONTACT_PERSON' | translate | titlecase">
+      <div fxLayout>
+        <div fxFlex fxLayout="column" fxLayoutGap="1rem">
+          <ui5-label>
+            {{ 'COMMON.CONTACT_PERSON_NAME' | translate | titlecase }}: {{ tbrDetails.approvalDecision?.contactAtSupplier?.name }}
+          </ui5-label>
+          <ui5-label>
+            {{ 'COMMON.CONTACT_PERSON_PHONE' | translate | titlecase }}: {{ tbrDetails.approvalDecision?.contactAtSupplier?.phone }}
+          </ui5-label>
+          <ui5-label>
+            {{ 'COMMON.CONTACT_PERSON_EMAIL' | translate | titlecase }}: {{ tbrDetails.approvalDecision?.contactAtSupplier?.email }}
+          </ui5-label>
+        </div>
+        <div fxFlex="50px" style="padding: 0 1rem">
+          <ui5-button icon="edit" (click)="editSection('CONTACT_PERSON')"></ui5-button>
+        </div>
+      </div>
+    </ui5-panel>
+    <ui5-panel accessible-role="Complementary" [headerText]="'COMMON.TRANSPORT_TYPE' | translate | titlecase">
+      <div fxLayout>
+        <div fxFlex fxLayout="column" fxLayoutGap="1rem">
+          <ui5-label>
+            {{ 'COMMON.TRANSPORT_TYPE' | translate | titlecase }}: {{ tbrDetails.approvalDecision?.transportSelection }}
+          </ui5-label>
+          <ui5-label>
+            {{ 'COMMON.MUST_ARRIVE_DATE' | translate | titlecase }}: {{ tbrDetails.approvalDecision?.mustArriveDate | parseDate }}
+          </ui5-label>
+          <ui5-label>
+            {{ 'COMMON.MUST_ARRIVE_TIME' | translate | titlecase }}: {{ tbrDetails.approvalDecision?.mustArriveTime }}
+          </ui5-label>
+          <ui5-label>
+            {{ 'COMMON.PICKUP_OPENING_HOURS' | translate | titlecase }}: {{ tbrDetails.approvalDecision?.openingHourAtDelivery }} -
+            {{ tbrDetails.approvalDecision?.closeHourAtDelivery }}
+          </ui5-label>
+          <ui5-label *ngIf="tbrDetails.crossDock"> {{ 'COMMON.XDOCK' | translate | titlecase }}: {{ tbrDetails.crossDock }} </ui5-label>
+        </div>
+        <div fxFlex="50px" style="padding: 0 1rem">
+          <ui5-button icon="edit" (click)="editSection('TRANSPORT_TYPE')"></ui5-button>
+        </div>
+      </div>
+    </ui5-panel>
+    <ui5-panel accessible-role="Complementary" [headerText]="'COMMON.COST_OWNER' | translate | titlecase">
+      <div fxLayout>
+        <div fxFlex fxLayout="column" fxLayoutGap="1rem">
+          <ui5-label> {{ 'COMMON.COST_OWNER' | translate | titlecase }}: {{ tbrDetails.approvalDecision?.costOwner }} </ui5-label>
+          <ui5-label>
+            {{ 'COMMON.COST_OWNER_CONSIGNEE_COST' | translate | titlecase }}:
+            {{ tbrDetails.approvalDecision?.costPercentageForConsignee }} %
+          </ui5-label>
+          <ui5-label>
+            {{ 'COMMON.COST_OWNER_CONSIGNOR_COST' | translate | titlecase }}:
+            {{ tbrDetails.approvalDecision?.costPercentageForConsignor }} %
+          </ui5-label>
+        </div>
+        <div fxFlex="50px" style="padding: 0 1rem">
+          <ui5-button icon="edit" (click)="editSection('COST_OWNER')"></ui5-button>
+        </div>
+      </div>
+    </ui5-panel>
+    <ui5-panel accessible-role="Complementary" [headerText]="'COMMON.REASON_CODE' | translate | titlecase">
+      <div fxLayout>
+        <div fxFlex fxLayout="column" fxLayoutGap="1rem">
+          <ui5-table>
+            <ui5-table-column slot="columns">
+              <span> {{ 'COMMON.REASON_CODE_CAUSE' | translate }}</span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns">
+              <span> {{ 'COMMON.REASON_CODE' | translate }} </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns">
+              <span> {{ 'COMMON.REASON_CODE_SUB' | translate }} </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns">
+              <span> {{ 'COMMON.REASON_CODE_REFERENCE' | translate }} </span>
+            </ui5-table-column>
+
+            <ui5-table-row data-ui5-compact-size *ngFor="let reasonCode of tbrDetails.approvalDecision?.reasonCodes">
+              <ui5-table-cell> {{ reasonCode.cause }} </ui5-table-cell>
+              <ui5-table-cell> {{ reasonCode.subCode }} </ui5-table-cell>
+              <ui5-table-cell> {{ reasonCode.secondSubCode }} </ui5-table-cell>
+              <ui5-table-cell> {{ reasonCode.reference }} </ui5-table-cell>
+            </ui5-table-row>
+          </ui5-table>
+        </div>
+        <div fxFlex="50px" style="padding: 0 1rem">
+          <ui5-button icon="edit" (click)="editSection('REASON_CODE')"></ui5-button>
+        </div>
+      </div>
+    </ui5-panel>
+    <ui5-panel accessible-role="Complementary" [headerText]="'COMMON.NOTE' | translate | titlecase">
+      <div fxLayout>
+        <div fxFlex fxLayout="column" fxLayoutGap="1rem">
+          <app-textarea [label]="'COMMON.NOTE_DETAILS' | translate" [formControl]="internalNote" [vertical]="true"></app-textarea>
+        </div>
+        <div fxFlex="50px" style="padding: 0 1rem">
+          <ui5-button icon="edit" (click)="editSection('NOTE')"></ui5-button>
+        </div>
+      </div>
+    </ui5-panel>
+    <ui5-panel accessible-role="Complementary" [headerText]="'COMMON.ADDITIONAL_CONTACTS' | translate | titlecase">
+      <div fxLayout>
+        <div fxFlex fxLayout="column" fxLayoutGap="1rem">
+          <ui5-table>
+            <ui5-table-column slot="columns">
+              <span> {{ 'COMMON.ADDITIONAL_CONTACTS_TYPE' | translate }} </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns">
+              <span> {{ 'COMMON.CONTACT_PERSON_EMAIL' | translate }} </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns">
+              <span> {{ 'COMMON.CONTACT_PERSON_NAME' | translate }} </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns">
+              <span> {{ 'COMMON.CONTACT_PERSON_PHONE' | translate }} </span>
+            </ui5-table-column>
+
+            <ui5-table-row data-ui5-compact-size *ngFor="let contact of tbrDetails.approvalDecision?.additionalContacts">
+              <ui5-table-cell> {{ contact.contactType }} </ui5-table-cell>
+              <ui5-table-cell> {{ contact.email }} </ui5-table-cell>
+              <ui5-table-cell> {{ contact.name }} </ui5-table-cell>
+              <ui5-table-cell> {{ contact.phone }} </ui5-table-cell>
+            </ui5-table-row>
+          </ui5-table>
+        </div>
+        <div fxFlex="50px" style="padding: 0 1rem">
+          <ui5-button icon="edit" (click)="editSection('ADDITIONAL_CONTACTS')"></ui5-button>
+        </div>
+      </div>
+    </ui5-panel>
+  </div>
+
+  <ui5-bar design="Footer">
+    <div slot="endContent">
+      <ui5-button design="Positive" icon="save">
+        {{ 'COMMON.BUTTON_APPROVE' | translate }}
+      </ui5-button>
+    </div>
+  </ui5-bar>
+</div>
+
+<ng-container *ngIf="details$ | async as tbrDetails">
+<app-dialog
+  #pickupInfo
+  [dialogHeader]="'COMMON.PICKUP_INFO' | translate"
+  (close)="pickupInfo.closeDialog()"
+  (save)="updateValue(pickupDialogRef.getData()); pickupInfo.closeDialog()">
+  <app-wizard-step-pickup-info #pickupDialogRef [data]="tbrDetails" [isStandaloneComponent]="true"></app-wizard-step-pickup-info>
+</app-dialog>
+
+<app-dialog
+  #contactPerson
+  [dialogHeader]="'COMMON.CONTACT_PERSON' | translate"
+  (close)="contactPerson.closeDialog()"
+  (save)="updateValue(contactPersonDialogRef.getData()); contactPerson.closeDialog()">
+  <app-wizard-step-contact #contactPersonDialogRef [data]="tbrDetails" [isStandaloneComponent]="true"></app-wizard-step-contact>
+</app-dialog>
+
+<app-dialog
+  #transportType
+  [dialogHeader]="'COMMON.TRANSPORT_TYPE' | translate"
+  (close)="transportType.closeDialog()"
+  (save)="updateValue(transportTypeDialogRef.getData()); transportType.closeDialog()">
+  <app-wizard-step-transport-type
+    #transportTypeDialogRef
+    [data]="tbrDetails"
+    [isStandaloneComponent]="true"></app-wizard-step-transport-type>
+</app-dialog>
+
+<app-dialog
+  #costOwner
+  [dialogHeader]="'COMMON.COST_OWNER' | translate"
+  (close)="costOwner.closeDialog()"
+  (save)="updateValue(costOwnerDialogRef.getData()); costOwner.closeDialog()">
+  <app-wizard-step-cost-owner #costOwnerDialogRef [data]="tbrDetails" [isStandaloneComponent]="true"></app-wizard-step-cost-owner>
+</app-dialog>
+
+<app-dialog
+  #reasonCode
+  [dialogHeader]="'COMMON.REASON_CODE' | translate"
+  (close)="reasonCode.closeDialog()"
+  (save)="updateValue(reasonCodeDialogRef.getData()); reasonCode.closeDialog()">
+  <app-wizard-step-reason-code #reasonCodeDialogRef [data]="tbrDetails" [isStandaloneComponent]="true"></app-wizard-step-reason-code>
+</app-dialog>
+
+<app-dialog
+  #internalNote
+  [dialogHeader]="'COMMON.NOTE' | translate"
+  (close)="internalNote.closeDialog()"
+  (save)="updateValue(internalNoteDialogRef.getData()); internalNote.closeDialog()">
+  <app-wizard-step-note #internalNoteDialogRef [data]="tbrDetails" [isStandaloneComponent]="true"></app-wizard-step-note>
+</app-dialog>
+
+<app-dialog
+  #additionalContacts
+  [dialogHeader]="'COMMON.ADDITIONAL_CONTACTS' | translate"
+  (close)="additionalContacts.closeDialog()"
+  (save)="updateValue(additionalContactsDialogRef.getData()); additionalContacts.closeDialog()">
+  <app-wizard-step-additional-contacts
+    #additionalContactsDialogRef
+    [data]="tbrDetails"
+    [isStandaloneComponent]="true"></app-wizard-step-additional-contacts>
+</app-dialog>
+</ng-container>

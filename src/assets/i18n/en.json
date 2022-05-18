@@ -4,14 +4,14 @@
     "REQUIRED": "Field cannot be empty",
     "EMAIL": "Enter valid email address",
     "PHONE": "Enter valid phone",
-    "MAXLENGTH": "Max length is {MAX_LENGTH}",
-    "MINLENGTH": "Min length is {MIN_LENGTH}",
-    "MAX": "Max value is {MAX_VALUE}",
-    "MIN": "Min value is {MIN_VALUE}",
+    "MAXLENGTH": "Max length is {{MAX_LENGTH}}",
+    "MINLENGTH": "Min length is {{MIN_LENGTH}}",
+    "MAX": "Max value is {{MAX_VALUE}}",
+    "MIN": "Min value is {{MIN_VALUE}}",
     "IS_PAST_DATE": "Date must not be in the past",
-    "IS_BETWEEN_TIMES": "Hours must be between {BETWEEN_FROM} and {BETWEEN_TO}",
-    "IS_HOUR_AFTER_HOUR": "Hour must be after {AFTER_HOUR}",
-    "IS_DATE_AFTER_DATE": "Date must be after {AFTER_DATE}",
+    "IS_BETWEEN_TIMES": "Hours must be between {{BETWEEN_FROM}} and {{BETWEEN_TO}}",
+    "IS_HOUR_AFTER_HOUR": "Hour must be after {{AFTER_HOUR}}",
+    "IS_DATE_AFTER_DATE": "Date must be after {{AFTER_DATE}}",
     "INVALID_DATE": "Enter valid date",
     "INVALID": "Invalid value"
   },
@@ -41,6 +41,7 @@
     "BUTTON_REJECT": "Reject",
     "BUTTON_SEND_TO_APPROVAL": "Send to Approval",
     "BUTTON_APPROVAL": "Approval",
+    "BUTTON_APPROVE": "Approve",
     "NO_DATA": "No data",
     "ADDRESS_NAME": "Name",
     "ADDRESS_COUNTRY": "Country",
@@ -110,6 +111,7 @@
     "PICKUP_READY_DATE": "Ready for collection date",
     "PICKUP_READY_TIME": "Ready for collection time",
     "PICKUP_OPENING_HOUR": "Opening hour at collection place",
+    "PICKUP_OPENING_HOURS": "Opening hours at collection place",
     "PICKUP_CLOSING_HOUR": "Closing hour at collection place",
     "PARTIAL_EXPRESS": "Partial Express to X-Dock",
     "PARTIAL_EXPRESS_TEXT": "Give latest delivery time at X-Dock",
@@ -133,6 +135,10 @@
     "VALID_FROM_TO": "valid from - to",
     "LOADING_POINT": "loading point"
   },
+  "WORKFLOW": {
+    "STEP": "Step {{step}}",
+    "FINALIZE": "Finalize"
+  },
   "TBR_DETAILS": {
     "ADD_REFERENCES": "Add References",
     "ADD_LINE": "Add Line",
@@ -150,7 +156,7 @@
     "HAZMAT_CLASS": "Hazmat Class",
     "HAZMAT_PACKAGING_GROUP": "Packaging Group",
     "HAZMAT_PROPPER_SHIPPING_NAME": "Shipping Name",
-    "HAZMAT_UNCODE": "Hazmat Uncode",
+    "HAZMAT_UNCODE": "Hazmat Unicode",
     "LOADING_METERS": "Loading Meters",
     "TEMPERATURE_CONTROL": "Temperature Control"
   }

@@ -43,5 +43,5 @@
     <app-input *ngIf="isCrossDock$ | async" formControlName="crossDock" [label]="'COMMON.XDOCK' | translate"></app-input>
   </div>
 
-  <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
+  <ui5-button (click)="goToNextStep()"> {{ nextButtonText | translate: { step: nextStepIndex } }} </ui5-button>
 </div>

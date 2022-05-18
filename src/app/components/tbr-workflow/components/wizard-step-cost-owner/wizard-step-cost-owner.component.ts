@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { WizardStepAbstract } from '../wizard-step-abstract';
 import { FormBuilder, Validators } from '@angular/forms';
 import { fromEvent } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map } from 'rxjs/operators';
 import { IFormGroup } from '@rxweb/types';
+import { WizardStepAbstract } from '../wizard-step-abstract';
 import { Tbr } from '../../../../models/tbr.model';
 
 interface CostOwnerForm {
@@ -41,7 +41,7 @@ export class WizardStepCostOwnerComponent extends WizardStepAbstract implements 
   ngAfterViewInit() {
     fromEvent(this.consigneeSlider.nativeElement, 'input')
       .pipe(
-        map((event: any) => event.target._stateStorage.value),
+        map((event) => (event as any).target._stateStorage.value),
         untilDestroyed(this)
       )
       .subscribe((value) => {
@@ -53,7 +53,7 @@ export class WizardStepCostOwnerComponent extends WizardStepAbstract implements 
 
     fromEvent(this.consignorSlider.nativeElement, 'input')
       .pipe(
-        map((event: any) => event.target._stateStorage.value),
+        map((event) => (event as any).target._stateStorage.value),
         untilDestroyed(this)
       )
       .subscribe((value) => {
@@ -106,20 +106,12 @@ export class WizardStepCostOwnerComponent extends WizardStepAbstract implements 
     this.form.patchValue(data);
   }
 
-  consignorCostChanged($event: any) {
-    // console.log($event.target._stateStorage.value);
-  }
-
-  consigneeCostChanged($event: any) {
-    // console.log($event.target._stateStorage.value);
-  }
-
   getData(): Partial<Tbr> {
     return {
       approvalDecision: {
-        costOwner: this.form.controls.costOwner,
-        costPercentageForConsignee: this.form.controls.costPercentageForConsignee,
-        costPercentageForConsignor: this.form.controls.costPercentageForConsignor,
+        costOwner: this.form.controls.costOwner.value,
+        costPercentageForConsignee: this.form.controls.costPercentageForConsignee.value,
+        costPercentageForConsignor: this.form.controls.costPercentageForConsignor.value,
       },
     };
   }
@@ -145,6 +137,8 @@ export class WizardStepCostOwnerComponent extends WizardStepAbstract implements 
         ...data,
         ...this.data.approvalDecision,
       };
+      this.consigneeCost = this.data.approvalDecision.costPercentageForConsignee;
+      this.consignorCost = this.data.approvalDecision.costPercentageForConsignor;
     }
     this.form.patchValue(data);
 

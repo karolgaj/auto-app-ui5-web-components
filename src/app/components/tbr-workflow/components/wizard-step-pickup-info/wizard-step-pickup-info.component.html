@@ -1,5 +1,5 @@
 <div class="wizard-step">
-  <ui5-title>{{ title }}</ui5-title>
+  <ui5-title *ngIf="!isStandaloneComponent">{{ title }}</ui5-title>
 
   <div fxLayout="column" class="wizard-step__content">
     <ui5-label>{{ 'COMMON.SHIP_FROM' | translate | titlecase }} : {{ data.shipFrom | address }}</ui5-label>
@@ -17,12 +17,12 @@
       [required]="true"
       [label]="'COMMON.PICKUP_OPENING_HOUR' | translate"></app-timepicker>
     <app-timepicker
-      formControlName="closingHourAtCollection"
+      formControlName="closeHourAtCollection"
       [required]="true"
       [label]="'COMMON.PICKUP_CLOSING_HOUR' | translate"></app-timepicker>
     <app-input formControlName="pickupReference" [label]="'COMMON.PICKUP_REFERENCE' | translate"></app-input>
     <app-input formControlName="messageToCarrier" [label]="'COMMON.MESSAGE_TO_CARRIER' | translate"></app-input>
   </div>
 
-  <ui5-button (click)="goToNextStep()">Step {{ nextStepIndex }}</ui5-button>
+  <ui5-button *ngIf="!isStandaloneComponent" (click)="goToNextStep()"> {{ nextButtonText | translate: { step: nextStepIndex } }} </ui5-button>
 </div>

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IFormGroup } from '@rxweb/types';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { WizardStepAbstract } from '../wizard-step-abstract';
 import { Tbr } from '../../../../models/tbr.model';
 
@@ -9,21 +8,26 @@ import { Tbr } from '../../../../models/tbr.model';
   templateUrl: './wizard-step-note.component.html',
 })
 export class WizardStepNoteComponent extends WizardStepAbstract implements OnInit {
-  form!: IFormGroup<any>;
+  form!: FormGroup;
+  internalNote = this.fb.control('');
 
   constructor(fb: FormBuilder) {
     super(fb);
   }
 
   getData(): Partial<Tbr> {
-    return this.form.getRawValue();
+    return {
+      internalNote: this.internalNote.value,
+    };
   }
 
-  protected createForm(): void {
-    this.form = this.fb.group({
-      internalNote: null,
-    });
+  isValid(): boolean {
+    return this.internalNote.valid;
   }
 
-  protected patchInitialForm(): void {}
+  protected createForm(): void {}
+
+  protected patchInitialForm(): void {
+    this.internalNote.patchValue(this.data.internalNote);
+  }
 }

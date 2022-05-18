@@ -3,27 +3,21 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CustomInputAbstract } from '../custom-input.abstract';
 
-type IconActions = {
-  icon: string;
-  action?: () => void;
-};
-
 @UntilDestroy()
 @Component({
-  selector: 'app-input',
-  templateUrl: './input.component.html',
-  styleUrls: ['./input.component.scss'],
+  selector: 'app-textarea',
+  templateUrl: './textarea.component.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       multi: true,
-      useExisting: forwardRef(() => InputComponent),
+      useExisting: forwardRef(() => TextareaComponent),
     },
   ],
 })
-export class InputComponent extends CustomInputAbstract {
+export class TextareaComponent extends CustomInputAbstract {
   @Input()
-  icons: IconActions[] = [];
+  rows = 10;
 
   @Input()
   showSuggestions = false;
@@ -33,6 +27,6 @@ export class InputComponent extends CustomInputAbstract {
   }
 
   getId(): string {
-    return `custom-input-${this._id}`;
+    return `custom-textarea-${this._id}`;
   }
 }

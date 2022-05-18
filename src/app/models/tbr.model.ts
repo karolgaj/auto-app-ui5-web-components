@@ -1,6 +1,7 @@
 import { ShipitStatus } from './tbr-type.model';
+import { TbrLine } from './tbr-line.model';
 
-export interface Tbr {
+export interface Tbr extends Partial<BaseEntity> {
   additionalContacts?: AdditionalContact[];
   orderReleaseLines: OrderReleaseLine[];
   transportBookings: any[];
@@ -42,23 +43,25 @@ export interface Tbr {
   deleted: boolean;
   split: boolean;
   orderNumbers: any[];
-  dispatchAdviceNumber: null;
+  dispatchAdviceNumber?: string;
   pickupReference?: string;
   messageToCarrier?: string;
-  internalNote: null;
+  internalNote: string | null;
   splitFromId: null;
   splitToId: null;
   responsibleOffice: null;
   enabledOtmMode: null;
   transportOperationsMode: null;
+  crossDock: null;
+  lines?: TbrLine[];
+}
+export interface BaseEntity {
   id: number;
   version: number;
   createdAt: Date;
   updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
-  crossDock: null;
-  lines: any[];
+  createdBy: null;
+  updatedBy: null;
 }
 
 export type ApprovalDecision = any;
@@ -76,16 +79,7 @@ export interface Consignee extends BaseEntity {
   address: Address | null;
 }
 
-export interface BaseEntity {
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: null;
-  updatedBy: null;
-}
-
-export interface Address {
+export interface Address extends Partial<BaseEntity> {
   latitude: string;
   longitude: string;
   street1: string;
@@ -95,19 +89,13 @@ export interface Address {
   city: string;
   county: string;
   country: string;
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: null;
-  updatedBy: null;
 }
 
 export enum AtedBy {
   V0C0385 = 'v0c0385',
 }
 
-export interface OrderReleaseLine {
+export interface OrderReleaseLine extends Partial<BaseEntity> {
   releaseLineId: string;
   hashkey: string;
   articleName: string;
@@ -131,12 +119,6 @@ export interface OrderReleaseLine {
   addedManually: null;
   dangerousGoods: boolean;
   hazmatDetails: HazmatDetails;
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
 }
 
 export enum WeightUom {
@@ -149,7 +131,7 @@ export interface HazmatDetails extends Partial<BaseEntity> {
   hazmatUncode: string;
 }
 
-export interface ShipUnitLine {
+export interface ShipUnitLine extends Partial<BaseEntity> {
   shipUnitLineId: string;
   quantity: string;
   sequence: null;
@@ -159,15 +141,9 @@ export interface ShipUnitLine {
   volumeUom: string;
   transportHandlingUnits: TransportHandlingUnit[];
   releaseLineIds: string[];
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
 }
 
-export interface TransportHandlingUnit {
+export interface TransportHandlingUnit extends Partial<BaseEntity> {
   baseType: string;
   description: string;
   dimensions: null;
@@ -197,27 +173,15 @@ export interface TransportHandlingUnit {
   subThu: boolean;
   fullThu: boolean;
   packMaterialLayer: PackMaterialLayer[];
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
 }
 
-export interface PackMaterialLayer {
+export interface PackMaterialLayer extends Partial<BaseEntity> {
   numberOfLayers: number;
   maxPackMaterialPerLayer: number;
   packMaterial: PackMaterial[];
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
 }
 
-export interface PackMaterial {
+export interface PackMaterial extends Partial<BaseEntity> {
   imgUrl: string;
   materialNumber: string;
   materialDescription: string;
@@ -239,12 +203,6 @@ export interface PackMaterial {
   packInstructionKey: string;
   mixReleaseLineRef: null;
   orderReleaseLineRef: null | string;
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
 }
 
 export enum ParentMaterialNumber {
@@ -254,7 +212,7 @@ export enum ParentMaterialNumber {
   The001123 = '001123',
 }
 
-export interface TransportNetwork {
+export interface TransportNetwork extends Partial<BaseEntity> {
   networkId: string;
   serviceLevel: string;
   deliveryLeadTime: string;
@@ -267,12 +225,6 @@ export interface TransportNetwork {
   useLoadingMeters: boolean;
   freightClass: string;
   valid: boolean;
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: null;
-  updatedBy: null;
 }
 
 export interface AdditionalContact {

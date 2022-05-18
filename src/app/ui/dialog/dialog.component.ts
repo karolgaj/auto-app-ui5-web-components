@@ -6,15 +6,6 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
   styleUrls: ['./dialog.component.scss'],
 })
 export class DialogComponent {
-  @ViewChild('dialog')
-  dialog!: ElementRef;
-
-  @Output()
-  save = new EventEmitter<void>();
-
-  @Output()
-  close = new EventEmitter<void>();
-
   @Input()
   accessibleName!: string;
 
@@ -23,6 +14,15 @@ export class DialogComponent {
 
   @Input()
   hideDefaultFooter = false;
+
+  @Output()
+  save = new EventEmitter<void>();
+
+  @Output()
+  close = new EventEmitter<void>();
+
+  @ViewChild('dialog')
+  dialog!: ElementRef;
 
   closeDialog(): void {
     this.dialog.nativeElement.close();

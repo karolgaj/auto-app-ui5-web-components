@@ -1,12 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { WizardStepAbstract } from '../wizard-step-abstract';
 import { FormBuilder } from '@angular/forms';
 import { IFormGroup } from '@rxweb/types';
-import { Tbr } from '../../../../models/tbr.model';
-import { map } from 'rxjs/operators';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { map, startWith } from 'rxjs/operators';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { Observable } from 'rxjs';
 import { CommonValidators } from '../../../../utils/validators';
+import { Tbr } from '../../../../models/tbr.model';
+import { WizardStepAbstract } from '../wizard-step-abstract';
 
 type TransportType = 'PARTIAL_EXPRESS' | 'EXPRESS';
 interface TransportTypeForm {
@@ -41,12 +41,12 @@ export class WizardStepTransportTypeComponent extends WizardStepAbstract impleme
     super(fb);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     this.watchForm();
   }
 
-  selectType(type: TransportType) {
+  selectType(type: TransportType): void {
     this.form.reset({
       closeHourAtDelivery: '',
       crossDock: '',
@@ -60,7 +60,11 @@ export class WizardStepTransportTypeComponent extends WizardStepAbstract impleme
   }
 
   getData(): Partial<Tbr> {
-    return {};
+    return {
+      approvalDecision: {
+        ...this.form.getRawValue(),
+      },
+    };
   }
 
   protected createForm(): void {
@@ -85,17 +89,21 @@ export class WizardStepTransportTypeComponent extends WizardStepAbstract impleme
     );
   }
 
-  protected patchInitialForm(): void {}
+  protected patchInitialForm(): void {
+    this.form.patchValue({
+      ...this.data.approvalDecision,
+    });
+  }
 
   private watchForm(): void {
     this.isCrossDock$ = this.form.controls.transportSelection.valueChanges.pipe(
+      startWith(this.data.approvalDecision?.transportSelection),
       map((value) => {
         if (value) {
           return value === 'PARTIAL_EXPRESS';
         }
         return null;
-      }),
-      untilDestroyed(this)
+      })
     );
 
     this.expressTypeStatus$ = this.isCrossDock$.pipe(

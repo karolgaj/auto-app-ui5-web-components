@@ -90,7 +90,7 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
     };
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     this.reasonCodes$ = this.store.select(selectCauses(this.payer));
 
@@ -131,7 +131,7 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
     });
   }
 
-  addReasonCode(): void {
+  addReasonCode(reasonCode?: ReasonCodeData): void {
     const form = this.fb.group<ReasonCodeData>({
       cause: [null],
       subCode: [null],
@@ -139,10 +139,14 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
       reference: [null],
     });
 
+    if (reasonCode) {
+      form.patchValue(reasonCode);
+    }
+
     this.form.push(form);
   }
 
-  getFormGroup(rowForm: any): FormGroup {
+  getFormGroup(rowForm: unknown): FormGroup {
     return rowForm as FormGroup;
   }
 
@@ -198,7 +202,13 @@ export class WizardStepReasonCodeComponent extends WizardStepAbstract implements
     this.form = this.fb.array<ReasonCodeData>([]);
   }
 
-  protected patchInitialForm(): void {}
+  protected patchInitialForm(): void {
+    setTimeout(() => {
+      this.data.approvalDecision?.reasonCodes?.forEach((reasonCode: ReasonCodeData) => {
+        this.addReasonCode(reasonCode);
+      });
+    });
+  }
 
   private static openDialog(dialog: DialogComponent): void {
     dialog.openDialog();

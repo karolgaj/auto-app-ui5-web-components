@@ -1,4 +1,6 @@
-export interface TbrLine {
+import { ShipUnitLine } from './tbr.model';
+
+export interface TbrLine extends ShipUnitLine {
   releaseLineId: string;
   additionalInternalDestination: null;
   articleNumber: string;
@@ -14,7 +16,7 @@ export interface TbrLine {
   notDelivered: boolean;
   deleted: boolean;
   userThu: boolean;
-  quantity: number;
+  quantity: string;
   weightSUL: number;
   volumeSUL: number;
   valueStateTHU: string;
@@ -31,4 +33,7 @@ export interface TbrLine {
   volumeSULuom: string;
   subHu: string;
   tbrType: string;
+  mixValid: boolean;
+  volumeSULUom: string;
+  weightSULUom: string;
 }

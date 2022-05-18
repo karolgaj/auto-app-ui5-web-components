@@ -8,6 +8,8 @@ import { WizardStepAdditionalContactsComponent } from './components/wizard-step-
 import { WizardStepTransportTypeComponent } from './components/wizard-step-transport-type/wizard-step-transport-type.component';
 import { TbrWorkflowComponent } from './tbr-workflow.component';
 
+export { WizardSummaryComponent };
+
 export const WORKFLOW_COMPONENTS = [
   WizardStepAdditionalContactsComponent,
   WizardStepContactComponent,

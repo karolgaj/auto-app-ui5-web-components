@@ -1,13 +1,14 @@
 import { AfterViewInit, Component, forwardRef, Injector, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { DateTime } from 'luxon';
 import { filter, take } from 'rxjs/operators';
-
+import { fromEvent } from 'rxjs';
 import { CustomInputAbstract } from '../custom-input.abstract';
 import { selectUserDateFormat } from '../../../state';
-import { fromEvent } from 'rxjs';
 
+@UntilDestroy()
 @Component({
   selector: 'app-datepicker',
   templateUrl: './datepicker.component.html',

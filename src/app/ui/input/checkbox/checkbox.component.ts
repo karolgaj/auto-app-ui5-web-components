@@ -1,8 +1,10 @@
-import { Component, forwardRef, Injector } from '@angular/core';
-import { CustomInputAbstract } from '../custom-input.abstract';
+import { AfterViewInit, Component, forwardRef, Injector } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { fromEvent } from 'rxjs';
+import { CustomInputAbstract } from '../custom-input.abstract';
 
+@UntilDestroy()
 @Component({
   selector: 'app-checkbox',
   templateUrl: './checkbox.component.html',
@@ -15,13 +17,9 @@ import { fromEvent } from 'rxjs';
     },
   ],
 })
-export class CheckboxComponent extends CustomInputAbstract {
+export class CheckboxComponent extends CustomInputAbstract implements AfterViewInit {
   constructor(injector: Injector) {
     super(injector);
-  }
-
-  getId(): string {
-    return `custom-checkbox-${this._id}`;
   }
 
   ngAfterViewInit() {
@@ -31,5 +29,9 @@ export class CheckboxComponent extends CustomInputAbstract {
       this.onChange(this.value);
       this.markAsTouched();
     });
+  }
+
+  getId(): string {
+    return `custom-checkbox-${this._id}`;
   }
 }

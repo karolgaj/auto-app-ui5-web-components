@@ -45,7 +45,8 @@ export class ThuDetailsComponent {
         return this.store.select(selectedTbr).pipe(
           map((tbr) => {
             if (tbr) {
-              return tbr.lines.find((line: { articleNumber: string }) => line.articleNumber === articleNumber);
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+              return tbr.lines?.find((line: { articleNumber: string }) => line.articleNumber === articleNumber);
             }
             return undefined;
           })

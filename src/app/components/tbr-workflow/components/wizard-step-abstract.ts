@@ -14,6 +14,12 @@ export abstract class WizardStepAbstract implements OnInit {
   @Input()
   data!: Tbr;
 
+  @Input()
+  isLastStep = false;
+
+  @Input()
+  isStandaloneComponent = false;
+
   @Output()
   nextStep = new EventEmitter<number>();
 
@@ -24,6 +30,10 @@ export abstract class WizardStepAbstract implements OnInit {
   protected constructor(fb: FormBuilder) {
     this.fb = fb;
     this.createForm();
+  }
+
+  get nextButtonText(): string {
+    return this.isLastStep ? 'WORKFLOW.FINALIZE' : 'WORKFLOW.STEP';
   }
 
   abstract form: IFormGroup<any> | IFormArray<any>;
@@ -39,8 +49,7 @@ export abstract class WizardStepAbstract implements OnInit {
   }
 
   isValid(): boolean {
-    // return this.form.valid;
-    return true;
+    return this.form.valid;
   }
 
   goToNextStep(): void {
