@@ -210,6 +210,30 @@ export class TbrEffects {
     )
   );
 
+  addHazmatDetails$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.addHazmatDetails),
+      concatMap(({ shipitId, releaseLineId, hazmatDetails }) =>
+        this.xtrService.addHazmatDetails(shipitId, releaseLineId, hazmatDetails).pipe(
+          map((res) => TbrActions.addHazmatDetailsSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.addHazmatDetailsFailure({ error })))
+        )
+      )
+    )
+  );
+
+  deleteHazmatDetails$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.deleteHazmatDetails),
+      concatMap(({ shipitId, releaseLineId }) =>
+        this.xtrService.deleteHazmatDetails(shipitId, releaseLineId).pipe(
+          map((res) => TbrActions.deleteHazmatDetailsSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.addHazmatDetailsFailure({ error })))
+        )
+      )
+    )
+  );
+
   goToWorkflow$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TbrActions.goToWorkflow),

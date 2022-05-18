@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 // @ts-ignore
+import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+// @ts-ignore
 import * as tbrList from './mocks/tbr-list.mock-data.json';
 // @ts-ignore
 import * as details from './mocks/tbr-details.mock-data.json';
@@ -7,12 +10,10 @@ import * as details from './mocks/tbr-details.mock-data.json';
 import * as tbrNetworks from './mocks/tbr-network.mock-data.json';
 // @ts-ignore
 import * as reasonCodes from './mocks/reason-codes-data.json';
-import { Observable, of } from 'rxjs';
 import { TbrLightDetails } from '../models/tbr-light.model';
 import { TbrNetwork } from '../models/tbr-network.model';
 import { NetworkForm } from '../models/network-form.model';
 import { ReasonCodePayload } from '../models/reason-code.model';
-import { HttpClient } from '@angular/common/http';
 
 const tbrsList = tbrList;
 const tbrDetails = details;

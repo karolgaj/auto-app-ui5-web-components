@@ -1,7 +1,7 @@
 import { ShipitStatus } from './tbr-type.model';
 import { TbrLine } from './tbr-line.model';
 
-export interface Tbr {
+export interface Tbr extends Partial<BaseEntity> {
   additionalContacts?: AdditionalContact[];
   orderReleaseLines: OrderReleaseLine[];
   transportBookings: any[];
@@ -52,19 +52,21 @@ export interface Tbr {
   responsibleOffice: null;
   enabledOtmMode: null;
   transportOperationsMode: null;
+  crossDock: null;
+  lines?: TbrLine[];
+}
+export interface BaseEntity {
   id: number;
   version: number;
   createdAt: Date;
   updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
-  crossDock: null;
-  lines?: TbrLine[];
+  createdBy: null;
+  updatedBy: null;
 }
 
 export type ApprovalDecision = any;
 
-export interface Consignee {
+export interface Consignee extends BaseEntity {
   parma: string;
   type: string;
   category: null | string;
@@ -75,15 +77,9 @@ export interface Consignee {
   timeZone: null | string;
   logisticsAddress: null;
   address: Address | null;
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: null;
-  updatedBy: null;
 }
 
-export interface Address {
+export interface Address extends Partial<BaseEntity> {
   latitude: string;
   longitude: string;
   street1: string;
@@ -93,19 +89,13 @@ export interface Address {
   city: string;
   county: string;
   country: string;
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: null;
-  updatedBy: null;
 }
 
 export enum AtedBy {
   V0C0385 = 'v0c0385',
 }
 
-export interface OrderReleaseLine {
+export interface OrderReleaseLine extends Partial<BaseEntity> {
   releaseLineId: string;
   hashkey: string;
   articleName: string;
@@ -127,23 +117,22 @@ export interface OrderReleaseLine {
   mixId: null;
   userThu: boolean;
   addedManually: null;
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
+  dangerousGoods: boolean;
+  hazmatDetails: HazmatDetails;
 }
 
 export enum WeightUom {
   Kg = 'KG',
 }
+export interface HazmatDetails extends Partial<BaseEntity> {
+  dgClass: string;
+  dgPackagingGroup: string;
+  dgProperName: string;
+  hazmatUncode: string;
+}
 
-export interface ShipUnitLine {
+export interface ShipUnitLine extends Partial<BaseEntity> {
   shipUnitLineId: string;
-  dgClass: null;
-  dgPackagingGroup: null;
-  dgProperName: null;
   quantity: string;
   sequence: null;
   weight: string;
@@ -152,18 +141,10 @@ export interface ShipUnitLine {
   volumeUom: string;
   transportHandlingUnits: TransportHandlingUnit[];
   releaseLineIds: string[];
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
 }
 
-export interface TransportHandlingUnit {
+export interface TransportHandlingUnit extends Partial<BaseEntity> {
   baseType: string;
-  dangerousGoods: boolean;
-  hazmatUncode: null;
   description: string;
   dimensions: null;
   dimensionsUom: string;
@@ -192,27 +173,15 @@ export interface TransportHandlingUnit {
   subThu: boolean;
   fullThu: boolean;
   packMaterialLayer: PackMaterialLayer[];
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
 }
 
-export interface PackMaterialLayer {
+export interface PackMaterialLayer extends Partial<BaseEntity> {
   numberOfLayers: number;
   maxPackMaterialPerLayer: number;
   packMaterial: PackMaterial[];
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
 }
 
-export interface PackMaterial {
+export interface PackMaterial extends Partial<BaseEntity> {
   imgUrl: string;
   materialNumber: string;
   materialDescription: string;
@@ -234,12 +203,6 @@ export interface PackMaterial {
   packInstructionKey: string;
   mixReleaseLineRef: null;
   orderReleaseLineRef: null | string;
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: AtedBy;
-  updatedBy: AtedBy;
 }
 
 export enum ParentMaterialNumber {
@@ -249,7 +212,7 @@ export enum ParentMaterialNumber {
   The001123 = '001123',
 }
 
-export interface TransportNetwork {
+export interface TransportNetwork extends Partial<BaseEntity> {
   networkId: string;
   serviceLevel: string;
   deliveryLeadTime: string;
@@ -262,12 +225,6 @@ export interface TransportNetwork {
   useLoadingMeters: boolean;
   freightClass: string;
   valid: boolean;
-  id: number;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: null;
-  updatedBy: null;
 }
 
 export interface AdditionalContact {

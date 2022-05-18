@@ -22,6 +22,7 @@
       "mixId": null,
       "userThu": false,
       "addedManually": null,
+      "dangerousGoods": false,
       "id": 8035,
       "version": 1,
       "createdAt": "2021-12-29T08:22:24.010+00:00",
@@ -51,6 +52,7 @@
       "mixId": null,
       "userThu": false,
       "addedManually": null,
+      "dangerousGoods": false,
       "id": 8036,
       "version": 1,
       "createdAt": "2021-12-29T08:22:24.012+00:00",
@@ -80,6 +82,7 @@
       "mixId": null,
       "userThu": false,
       "addedManually": null,
+      "dangerousGoods": false,
       "id": 8037,
       "version": 1,
       "createdAt": "2021-12-29T08:22:24.013+00:00",
@@ -109,6 +112,7 @@
       "mixId": null,
       "userThu": false,
       "addedManually": null,
+      "dangerousGoods": false,
       "id": 8038,
       "version": 1,
       "createdAt": "2021-12-29T08:22:24.013+00:00",
@@ -121,9 +125,7 @@
   "shipUnitLines": [
     {
       "shipUnitLineId": "ES10000983Q-001",
-      "dgClass": null,
-      "dgPackagingGroup": null,
-      "dgProperName": null,
+
       "quantity": "1",
       "sequence": null,
       "weight": "29.233",
@@ -133,8 +135,6 @@
       "transportHandlingUnits": [
         {
           "baseType": "K750",
-          "dangerousGoods": false,
-          "hazmatUncode": null,
           "description": "",
           "dimensions": null,
           "dimensionsUom": "MM",
@@ -334,9 +334,6 @@
     },
     {
       "shipUnitLineId": "ES10000983Q-002",
-      "dgClass": null,
-      "dgPackagingGroup": null,
-      "dgProperName": null,
       "quantity": "1",
       "sequence": null,
       "weight": "54.631",
@@ -346,8 +343,6 @@
       "transportHandlingUnits": [
         {
           "baseType": "K100",
-          "dangerousGoods": false,
-          "hazmatUncode": null,
           "description": "",
           "dimensions": null,
           "dimensionsUom": "MM",
@@ -605,9 +600,7 @@
     },
     {
       "shipUnitLineId": "ES10000983Q-003",
-      "dgClass": null,
-      "dgPackagingGroup": null,
-      "dgProperName": null,
+
       "quantity": "1",
       "sequence": null,
       "weight": "156.556",
@@ -617,8 +610,6 @@
       "transportHandlingUnits": [
         {
           "baseType": "H",
-          "dangerousGoods": false,
-          "hazmatUncode": null,
           "description": "",
           "dimensions": null,
           "dimensionsUom": "MM",
@@ -818,9 +809,6 @@
     },
     {
       "shipUnitLineId": "ES10000983Q-004",
-      "dgClass": null,
-      "dgPackagingGroup": null,
-      "dgProperName": null,
       "quantity": "1",
       "sequence": null,
       "weight": "48.121",
@@ -830,8 +818,6 @@
       "transportHandlingUnits": [
         {
           "baseType": "K750",
-          "dangerousGoods": false,
-          "hazmatUncode": null,
           "description": "",
           "dimensions": null,
           "dimensionsUom": "MM",

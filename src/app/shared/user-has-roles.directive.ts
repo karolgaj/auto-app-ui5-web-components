@@ -1,24 +1,21 @@
 import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { UserRole } from '../models/user.model';
-import { selectUserData } from '../state';
 import { filter, map } from 'rxjs/operators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UserRole } from '../models/user.model';
+import { selectUserData } from '../state';
 
 @UntilDestroy()
 @Directive({
   selector: '[appUserHasRoles]',
 })
 export class UserHasRolesDirective implements OnInit {
-  constructor(private templateRef: TemplateRef<unknown>, private viewContainerRef: ViewContainerRef, private store: Store) {}
-
   @Input()
   appUserHasRoles!: UserRole[];
-
   @Input()
   appUserHasRolesElse?: TemplateRef<unknown>;
-
   private isVisible = false;
+  constructor(private templateRef: TemplateRef<unknown>, private viewContainerRef: ViewContainerRef, private store: Store) {}
 
   ngOnInit() {
     this.store
