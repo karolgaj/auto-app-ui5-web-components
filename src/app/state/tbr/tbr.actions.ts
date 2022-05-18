@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Tbr } from '../../models/tbr.model';
+import { Tbr, HazmatDetails } from '../../models/tbr.model';
 import { TbrLightDetails } from '../../models/tbr-light.model';
 import { NetworkForm } from '../../models/network-form.model';
 import { TbrNetwork } from '../../models/tbr-network.model';
@@ -96,3 +96,14 @@ export const goToWorkflow = createAction('[XTR] Go to workflow', props<{ data: {
 export const goToWorkflowSuccess = createAction('[XTR] Go to workflow Success', props<{ data: Tbr }>());
 
 export const goToWorkflowSummary = createAction('[XTR] Go to workflow summary', props<{ data?: Tbr }>());
+
+export const addHazmatDetails = createAction(
+  '[Express] Add hazmat details',
+  props<{ shipitId: string; releaseLineId: string; hazmatDetails: HazmatDetails }>()
+);
+export const addHazmatDetailsSuccess = createAction('[Express] Addd hazmat details Success', props<{ data: Tbr }>());
+export const addHazmatDetailsFailure = createAction('[Express] Add hazmat details Failure', props<{ error: unknown }>());
+
+export const deleteHazmatDetails = createAction('[Express] Add hazmat details', props<{ shipitId: string; releaseLineId: string }>());
+export const deleteHazmatDetailsSuccess = createAction('[Express] Addd hazmat details Success', props<{ data: Tbr }>());
+export const deleteHazmatDetailsFailure = createAction('[Express] Add hazmat details Failure', props<{ error: unknown }>());

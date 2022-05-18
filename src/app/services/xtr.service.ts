@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TbrLightDetails } from '../models/tbr-light.model';
-import { Tbr } from '../models/tbr.model';
+import { HazmatDetails, Tbr } from '../models/tbr.model';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +38,10 @@ export class XtrService {
     return this.http.put(`/gateway/api/xtr/v3/xtr/${shipItId}/manual/thu/{releaseLine}`, {});
   }
 
+  addHazmatDetails(shipItId: string, releaseLineId: string, hazmatDetails: HazmatDetails): Observable<Tbr> {
+    return this.http.put<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/hazmat/${releaseLineId}`, hazmatDetails);
+  }
+
   /* PATCH METHODS */
 
   updateReference(shipItId: string, pickupReference: string, messageToCarrier: string): Observable<any> {
@@ -51,6 +55,10 @@ export class XtrService {
 
   deleteOldXTRs(): Observable<any> {
     return this.http.delete('/gateway/api/xtr/v3/xtr');
+  }
+
+  deleteHazmatDetails(shipItId: string, releaseLineId: string): Observable<Tbr> {
+    return this.http.delete<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/hazmat/${releaseLineId}`);
   }
 
   /* GET METHODS */

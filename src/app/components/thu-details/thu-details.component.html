@@ -35,7 +35,7 @@
     </div>
     <ui5-panel [attr.header-text]="'COMMON.HAZMATS' | translate | titlecase">
       <ui5-bar class="transparent-bg">
-        <ui5-button slot="startContent" icon="add" (click)="openAddHazmatDialog()">
+        <ui5-button slot="startContent" *ngIf="!line.dangerousGoods" icon="add" (click)="openAddHazmatDialog()">
           {{ 'HAZMAT_DETAILS.ADD_HAZMAT' | translate | titlecase }}
         </ui5-button>
       </ui5-bar>
@@ -52,6 +52,16 @@
         <ui5-table-column slot="columns">
           <span> {{ 'HAZMAT_DETAILS.HAZMAT_UNCODE' | translate }} </span>
         </ui5-table-column>
+        <ui5-table-column slot="columns">
+        </ui5-table-column>
+
+        <ui5-table-row *ngFor="let hazmat of addHazmatFormGroup.controls" [formGroup]="getFormGroup(hazmat)">
+          <ui5-table-cell><app-input formControlName="dgClass"></app-input> </ui5-table-cell>
+          <ui5-table-cell><app-input formControlName="dgPackagingGroup"></app-input> </ui5-table-cell>
+          <ui5-table-cell><app-input formControlName="dgProperName"></app-input></ui5-table-cell>
+          <ui5-table-cell><app-input formControlName="hazmatUncode"></app-input></ui5-table-cell>
+          <ui5-table-cell><ui5-button icon="delete" (click)="removeHazmatDetails()" ></ui5-button ></ui5-table-cell>
+        </ui5-table-row>
       </ui5-table>
     </ui5-panel>
     <ui5-panel [attr.header-text]="'COMMON.THU_LONG' | translate | titlecase">
@@ -132,24 +142,30 @@
   [dialogHeader]="'HAZMAT_DETAILS.ADD_HAZMAT' | translate | titlecase"
   (close)="cancelAddHazmat()"
   (save)="saveAddHazmat()">
-  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="addHazmatFormGroup">
+  <div
+    *ngIf="addHazmatFormGroup.controls.length"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="1rem"
+    class="custom-address-form"
+    [formGroup]="getFormGroup(addHazmatFormGroup.controls[0])">
     <app-input
-      formControlName="hazmatClass"
+      formControlName="dgClass"
       [inputClasses]="['w-100']"
       [vertical]="true"
       [label]="'HAZMAT_DETAILS.HAZMAT_CLASS' | translate | titlecase"></app-input>
     <app-input
-      formControlName="hazmatPackagingGroup"
+      formControlName="dgPackagingGroup"
       [inputClasses]="['w-100']"
       [vertical]="true"
       [label]="'HAZMAT_DETAILS.HAZMAT_PACKAGING_GROUP' | translate | titlecase"></app-input>
     <app-input
-      formControlName="hazmatPropperShippingName"
+      formControlName="dgProperName"
       [inputClasses]="['w-100']"
       [vertical]="true"
       [label]="'HAZMAT_DETAILS.HAZMAT_PROPPER_SHIPPING_NAME' | translate | titlecase"></app-input>
     <app-input
-      formControlName="hazmatUnode"
+      formControlName="hazmatUncode"
       [inputClasses]="['w-100']"
       [vertical]="true"
       [label]="'HAZMAT_DETAILS.HAZMAT_UNCODE' | translate | titlecase"></app-input>

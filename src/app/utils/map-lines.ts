@@ -31,6 +31,7 @@ function mapTBRLine(
     // For THU type and shipQty validation. Default is that all is ok
     valueStateTHU: 'None',
     valueStateQty: 'None',
+    dangerousGoods: oORL.dangerousGoods,
     whLoc: oORL.additionalInternalDestination,
   };
 
