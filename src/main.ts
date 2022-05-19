@@ -29,6 +29,7 @@ import '@ui5/webcomponents-fiori/dist/Bar';
 import '@ui5/webcomponents-fiori/dist/ShellBar';
 import '@ui5/webcomponents-fiori/dist/illustrations/NoData';
 import '@ui5/webcomponents-fiori/dist/IllustratedMessage';
+import '@ui5/webcomponents/dist/features/InputElementsFormSupport';
 import '@ui5/webcomponents-fiori/dist/Wizard';
 import '@ui5/webcomponents-icons/dist/AllIcons';
 

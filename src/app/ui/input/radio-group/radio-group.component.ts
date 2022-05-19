@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, forwardRef, Injector, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Injector, Input } from '@angular/core';
 import { FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CustomInputAbstract } from '../custom-input.abstract';
@@ -16,7 +16,7 @@ import { SelectionOption } from '../../../models/selection-option.model';
     },
   ],
 })
-export class RadioGroupComponent extends CustomInputAbstract implements AfterViewInit, OnInit {
+export class RadioGroupComponent extends CustomInputAbstract {
   @Input()
   options: SelectionOption<any>[] = [];
 
@@ -27,13 +27,6 @@ export class RadioGroupComponent extends CustomInputAbstract implements AfterVie
 
   constructor(injector: Injector) {
     super(injector);
-  }
-
-  ngOnInit(): void {
-    super.ngOnInit();
-    this.formGroup = new FormGroup({
-      radio: this.formControl,
-    });
   }
 
   getId(): string {
