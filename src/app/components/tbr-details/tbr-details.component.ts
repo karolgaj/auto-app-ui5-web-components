@@ -18,6 +18,13 @@ interface AddLineForm {
   partNo: string;
   plannedQty: number;
   poNumber: string;
+  description: string;
+  weight: string;
+}
+
+interface AddLineOptions {
+  text: string;
+  value: string;
 }
 
 interface AddRefForm {
@@ -49,19 +56,20 @@ export class TbrDetailsComponent {
   linesTable!: ElementRef;
 
   private details$ = this.store.select(selectedTbr);
+  addLineOptions: AddLineOptions[] = [{ text: 'Volvo part', value: 'value' }];
   tbrDetails?: Tbr;
   lines?: ExtendedTbrLine[];
   selectedRowsIndexes: number[] = [];
   addLineFormGroup!: IFormGroup<AddLineForm>;
   addRefFormGroup!: IFormGroup<AddRefForm>;
   deliveryDateFormControl!: IFormControl<string>;
+  addLineOptionsFormControl!: IFormControl<AddLineOptions>;
 
   private fb: IFormBuilder;
 
   constructor(private router: Router, private tbrService: TbrService, private store: Store, fb: FormBuilder) {
     this.fb = fb;
     this.createForm();
-
     this.details$.pipe(untilDestroyed(this)).subscribe((value) => {
       this.tbrDetails = value;
       if (this.tbrDetails == null) {
@@ -203,6 +211,8 @@ export class TbrDetailsComponent {
       partNo: [null, Validators.required],
       plannedQty: [null, Validators.required],
       poNumber: [null, Validators.required],
+      description: [null],
+      weight: [null],
     });
 
     this.addRefFormGroup = this.fb.group<AddRefForm>({
@@ -212,6 +222,7 @@ export class TbrDetailsComponent {
       orderNumber: [null],
       pickupRef: [null],
     });
+    this.addLineOptionsFormControl = this.fb.control<AddLineOptions>(this.addLineOptions[0]);
 
     this.deliveryDateFormControl = this.fb.control<string>(null, [Validators.required, CommonValidators.IsNotPastDateValidator()]);
   }

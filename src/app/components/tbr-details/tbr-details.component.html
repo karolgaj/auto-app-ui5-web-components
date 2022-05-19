@@ -99,7 +99,6 @@
           </ui5-table-cell>
           <ui5-table-cell>{{ line.dangerousGoods }}</ui5-table-cell>
           <ui5-table-cell>{{ line.whLoc }}</ui5-table-cell>
-
         </ui5-table-row>
       </ui5-table>
     </div>
@@ -124,6 +123,11 @@
   <app-tbr-empty-state></app-tbr-empty-state>
 </ng-template>
 <app-dialog #addLineDialog [dialogHeader]="'TBR_DETAILS.ADD_LINE' | translate | titlecase" (close)="cancelAddLine()" (save)="saveAddLine()">
+  <app-radio-group
+    *ngIf="addLineOptionsFormControl"
+    [options]="addLineOptions"
+    [formControl]="addLineOptionsFormControl">
+  </app-radio-group>
   <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="addLineFormGroup">
     <app-input
       formControlName="partNo"
@@ -140,6 +144,16 @@
       [inputClasses]="['w-100']"
       [vertical]="true"
       [label]="'COMMON.PO_NUMBER' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="description"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.DESCRIPTION' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="weight"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.WEIGHT_PART' | translate | titlecase"></app-input>
   </div>
 </app-dialog>
 
