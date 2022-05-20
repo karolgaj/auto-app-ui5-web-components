@@ -123,17 +123,21 @@
   <app-tbr-empty-state></app-tbr-empty-state>
 </ng-template>
 <app-dialog #addLineDialog [dialogHeader]="'TBR_DETAILS.ADD_LINE' | translate | titlecase" (close)="cancelAddLine()" (save)="saveAddLine()">
-  <app-radio-group
-    *ngIf="addLineOptionsFormControl"
-    [options]="addLineOptions"
-    [formControl]="addLineOptionsFormControl">
+  <app-radio-group *ngIf="addLineOptionsFormControl" [options]="addLineOptions" [formControl]="addLineOptionsFormControl">
   </app-radio-group>
   <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="addLineFormGroup">
     <app-input
       formControlName="partNo"
       [inputClasses]="['w-100']"
       [vertical]="true"
+      *ngIf="addLineType === 'VolvoPart'"
       [label]="'COMMON.PART_NUMBER' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="description"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      *ngIf="addLineType === 'OtherPart'"
+      [label]="'COMMON.DESCRIPTION' | translate | titlecase"></app-input>
     <app-input
       formControlName="plannedQty"
       [inputClasses]="['w-100']"
@@ -143,16 +147,13 @@
       formControlName="poNumber"
       [inputClasses]="['w-100']"
       [vertical]="true"
+      *ngIf="addLineType === 'VolvoPart'"
       [label]="'COMMON.PO_NUMBER' | translate | titlecase"></app-input>
-    <app-input
-      formControlName="description"
-      [inputClasses]="['w-100']"
-      [vertical]="true"
-      [label]="'COMMON.DESCRIPTION' | translate | titlecase"></app-input>
     <app-input
       formControlName="weight"
       [inputClasses]="['w-100']"
       [vertical]="true"
+      *ngIf="addLineType === 'OtherPart'"
       [label]="'COMMON.WEIGHT_PART' | translate | titlecase"></app-input>
   </div>
 </app-dialog>

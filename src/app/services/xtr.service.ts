@@ -99,6 +99,10 @@ export class XtrService {
     return this.http.get<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/line/add/${purchaseOrderNumber}/${partNumber}/${quantity}`);
   }
 
+  addLineWithoutPartNumber(shipItId: string, description: string, plannedQty: number, weight: string): Observable<Tbr> {
+    return this.http.get<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/line/add/other/${description}/${plannedQty}/${weight}`);
+  }
+
   getXtrByShipItId(shipItId: string): Observable<Tbr> {
     return this.http.get<Tbr>(`/gateway/api/xtr/v3/xtr/shipit/${shipItId}`);
   }

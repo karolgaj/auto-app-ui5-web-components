@@ -228,7 +228,7 @@ export class TbrEffects {
       concatMap(({ shipitId, releaseLineId }) =>
         this.xtrService.deleteHazmatDetails(shipitId, releaseLineId).pipe(
           map((res) => TbrActions.deleteHazmatDetailsSuccess({ data: res })),
-          catchError((error: unknown) => of(TbrActions.addHazmatDetailsFailure({ error })))
+          catchError((error: unknown) => of(TbrActions.deleteHazmatDetailsFailure({ error })))
         )
       )
     )
@@ -304,6 +304,18 @@ export class TbrEffects {
       map(({ data }) => {
         return TbrActions.goToWorkflowSummary({ data });
       })
+    )
+  );
+
+  addLineWithoutPartNumber$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.addLineWithoutPartNumber),
+      concatMap(({ data }) =>
+        this.xtrService.addLineWithoutPartNumber(data.shipItId, data.description, data.plannedQty, data.weight).pipe(
+          map((res) => TbrActions.addLineWithoutPartNumberSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.addLineWithoutPartNumberFailure({ error })))
+        )
+      )
     )
   );
 
