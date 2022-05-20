@@ -1,8 +1,8 @@
 import { AfterViewInit, Directive, ElementRef, Injector, Input, OnInit, ViewChild } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormControlDirective, FormControlName, FormGroupDirective, NgControl } from '@angular/forms';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Observable } from 'rxjs';
 import { untilDestroyed } from '@ngneat/until-destroy';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 
 let id = 0;
 
@@ -35,7 +35,10 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   vertical = false;
 
   @Input()
-  formatValue?: (value: any) => any;
+  formatValue?: (value: any) => any | Observable<any>;
+
+  @Input()
+  readonly = false;
 
   @ViewChild('customInput')
   customInput!: ElementRef;
@@ -62,6 +65,10 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
       this.onChange(this.value);
       this.markAsTouched();
     });
+
+    if (this.readonly) {
+      this.customInput.nativeElement.setAttribute('readonly', true);
+    }
   }
 
   ngOnInit(): void {
@@ -101,8 +108,27 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   }
 
   writeValue(value: any): void {
-    this.formattedValue = this.formatValue ? this.formatValue(value) : value;
-    this.value = value;
+    if (this.formatValue == null) {
+      this.formattedValue = value;
+      this.value = value;
+      return;
+    }
+
+    if (this.assertIsObservable(this.formatValue(value))) {
+      this.formatValue(value)
+        .pipe(take(1))
+        .subscribe((v: any) => {
+          this.formattedValue = v;
+          this.value = value;
+        });
+    } else {
+      this.formattedValue = this.formatValue(value);
+      this.value = value;
+    }
+  }
+
+  assertIsObservable(value: any): value is Observable<any> {
+    return !!value?.source;
   }
 
   registerOnChange(onChange: any): void {

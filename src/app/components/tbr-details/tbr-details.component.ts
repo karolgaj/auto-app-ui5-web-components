@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { IFormBuilder, IFormControl, IFormGroup } from '@rxweb/types';
 import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-
-import { TbrService } from '../../services';
 import { TbrLine } from '../../models/tbr-line.model';
 import { addLine, goToWorkflow, goToWorkflowSummary, selectedTbr, splitLine, updateReference } from '../../state';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
@@ -58,7 +56,7 @@ export class TbrDetailsComponent {
 
   private fb: IFormBuilder;
 
-  constructor(private router: Router, private tbrService: TbrService, private store: Store, fb: FormBuilder) {
+  constructor(private router: Router, private store: Store, fb: FormBuilder) {
     this.fb = fb;
     this.createForm();
 

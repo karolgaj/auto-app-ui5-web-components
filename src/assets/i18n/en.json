@@ -42,6 +42,7 @@
     "BUTTON_SEND_TO_APPROVAL": "Send to Approval",
     "BUTTON_APPROVAL": "Approval",
     "BUTTON_APPROVE": "Approve",
+    "BUTTON_DISAPPROVE": "Disapprove",
     "NO_DATA": "No data",
     "ADDRESS_NAME": "Name",
     "ADDRESS_COUNTRY": "Country",
@@ -129,7 +130,9 @@
     "BUTTON_CREATE_EXPRESS": "Create Express",
     "BUTTON_CREATE_TBR": "Create TBR",
     "BUTTON_REMOVE_ALL": "Remove All",
-    "BASKET": "Basket"
+    "BASKET": "Basket",
+    "APPROVED": "Approved",
+    "UNAPPROVED": "Unapproved"
   },
   "NETWORK_FORM": {
     "VALID_FROM_TO": "valid from - to",

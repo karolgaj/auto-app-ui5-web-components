@@ -1,5 +1,6 @@
-<div fxLayout="column" fxLayoutAlign="space-between" style="height: 100%">
+<div *appUserHasRoles="['EXPRESS_REQUESTER_LIMITED']" fxLayout="column" fxLayoutAlign="space-between" style="height: 100%">
   <ui5-bar design="Header" slot="header">
+    {{'LIMITED'}}
     <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
       {{ 'COMMON.BUTTON_CLOSE' | translate }}
     </ui5-button>
@@ -9,23 +10,25 @@
     <app-input
       [placeholder]="'COMMON.SHIP_FROM' | translate | titlecase"
       [label]="'COMMON.SHIP_FROM' | translate | titlecase"
+      [formatValue]="formatShipFromValue"
       formControlName="shipFrom"
+      [readonly]="true"
       [required]="true"
       [icons]="[
         { icon: 'add-contact', action: openCustomShipFromAddressDialogBound },
         { icon: 'value-help', action: openShipFromListDialogBound }
       ]"></app-input>
-
-    <app-input
-      [placeholder]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"
-      [label]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"
-      formControlName="loadingPoint"
-      [icons]="[{ icon: 'value-help', action: openLoadingPointDialogBound }]"></app-input>
-
+    <!--    <app-input-->
+    <!--      [placeholder]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"-->
+    <!--      [label]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"-->
+    <!--      formControlName="loadingPoint"-->
+    <!--      [icons]="[{ icon: 'value-help', action: openLoadingPointDialogBound }]"></app-input>-->
     <app-input
       [placeholder]="'COMMON.SHIP_TO' | translate | titlecase"
       [label]="'COMMON.SHIP_TO' | translate | titlecase"
+      [formatValue]="formatShipToValue"
       formControlName="shipTo"
+      [readonly]="true"
       [required]="true"
       [icons]="[
         { icon: 'add-contact', action: openCustomShipToAddressDialogBound },
@@ -35,6 +38,7 @@
       [placeholder]="'COMMON.UNLOADING_POINT' | translate | titlecase"
       [label]="'COMMON.UNLOADING_POINT' | translate | titlecase"
       formControlName="unloadingPoint"
+      [readonly]="true"
       [required]="true"
       [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"></app-input>
 
@@ -43,7 +47,8 @@
       [label]="'COMMON.CONSIGNEE' | translate | titlecase"
       formControlName="consignee"
       [required]="true"
-      [icons]="[{ icon: 'value-help', action: openConsigneeDialogBound }]"></app-input>
+      [readonly]="true"
+    ></app-input>
 
     <app-input
       class="after-icon"
@@ -51,6 +56,7 @@
       [label]="'COMMON.CONSIGNOR' | translate | titlecase"
       formControlName="consignor"
       [showColon]="true"
+      [formatValue]="formatConsignorValue"
       [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]">
       <ui5-icon name="question-mark" after (click)="toggleAvailableNetwork()"></ui5-icon>
     </app-input>
@@ -102,7 +108,112 @@
       formControlName="transportType"></app-select>
 
     <app-checkbox formControlName="customs" [label]="'COMMON.CUSTOMS' | translate"></app-checkbox>
-<!--    <app-checkbox formControlName="useLoadingMeters" [label]="'COMMON.USE_LOADING_METERS' | translate | titlecase"></app-checkbox>-->
+    <!--    <app-checkbox formControlName="useLoadingMeters" [label]="'COMMON.USE_LOADING_METERS' | translate | titlecase"></app-checkbox>-->
+  </div>
+  <ui5-bar design="Footer">
+    <div slot="endContent">
+      <ui5-button design="Emphasized" (click)="createTbr()"> {{ 'COMMON.BUTTON_CREATE' | translate }} </ui5-button>
+    </div>
+  </ui5-bar>
+</div>
+<div *appUserHasRoles="['EXPRESS_REQUESTER_UNLIMITED']" fxLayout="column" fxLayoutAlign="space-between" style="height: 100%">
+  <ui5-bar design="Header" slot="header">
+    {{'UNLIMITED'}}
+    <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
+      {{ 'COMMON.BUTTON_CLOSE' | translate }}
+    </ui5-button>
+  </ui5-bar>
+
+  <div fxLayout="column" fxFlex fxLayoutAlign="stetch center" fxLayoutGap="1rem" class="network-form" [formGroup]="networkForm">
+    <app-input
+      [placeholder]="'COMMON.SHIP_FROM' | translate | titlecase"
+      [label]="'COMMON.SHIP_FROM' | translate | titlecase"
+      [formatValue]="formatShipFromValue"
+      formControlName="shipFrom"
+      [required]="true"
+      [icons]="[
+        { icon: 'add-contact', action: openCustomShipFromAddressDialogBound },
+      ]"></app-input>
+
+    <app-input
+      [placeholder]="'COMMON.SHIP_TO' | translate | titlecase"
+      [label]="'COMMON.SHIP_TO' | translate | titlecase"
+      [formatValue]="formatShipToValue"
+      formControlName="shipTo"
+      [required]="true"
+      [icons]="[
+        { icon: 'add-contact', action: openCustomShipToAddressDialogBound },
+      ]"></app-input>
+    <app-input
+      [placeholder]="'COMMON.UNLOADING_POINT' | translate | titlecase"
+      [label]="'COMMON.UNLOADING_POINT' | translate | titlecase"
+      formControlName="unloadingPoint"
+      [required]="true"
+      [icons]="[{ icon: 'value-help', action: openUnloadingPointDialogBound }]"></app-input>
+
+    <app-input
+      [placeholder]="'COMMON.CONSIGNEE' | translate | titlecase"
+      [label]="'COMMON.CONSIGNEE' | translate | titlecase"
+      formControlName="consignee"
+      [icons]="[{ icon: 'value-help', action: openConsigneeDialogBound }]"></app-input>
+
+    <app-input
+      class="after-icon"
+      [placeholder]="'COMMON.CONSIGNOR' | translate | titlecase"
+      [label]="'COMMON.CONSIGNOR' | translate | titlecase"
+      formControlName="consignor"
+      [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]">
+      <ui5-icon name="question-mark" after (click)="toggleAvailableNetwork()"></ui5-icon>
+    </app-input>
+
+    <div class="table-container">
+      <ui5-table mode="SingleSelect" *ngIf="showAvailableNetwork">
+        <ui5-table-column slot="columns">
+          <span>{{ 'COMMON.CONSIGNOR' | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ 'COMMON.SHIP_FROM' | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ 'COMMON.UNLOAD_POINT' | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ 'COMMON.STREET_ADDRESS' | translate | titlecase }}</span>
+        </ui5-table-column>
+        <ui5-table-column slot="columns">
+          <span>{{ 'NETWORK_FORM.VALID_FROM_TO' | translate | titlecase }}</span>
+        </ui5-table-column>
+
+        <ui5-table-row (click)="chooseNetwork(row)" *ngFor="let row of availableNetworks$ | async">
+          <ui5-table-cell>{{ row.consignorId }}</ui5-table-cell>
+          <ui5-table-cell>{{ row.shipFromId }}</ui5-table-cell>
+          <ui5-table-cell>{{ row.unloadingPoint }}</ui5-table-cell>
+          <ui5-table-cell></ui5-table-cell>
+          <ui5-table-cell>{{ row.validFrom | date }} - {{ row.validTo | date }}</ui5-table-cell>
+        </ui5-table-row>
+      </ui5-table>
+    </div>
+
+    <app-datepicker formControlName="pickupDate" [required]="true" [label]="'COMMON.PICKUP_DATE' | translate | titlecase"></app-datepicker>
+
+    <app-select
+      [placeholder]="'COMMON.SERVICE_LEVEL' | translate | titlecase"
+      [label]="'COMMON.SERVICE_LEVEL' | translate | titlecase"
+      [selectionOptions]="serviceLevelOptions"
+      formControlName="serviceLevel"></app-select>
+    <app-select
+      [placeholder]="'COMMON.PLANNING_TYPE' | translate"
+      [label]="'COMMON.PLANNING_TYPE' | translate | titlecase"
+      [selectionOptions]="planningTypesOptions"
+      formControlName="planningType"></app-select>
+    <app-select
+      [placeholder]="'COMMON.TRANSPORT_TYPE' | translate"
+      [label]="'COMMON.TRANSPORT_TYPE' | translate | titlecase"
+      [selectionOptions]="transportTypeOptions"
+      formControlName="transportType"></app-select>
+
+    <app-checkbox formControlName="customs" [label]="'COMMON.CUSTOMS' | translate"></app-checkbox>
+    <!--    <app-checkbox formControlName="useLoadingMeters" [label]="'COMMON.USE_LOADING_METERS' | translate | titlecase"></app-checkbox>-->
   </div>
   <ui5-bar design="Footer">
     <div slot="endContent">
@@ -112,56 +223,92 @@
 </div>
 
 <app-dialog
-  #parmaDialog
-  [dialogHeader]="parmaDialogHeader | translate | titlecase"
+  #consignorDialog
+  [dialogHeader]="'COMMON.CONSIGNOR' | translate | titlecase"
   [hideDefaultFooter]="true"
-  [accessibleName]="parmaDialogAccessibleName">
+  [accessibleName]="'Consignor Value Help'">
   <!--  <app-input placeholder="Search" [control]="networkForm.controls.pickupDate" [icons]="[{ icon: 'clear' }]"></app-input>-->
 
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
-      *ngFor="let parma of consignors$ | async"
-      [description]="parma.info"
-      [additionalText]="parma.parma"
-      (click)="selectParma(parma)">
-      {{ parma.name }}
+      *ngFor="let consignor of lostOfConsignors$ | async"
+      [description]="consignor.parmaId"
+      [additionalText]="consignor.parmaCountryCode"
+      (click)="selectConsignor(consignor)">
+      {{ consignor.parmaName }}
     </ui5-li>
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeParmaDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
+    <ui5-button design="Transparent" (click)="consignorDialog.closeDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
   </div>
 </app-dialog>
 
-<app-dialog #unloadingPointDialog dialogHeader="Unloading point" [hideDefaultFooter]="true" accessibleName="Unloading point value help">
+<app-dialog
+  #consigneeDialog
+  [dialogHeader]="'COMMON.CONSIGNEE' | translate | titlecase"
+  [hideDefaultFooter]="true"
+  [accessibleName]="'Consignees Value Help'">
+  <!--  <app-input placeholder="Search" [control]="networkForm.controls.pickupDate" [icons]="[{ icon: 'clear' }]"></app-input>-->
+
+  <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
+    <ui5-li
+      *ngFor="let consignee of listOfConsignees$"
+      [description]="consignee.parmaId"
+      [additionalText]="consignee.parmaCountryCode"
+      (click)="selectConsignee(consignee)">
+      {{ consignee.parmaName }}
+    </ui5-li>
+  </ui5-list>
+
+  <div slot="footer">
+    <ui5-button design="Transparent" (click)="consigneeDialog.closeDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
+  </div>
+</app-dialog>
+
+<app-dialog #unloadingPointDialogRef dialogHeader="Unloading point" [hideDefaultFooter]="true" accessibleName="Unloading point value help">
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
       *ngFor="let unloadPoint of unloadingPoints$ | async"
-      [description]="unloadPoint.unloadingPoint"
-      [additionalText]="unloadPoint.serviceLevel"
       (click)="selectLoadingPoint(unloadPoint)">
-      {{ unloadPoint.shipToName }}
+      {{ unloadPoint }}
     </ui5-li>
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeUnloadingPointDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
+    <ui5-button design="Transparent" (click)="unloadingPointDialogRef.closeDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
   </div>
 </app-dialog>
 
-<app-dialog #shipListDialog [hideDefaultFooter]="true" [dialogHeader]="shipListDialogHeader | translate | titlecase">
+<app-dialog #shipFromListDialog [hideDefaultFooter]="true" [dialogHeader]="'COMMON.SHIP_FROM' | translate | titlecase">
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
-      *ngFor="let shipItem of shipItems$ | async"
-      [description]="shipItem.info"
-      [additionalText]="shipItem.parma"
-      (click)="selectShipItem(shipItem)">
-      {{ shipItem.name }}
+      *ngFor="let shipFrom of listOfShipFrom$ | async"
+      [description]="shipFrom.parmaId"
+      [additionalText]="shipFrom.parmaCountryCode"
+      (click)="selectShipItem(shipFrom)">
+      {{ shipFrom.parmaName }}
     </ui5-li>
   </ui5-list>
 
   <div slot="footer">
-    <ui5-button design="Transparent" (click)="closeShipListDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
+    <ui5-button design="Transparent" (click)="shipFromListDialog.closeDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
+  </div>
+</app-dialog>
+
+<app-dialog #shipToListDialog [hideDefaultFooter]="true" [dialogHeader]="'COMMON.SHIP_TO' | translate | titlecase">
+  <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
+    <ui5-li
+      *ngFor="let shipTo of listOfShipTo$ | async"
+      [description]="shipTo.parmaId"
+      [additionalText]="shipTo.parmaCountryCode"
+      (click)="selectShipItem(shipTo)">
+      {{ shipTo.parmaName }}
+    </ui5-li>
+  </ui5-list>
+
+  <div slot="footer">
+    <ui5-button design="Transparent" (click)="shipToListDialog.closeDialog()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
   </div>
 </app-dialog>
 
@@ -191,5 +338,20 @@
       formControlName="street1"
       [placeholder]="'COMMON.ADDRESS_STREET' | translate | titlecase"
       [label]="'COMMON.ADDRESS_STREET' | translate | titlecase"></app-input>
+
+    <ui5-card class="medium" *ngIf="addressToApprove">
+      <ui5-card-header
+        slot="header"
+        [titleText]="addressToApprove"
+        [status]="(customAddressForm.controls.isAddressValidated.value ? 'COMMON.APPROVED' : 'COMMON.UNAPPROVED') | translate">
+        <ui5-icon name="locate-me" slot="avatar"></ui5-icon>
+        <ui5-button
+          slot="action"
+          [design]="customAddressForm.controls.isAddressValidated.value ? 'Negative' : 'Positive'"
+          (click)="approveAddress()">
+          {{ (customAddressForm.controls.isAddressValidated.value ? 'COMMON.BUTTON_DISAPPROVE' : 'COMMON.BUTTON_APPROVE') | translate }}
+        </ui5-button>
+      </ui5-card-header>
+    </ui5-card>
   </div>
 </app-dialog>

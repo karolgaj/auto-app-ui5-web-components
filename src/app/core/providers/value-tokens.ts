@@ -77,10 +77,10 @@ export const REFRESH_TOKEN_KEY = new InjectionToken<string>('REFRESH_TOKEN_KEY')
 const REFRESH_TOKEN_KEY_VALUE = 'refresh_token';
 
 export const GOOGLE_API_KEY = new InjectionToken<string>('GOOGLE_API_KEY');
-const GOOGLE_API_KEY_VALUE = 'AIzaSyCWjZ8OxZGd5-nXc1krnsQGdG2D8kzz9x0';
+export const GOOGLE_API_KEY_VALUE = 'AIzaSyCWjZ8OxZGd5-nXc1krnsQGdG2D8kzz9x0';
 
 export const GOOGLE_API_URL = new InjectionToken<string>('GOOGLE_API_URL');
-const GOOGLE_API_URL_VALUE = 'https://maps.googleapis.com/maps/api';
+export const GOOGLE_API_URL_VALUE = 'https://maps.googleapis.com/maps/api';
 
 export const TOKENS: (ValueProvider | FactoryProvider)[] = [
   {

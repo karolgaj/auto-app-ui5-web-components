@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { FormGroup, ValidatorFn } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
 import { IFormGroup } from '@rxweb/types';
 import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -29,37 +29,33 @@ export class CommonValidators {
     private http: HttpClient
   ) {}
 
-  validateAddressWithGoogle<T extends GenericWithStrings<T>>() {
-    return (formGroup: FormGroup) => {
-      const formValue = formGroup.getRawValue();
+  validateAddressWithGoogle(value: any) {
+    const address = value.street1
+      .concat(',+', value.postalCode, ',+', value.city, ',+', value.country)
+      .split('')
+      .map((char: string) => (char === ' ' ? '+' : char))
+      .join('');
 
-      const address = formValue.street1
-        .concat(',+', formValue.postalCode, ',+', formValue.city, ',+', formValue.country)
-        .split('')
-        .map((char: string) => (char === ' ' ? '+' : char))
-        .join('');
+    return this.http.get(`${this.googleApiUrl}/geocode/json?address=${address}&key=${this.googleApiKey}`).pipe(
+      map((result: any) => (result.results[0] !== null || result.results[0].geometry.location ? result.results[0] : null)),
+      switchMap((result: any) => {
+        const { lat, lng } = result.geometry.location;
+        let timestamp = Date.now();
+        const len = timestamp.toString().length;
 
-      return this.http.get(`${this.googleApiUrl}/geocode/json?address=${address}&key=${this.googleApiKey}`).pipe(
-        map((result: any) => (result.results[0] !== null || result.results[0].geometry.location ? result.results[0] : null)),
-        switchMap((result: any) => {
-          const { lat, lng } = result.geometry.location;
-          let timestamp = Date.now();
-          const len = timestamp.toString().length;
-
-          if (len > 12) {
-            timestamp = Number(timestamp.toString().substr(0, 12));
-          }
-          return this.http
-            .get(`${this.googleApiUrl}/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${this.googleApiKey}`)
-            .pipe(
-              map((value) => ({
-                ...value,
-                location: result,
-              }))
-            );
-        })
-      );
-    };
+        if (len > 12) {
+          timestamp = Number(timestamp.toString().substr(0, 12));
+        }
+        return this.http
+          .get(`${this.googleApiUrl}/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${this.googleApiKey}`)
+          .pipe(
+            map((value) => ({
+              ...value,
+              location: result,
+            }))
+          );
+      })
+    );
   }
 
   init(): void {

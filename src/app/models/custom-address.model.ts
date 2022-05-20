@@ -4,4 +4,5 @@ export interface CustomAddress {
   postalCode: string;
   city: string;
   street1: string;
+  isAddressValidated: boolean;
 }

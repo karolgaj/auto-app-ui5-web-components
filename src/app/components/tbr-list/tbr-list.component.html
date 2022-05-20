@@ -32,7 +32,12 @@
 </ui5-list>
 <!--</div>-->
 <ui5-bar design="Footer" slot="footer" class="tbr-list__footer">
-  <ui5-button slot="startContent" icon="add" design="Transparent" (click)="goToNetworkForm()"></ui5-button>
+  <ui5-button
+    *appUserHasRoles="['EXPRESS_REQUESTER_LIMITED', 'EXPRESS_REQUESTER_UNLIMITED']"
+    slot="startContent"
+    icon="add"
+    design="Transparent"
+    (click)="goToNetworkForm()"></ui5-button>
   <ui5-button slot="endContent" icon="refresh" (click)="refreshList()"></ui5-button>
 </ui5-bar>
 

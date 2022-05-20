@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TbrLightDetails } from '../models/tbr-light.model';
 import { HazmatDetails, Tbr } from '../models/tbr.model';
+import { PartyLocation } from '../models/location.model';
 
 @Injectable({
   providedIn: 'root',
@@ -62,6 +63,37 @@ export class XtrService {
   }
 
   /* GET METHODS */
+  createEmptyBooking(): Observable<Partial<Tbr>> {
+    return this.http.get('/gateway/api/xtr/v3/xtr/new');
+  }
+
+  getListOfShipFrom(): Observable<PartyLocation[]> {
+    return this.http.get<PartyLocation[]>('/gateway/api/tnd/v3/location/SHIP_FROM');
+  }
+
+  getListOfShipTo(): Observable<PartyLocation[]> {
+    return this.http.get<PartyLocation[]>('/gateway/api/tnd/v3/location/SHIP_TO');
+  }
+
+  getListOfConsignors(): Observable<PartyLocation[]> {
+    return this.http.get<PartyLocation[]>('/gateway/api/tnd/v3/location/CONSIGNOR');
+  }
+
+  getListOfUnloadingPoints(parmaId: string): Observable<string[]> {
+    return this.http.get<string[]>(`/gateway/api/location/v3/location/unloadpoint/${parmaId}`);
+  }
+
+  getShipFromLocation(shipItId: string, parmaId: string): Observable<PartyLocation[]> {
+    return this.http.get<PartyLocation[]>(`/gateway/api/location/v3/location/${shipItId}/SHIP_FROM/${parmaId}`);
+  }
+
+  getShipToLocation(shipItId: string, parmaId: string): Observable<PartyLocation[]> {
+    return this.http.get<PartyLocation[]>(`/gateway/api/location/v3/location/${shipItId}/SHIP_TO/${parmaId}`);
+  }
+
+  getConsignorLocation(shipItId: string, parmaId: string): Observable<PartyLocation[]> {
+    return this.http.get<PartyLocation[]>(`/gateway/api/location/v3/location/${shipItId}/CONSIGNOR/${parmaId}`);
+  }
 
   getXtrs(): Observable<TbrLightDetails[]> {
     return this.http.get<TbrLightDetails[]>(`/gateway/api/xtr/v3/xtr`);
