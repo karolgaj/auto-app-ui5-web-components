@@ -130,8 +130,8 @@ export class ThuDetailsComponent {
     this.addHazmatFormGroup = this.fb.array<HazmatDetails>([]);
     if (value) {
       const hazmatDetailsForms = this.fb.group<HazmatDetails>({ dgClass: '', dgPackagingGroup: '', dgProperName: '', hazmatUncode: '' });
-      f.patchValue(value);
-      this.addHazmatFormGroup.push(f);
+      hazmatDetailsForms.patchValue(value);
+      this.addHazmatFormGroup.push(hazmatDetailsForms);
     }
   }
 }
