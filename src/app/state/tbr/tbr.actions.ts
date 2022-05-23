@@ -104,6 +104,20 @@ export const addHazmatDetails = createAction(
 export const addHazmatDetailsSuccess = createAction('[Express] Addd hazmat details Success', props<{ data: Tbr }>());
 export const addHazmatDetailsFailure = createAction('[Express] Add hazmat details Failure', props<{ error: unknown }>());
 
-export const deleteHazmatDetails = createAction('[Express] Add hazmat details', props<{ shipitId: string; releaseLineId: string }>());
-export const deleteHazmatDetailsSuccess = createAction('[Express] Addd hazmat details Success', props<{ data: Tbr }>());
-export const deleteHazmatDetailsFailure = createAction('[Express] Add hazmat details Failure', props<{ error: unknown }>());
+export const deleteHazmatDetails = createAction('[Express] Delete hazmat details', props<{ shipitId: string; releaseLineId: string }>());
+export const deleteHazmatDetailsSuccess = createAction('[Express] Delete hazmat details Success', props<{ data: Tbr }>());
+export const deleteHazmatDetailsFailure = createAction('[Express] Delete hazmat details Failure', props<{ error: unknown }>());
+
+export const addLineWithoutPartNumber = createAction(
+  '[XTR] Add line without part number',
+  props<{
+    data: {
+      shipItId: string;
+      description: string;
+      plannedQty: number;
+      weight: string;
+    };
+  }>()
+);
+export const addLineWithoutPartNumberSuccess = createAction('[XTR] Add line without part number Success', props<{ data: Tbr }>());
+export const addLineWithoutPartNumberFailure = createAction('[XTR] Add line without part number Failure', props<{ error: unknown }>());

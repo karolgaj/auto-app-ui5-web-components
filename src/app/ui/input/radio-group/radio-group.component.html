@@ -18,7 +18,7 @@
 <div #customInput role="radiogroup" id="radioGroup" *ngIf="formControl" [ngClass]="inputContainerClasses">
   <ui5-label *ngIf="label" [ngClass]="labelClasses" [for]="getId()" [required]="required" [showColon]="showColon"> {{ label }} </ui5-label>
   <div [fxLayout]="vertical ? 'column' : 'row'">
-    <ui5-radio-button *ngFor="let option of options" [text]="option.text" [value]="option.value" name="radioGroup" [checked]="value === option.value">
+    <ui5-radio-button *ngFor="let option of options" [text]="option.text | translate" [value]="option.value" name="radioGroup" [checked]="value === option.value">
     </ui5-radio-button>
   </div>
 </div>

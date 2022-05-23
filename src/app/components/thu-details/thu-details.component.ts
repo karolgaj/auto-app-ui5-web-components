@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { IFormArray, IFormBuilder } from '@rxweb/types';
 import { Observable } from 'rxjs';
@@ -23,12 +23,11 @@ import { addHazmatDetails, deleteHazmatDetails, selectedTbr } from '../../state'
 export class ThuDetailsComponent {
   @ViewChild('addHazmatDialog')
   addHazmatDialog!: DialogComponent;
-
   public line$;
-
   public thuList$;
   private shipitId!: string;
   private releaseLineId$: Observable<string>;
+  public hazmatDetails$: Observable<HazmatDetails>;
   addHazmatFormGroup!: IFormArray<HazmatDetails>;
   private fb: IFormBuilder;
 
@@ -55,7 +54,7 @@ export class ThuDetailsComponent {
     );
 
     this.releaseLineId$ = this.line$.pipe(filter(Boolean), pluck<TbrLine>('releaseLineId')) as Observable<string>;
-
+    this.hazmatDetails$ = this.line$.pipe(filter(Boolean), pluck<TbrLine>('hazmatDetails')) as Observable<HazmatDetails>;
     this.thuList$ = this.store.select(selectedTbr).pipe(
       filter(Boolean),
       map((tbrDetails) => {
@@ -65,8 +64,11 @@ export class ThuDetailsComponent {
       })
     );
     this.fb = fb;
-    this.thuList$.subscribe();
-    this.createForm();
+    this.thuList$.pipe(untilDestroyed(this)).subscribe();
+
+    this.hazmatDetails$.pipe(take(1)).subscribe((value: HazmatDetails) => {
+      this.createForm(value);
+    });
   }
 
   goBack(): void {
@@ -101,8 +103,6 @@ export class ThuDetailsComponent {
         })
       );
     });
-
-    this.createForm();
   }
   openAddHazmatDialog() {
     if (this.addHazmatFormGroup.length === 1) return;
@@ -126,7 +126,12 @@ export class ThuDetailsComponent {
   getFormGroup(rowForm: unknown): FormGroup {
     return rowForm as FormGroup;
   }
-  private createForm(): void {
+  private createForm(value?: HazmatDetails): void {
     this.addHazmatFormGroup = this.fb.array<HazmatDetails>([]);
+    if (value) {
+      const hazmatDetailsForms = this.fb.group<HazmatDetails>({ dgClass: '', dgPackagingGroup: '', dgProperName: '', hazmatUncode: '' });
+      f.patchValue(value);
+      this.addHazmatFormGroup.push(f);
+    }
   }
 }
