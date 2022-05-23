@@ -129,7 +129,7 @@ export class ThuDetailsComponent {
   private createForm(value?: HazmatDetails): void {
     this.addHazmatFormGroup = this.fb.array<HazmatDetails>([]);
     if (value) {
-      const f = this.fb.group<HazmatDetails>({ dgClass: '', dgPackagingGroup: '', dgProperName: '', hazmatUncode: '' });
+      const hazmatDetailsForms = this.fb.group<HazmatDetails>({ dgClass: '', dgPackagingGroup: '', dgProperName: '', hazmatUncode: '' });
       f.patchValue(value);
       this.addHazmatFormGroup.push(f);
     }
