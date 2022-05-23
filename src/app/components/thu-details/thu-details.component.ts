@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { IFormArray, IFormBuilder } from '@rxweb/types';
 import { Observable } from 'rxjs';
@@ -64,11 +64,10 @@ export class ThuDetailsComponent {
       })
     );
     this.fb = fb;
-    this.thuList$.subscribe();
+    this.thuList$.pipe(untilDestroyed(this)).subscribe();
 
     this.hazmatDetails$.pipe(take(1)).subscribe((value: HazmatDetails) => {
-      this.createForm();
-      this.setForm(value);
+      this.createForm(value);
     });
   }
 
@@ -127,26 +126,12 @@ export class ThuDetailsComponent {
   getFormGroup(rowForm: unknown): FormGroup {
     return rowForm as FormGroup;
   }
-  private createForm(): void {
-    this.addHazmatFormGroup = this.fb.array<HazmatDetails>([
-      {
-        dgClass: '',
-        dgPackagingGroup: '',
-        dgProperName: '',
-        hazmatUncode: '',
-      },
-    ]);
-  }
-
-  private setForm(value: HazmatDetails): void {
-    console.log('patchForm', value);
-    this.addHazmatFormGroup.setValue([
-      {
-        dgClass: value.dgClass,
-        dgPackagingGroup: value.dgPackagingGroup,
-        dgProperName: value.dgProperName,
-        hazmatUncode: value.hazmatUncode,
-      },
-    ]);
+  private createForm(value?: HazmatDetails): void {
+    this.addHazmatFormGroup = this.fb.array<HazmatDetails>([]);
+    if (value) {
+      const f = this.fb.group<HazmatDetails>({ dgClass: '', dgPackagingGroup: '', dgProperName: '', hazmatUncode: '' });
+      f.patchValue(value);
+      this.addHazmatFormGroup.push(f);
+    }
   }
 }
