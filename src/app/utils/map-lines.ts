@@ -33,6 +33,7 @@ function mapTBRLine(
     valueStateQty: 'None',
     dangerousGoods: oORL.dangerousGoods,
     whLoc: oORL.additionalInternalDestination,
+    hazmatDetails: oORL.hazmatDetails,
   };
 
   let bMixed = false;

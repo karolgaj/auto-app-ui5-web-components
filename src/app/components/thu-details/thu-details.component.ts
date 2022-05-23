@@ -23,12 +23,11 @@ import { addHazmatDetails, deleteHazmatDetails, selectedTbr } from '../../state'
 export class ThuDetailsComponent {
   @ViewChild('addHazmatDialog')
   addHazmatDialog!: DialogComponent;
-
   public line$;
-
   public thuList$;
   private shipitId!: string;
   private releaseLineId$: Observable<string>;
+  public hazmatDetails$: Observable<HazmatDetails>;
   addHazmatFormGroup!: IFormArray<HazmatDetails>;
   private fb: IFormBuilder;
 
@@ -55,7 +54,7 @@ export class ThuDetailsComponent {
     );
 
     this.releaseLineId$ = this.line$.pipe(filter(Boolean), pluck<TbrLine>('releaseLineId')) as Observable<string>;
-
+    this.hazmatDetails$ = this.line$.pipe(filter(Boolean), pluck<TbrLine>('hazmatDetails')) as Observable<HazmatDetails>;
     this.thuList$ = this.store.select(selectedTbr).pipe(
       filter(Boolean),
       map((tbrDetails) => {
@@ -66,7 +65,11 @@ export class ThuDetailsComponent {
     );
     this.fb = fb;
     this.thuList$.subscribe();
-    this.createForm();
+
+    this.hazmatDetails$.pipe(take(1)).subscribe((value: HazmatDetails) => {
+      this.createForm();
+      this.setForm(value);
+    });
   }
 
   goBack(): void {
@@ -101,8 +104,6 @@ export class ThuDetailsComponent {
         })
       );
     });
-
-    this.createForm();
   }
   openAddHazmatDialog() {
     if (this.addHazmatFormGroup.length === 1) return;
@@ -127,6 +128,25 @@ export class ThuDetailsComponent {
     return rowForm as FormGroup;
   }
   private createForm(): void {
-    this.addHazmatFormGroup = this.fb.array<HazmatDetails>([]);
+    this.addHazmatFormGroup = this.fb.array<HazmatDetails>([
+      {
+        dgClass: '',
+        dgPackagingGroup: '',
+        dgProperName: '',
+        hazmatUncode: '',
+      },
+    ]);
+  }
+
+  private setForm(value: HazmatDetails): void {
+    console.log('patchForm', value);
+    this.addHazmatFormGroup.setValue([
+      {
+        dgClass: value.dgClass,
+        dgPackagingGroup: value.dgPackagingGroup,
+        dgProperName: value.dgProperName,
+        hazmatUncode: value.hazmatUncode,
+      },
+    ]);
   }
 }

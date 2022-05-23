@@ -1,4 +1,4 @@
-import { ShipUnitLine } from './tbr.model';
+import { HazmatDetails, ShipUnitLine } from './tbr.model';
 
 export interface TbrLine extends ShipUnitLine {
   releaseLineId: string;
@@ -36,4 +36,5 @@ export interface TbrLine extends ShipUnitLine {
   mixValid: boolean;
   volumeSULUom: string;
   weightSULUom: string;
+  hazmatDetails: HazmatDetails;
 }
