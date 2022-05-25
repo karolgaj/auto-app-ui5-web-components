@@ -68,7 +68,7 @@ export const NEW_XTR: any = {
     shipUnitLines: [],
     orderReleaseLines: [],
     transportBookings: [],
-    tbrType: 'MANUAL_EXPRESS',
+    tbrType: 'EXPRESS',
     expressType: 'NORMAL',
     orderType: 'TBR',
     shipitStatus: 'CREATED',
