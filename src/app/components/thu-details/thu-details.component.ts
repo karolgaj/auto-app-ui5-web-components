@@ -103,6 +103,7 @@ export class ThuDetailsComponent {
         })
       );
     });
+    this.addHazmatFormGroup = this.fb.array<HazmatDetails>([]);
   }
   openAddHazmatDialog() {
     if (this.addHazmatFormGroup.length === 1) return;
