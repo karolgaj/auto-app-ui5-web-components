@@ -88,7 +88,7 @@ export class ThuDetailsComponent {
       );
     });
 
-    this.cancelAddHazmat();
+    this.addHazmatDialog.closeDialog();
   }
 
   removeHazmatDetails() {
@@ -103,7 +103,7 @@ export class ThuDetailsComponent {
         })
       );
     });
-    this.addHazmatFormGroup = this.fb.array<HazmatDetails>([]);
+    if (this.addHazmatFormGroup.controls.length > 0) this.addHazmatFormGroup.removeAt(0);
   }
   openAddHazmatDialog() {
     if (this.addHazmatFormGroup.length === 1) return;
