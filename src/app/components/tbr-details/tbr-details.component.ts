@@ -5,9 +5,24 @@ import { IFormBuilder, IFormControl, IFormGroup } from '@rxweb/types';
 import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+import { TransportHandlingUnit } from 'src/app/models/transport-handling-unit.model';
+import { combineLatest, startWith } from 'rxjs';
+import { ThuDetails } from 'src/app/models/thu-details';
 import { TbrService } from '../../services';
 import { TbrLine } from '../../models/tbr-line.model';
-import { addLine, addLineWithoutPartNumber, goToWorkflow, goToWorkflowSummary, selectedTbr, splitLine, updateReference } from '../../state';
+import {
+  addLine,
+  addLineWithoutPartNumber,
+  goToWorkflow,
+  goToWorkflowSummary,
+  selectedTbr,
+  loadThuData,
+  selectThu,
+  selectThuList,
+  splitLine,
+  updateReference,
+  setManualThu,
+} from '../../state';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { Tbr } from '../../models/tbr.model';
 import { CommonValidators } from '../../utils/validators';
@@ -52,19 +67,34 @@ export class TbrDetailsComponent {
   @ViewChild('addReferencesDialog')
   addReferencesDialog!: DialogComponent;
 
+  @ViewChild('thuListSelectDialog')
+  thuListSelectDialog!: DialogComponent;
+
+  @ViewChild('manualThuDetailsDialog')
+  manualThuDetailsDialog!: DialogComponent;
+
   @ViewChild('linesTable')
   linesTable!: ElementRef;
 
   private details$ = this.store.select(selectedTbr);
+  thuList$ = this.store.select(selectThuList);
+  thuDetails$ = this.store.select(selectThu);
+
   addLineOptions: AddLineOptions[] = [
     { text: 'COMMON.VOLVO_GROUP_PART', value: 'VolvoPart' },
     { text: 'COMMON.NO_PART_NUMBER_AVAILIABLE', value: 'OtherPart' },
   ];
+
   tbrDetails?: Tbr;
+  manualThu?: ThuDetails;
   lines?: ExtendedTbrLine[];
+
   selectedRowsIndexes: number[] = [];
   addLineFormGroup!: IFormGroup<AddLineForm>;
   addRefFormGroup!: IFormGroup<AddRefForm>;
+  thuListSelecFormGroup!: IFormGroup<TransportHandlingUnit>;
+  openThuListDialogBound = this.openThuListDialog.bind(this);
+
   addLineType = this.addLineOptions[0].value;
   deliveryDateFormControl!: IFormControl<string>;
   addLineOptionsFormControl!: IFormControl<string>;
@@ -91,6 +121,11 @@ export class TbrDetailsComponent {
       });
       this.patchForm(this.tbrDetails);
     });
+
+    this.thuDetails$.pipe(untilDestroyed(this)).subscribe((value) => {
+      this.manualThu = value;
+    });
+
     this.watchForm();
   }
 
@@ -100,6 +135,42 @@ export class TbrDetailsComponent {
 
   openAddDialog(): void {
     this.addLineDialog.openDialog();
+  }
+
+  openThuListDialog(): void {
+    this.thuListSelectDialog.openDialog();
+  }
+
+  openManualThuDetailsDialog(): void {
+    this.manualThuDetailsDialog.openDialog();
+  }
+  cancelAddLine(): void {
+    this.addLineDialog.closeDialog();
+  }
+
+  cancelManualThuDetails(): void {
+    this.manualThuDetailsDialog.closeDialog();
+  }
+
+  cancelSelectThuType(): void {
+    this.thuListSelectDialog.closeDialog();
+  }
+
+  openAddRefDialog(): void {
+    this.addReferencesDialog.openDialog();
+  }
+
+  saveManualThuDetails(): void {
+    if (this.tbrDetails && this.manualThu) {
+      this.store.dispatch(
+        setManualThu({
+          shipItId: this.tbrDetails.shipitId,
+          releaseLineId: '123',
+          pi: this.manualThu,
+        })
+      );
+    }
+    this.cancelManualThuDetails();
   }
 
   saveAddLine(): void {
@@ -131,12 +202,10 @@ export class TbrDetailsComponent {
     this.cancelAddLine();
   }
 
-  cancelAddLine(): void {
-    this.addLineDialog.closeDialog();
-  }
-
-  openAddRefDialog(): void {
-    this.addReferencesDialog.openDialog();
+  selectThu(selectedThuId: string): void {
+    this.thuListSelecFormGroup.controls.thuId.setValue(selectedThuId);
+    this.cancelSelectThuType();
+    this.openManualThuDetailsDialog();
   }
 
   saveAddRef(): void {
@@ -159,11 +228,12 @@ export class TbrDetailsComponent {
 
   navigateToThuDetails(event: MouseEvent, line: TbrLine, shipitId: string): void {
     const anyEvent = event as any;
+
     const pathHasCheckbox = anyEvent.path
       .map((path: { classList: DOMTokenList }) => path.classList?.toString() || '')
       .includes('ui5-checkbox-inner');
 
-    if (pathHasCheckbox || anyEvent.target.id.includes('custom-input')) {
+    if (pathHasCheckbox || anyEvent.target.id.includes('custom-input') || anyEvent.srcElement.localName === 'ui5-icon') {
       return;
     }
     this.router.navigate(['/', 'xtr', shipitId, line.articleNumber]);
@@ -238,8 +308,14 @@ export class TbrDetailsComponent {
       orderNumber: [null],
       pickupRef: [null],
     });
-    this.addLineOptionsFormControl = this.fb.control<string>(this.addLineOptions[0].value);
 
+    this.thuListSelecFormGroup = this.fb.group<TransportHandlingUnit>({
+      description: [null],
+      id: [null],
+      thuId: [null],
+    });
+
+    this.addLineOptionsFormControl = this.fb.control<string>(this.addLineOptions[0].value);
     this.deliveryDateFormControl = this.fb.control<string>(null, [Validators.required, CommonValidators.IsNotPastDateValidator()]);
   }
 
@@ -256,5 +332,20 @@ export class TbrDetailsComponent {
     this.addLineOptionsFormControl.valueChanges.pipe(untilDestroyed(this)).subscribe((value) => {
       if (value) this.addLineType = value;
     });
+
+    combineLatest([this.thuListSelecFormGroup.controls.thuId.valueChanges.pipe(startWith(this.thuListSelecFormGroup.controls.thuId.value))])
+      .pipe(untilDestroyed(this))
+      .subscribe(([selectedThuId]) => {
+        if (selectedThuId && this.tbrDetails) {
+          this.store.dispatch(
+            loadThuData({
+              data: {
+                thuId: selectedThuId,
+                shipFromId: this.tbrDetails.shipFrom.parma,
+              },
+            })
+          );
+        }
+      });
   }
 }

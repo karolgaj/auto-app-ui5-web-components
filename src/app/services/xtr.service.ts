@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TbrLightDetails } from '../models/tbr-light.model';
 import { HazmatDetails, Tbr } from '../models/tbr.model';
+import { ThuDetails } from '../models/thu-details';
 
 @Injectable({
   providedIn: 'root',
@@ -34,8 +35,8 @@ export class XtrService {
 
   /* PUT METHODS */
 
-  setManualTHU(shipItId: string): Observable<any> {
-    return this.http.put(`/gateway/api/xtr/v3/xtr/${shipItId}/manual/thu/{releaseLine}`, {});
+  setManualTHU(shipItId: string, releaseLineId: string, pi: ThuDetails): Observable<Tbr> {
+    return this.http.put<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/manual/thu/${releaseLineId}`, pi);
   }
 
   addHazmatDetails(shipItId: string, releaseLineId: string, hazmatDetails: HazmatDetails): Observable<Tbr> {

@@ -21,6 +21,8 @@ export const selectConsignors = createSelector(selectTbrState, (state) => state.
 export const selectUnloadingPoints = createSelector(selectTbrState, (state) => state.unloadingPoints);
 export const selectShipItems = createSelector(selectTbrState, (state) => state.shipItems);
 export const selectThuList = createSelector(selectTbrState, (state) => state.thuList);
+export const selectThu = createSelector(selectTbrState, (state) => state.thuData);
+
 export const selectedTbr = createSelector(selectTbrState, (state) =>
   state.selectedTbr
     ? ({
