@@ -10,6 +10,7 @@ import {
 import { LayoutComponent } from './ui';
 import { AuthenticatedGuard, LoadedExpressGuard } from './shared';
 import { WizardSummaryComponent } from './components/tbr-workflow';
+import { NetworkResolver } from './core/providers/network.resolver';
 
 const routes: Routes = [
   {
@@ -30,6 +31,9 @@ const routes: Routes = [
       {
         path: 'network',
         component: TbrNetworkFormComponent,
+        resolve: {
+          booking: NetworkResolver,
+        },
       },
       {
         path: 'workflow/:shipItId',

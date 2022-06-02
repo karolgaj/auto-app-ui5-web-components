@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Network } from '../models/network.model';
 
 @Injectable({
   providedIn: 'root',
@@ -52,5 +53,9 @@ export class TransportNetworkService {
 
   getActiveTransportNetworksForAuto(consignee: string, consignor: string, unloadPoint: string, deliveryDate: string): Observable<any> {
     return this.http.get(`/gateway/api/tnd/v1/transportnetwork/active/auto/${consignee}/${consignor}/${unloadPoint}/${deliveryDate}`);
+  }
+
+  patchNetwork(shipItId: string, payload: Partial<Network>): Observable<any> {
+    return this.http.patch<any>(`/gateway/api/location/v3/xtr/${shipItId}/network`, payload);
   }
 }

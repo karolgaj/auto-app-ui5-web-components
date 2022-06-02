@@ -1,6 +1,6 @@
 <div *appUserHasRoles="['EXPRESS_REQUESTER_LIMITED']" fxLayout="column" fxLayoutAlign="space-between" style="height: 100%">
   <ui5-bar design="Header" slot="header">
-    {{'LIMITED'}}
+    {{ 'LIMITED' }}
     <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
       {{ 'COMMON.BUTTON_CLOSE' | translate }}
     </ui5-button>
@@ -18,11 +18,6 @@
         { icon: 'add-contact', action: openCustomShipFromAddressDialogBound },
         { icon: 'value-help', action: openShipFromListDialogBound }
       ]"></app-input>
-    <!--    <app-input-->
-    <!--      [placeholder]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"-->
-    <!--      [label]="'NETWORK_FORM.LOADING_POINT' | translate | titlecase"-->
-    <!--      formControlName="loadingPoint"-->
-    <!--      [icons]="[{ icon: 'value-help', action: openLoadingPointDialogBound }]"></app-input>-->
     <app-input
       [placeholder]="'COMMON.SHIP_TO' | translate | titlecase"
       [label]="'COMMON.SHIP_TO' | translate | titlecase"
@@ -47,47 +42,21 @@
       [label]="'COMMON.CONSIGNEE' | translate | titlecase"
       formControlName="consignee"
       [required]="true"
-      [readonly]="true"
-    ></app-input>
+      [readonly]="true"></app-input>
 
     <app-input
-      class="after-icon"
       [placeholder]="'COMMON.CONSIGNOR' | translate | titlecase"
       [label]="'COMMON.CONSIGNOR' | translate | titlecase"
       formControlName="consignor"
-      [showColon]="true"
+      [required]="true"
       [formatValue]="formatConsignorValue"
       [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]">
-      <ui5-icon name="question-mark" after (click)="toggleAvailableNetwork()"></ui5-icon>
     </app-input>
-
-    <div class="table-container">
-      <ui5-table mode="SingleSelect" *ngIf="showAvailableNetwork">
-        <ui5-table-column slot="columns">
-          <span>{{ 'COMMON.CONSIGNOR' | translate | titlecase }}</span>
-        </ui5-table-column>
-        <ui5-table-column slot="columns">
-          <span>{{ 'COMMON.SHIP_FROM' | translate | titlecase }}</span>
-        </ui5-table-column>
-        <ui5-table-column slot="columns">
-          <span>{{ 'COMMON.UNLOAD_POINT' | translate | titlecase }}</span>
-        </ui5-table-column>
-        <ui5-table-column slot="columns">
-          <span>{{ 'COMMON.STREET_ADDRESS' | translate | titlecase }}</span>
-        </ui5-table-column>
-        <ui5-table-column slot="columns">
-          <span>{{ 'NETWORK_FORM.VALID_FROM_TO' | translate | titlecase }}</span>
-        </ui5-table-column>
-
-        <ui5-table-row (click)="chooseNetwork(row)" *ngFor="let row of availableNetworks$ | async">
-          <ui5-table-cell>{{ row.consignorId }}</ui5-table-cell>
-          <ui5-table-cell>{{ row.shipFromId }}</ui5-table-cell>
-          <ui5-table-cell>{{ row.unloadingPoint }}</ui5-table-cell>
-          <ui5-table-cell></ui5-table-cell>
-          <ui5-table-cell>{{ row.validFrom | date }} - {{ row.validTo | date }}</ui5-table-cell>
-        </ui5-table-row>
-      </ui5-table>
-    </div>
+    <app-input
+      [placeholder]="'COMMON.PAYER' | translate | titlecase"
+      [label]="'COMMON.PAYER' | translate | titlecase"
+      [readonly]="true"
+      formControlName="payer"></app-input>
 
     <app-datepicker formControlName="pickupDate" [required]="true" [label]="'COMMON.PICKUP_DATE' | translate | titlecase"></app-datepicker>
 
@@ -118,7 +87,7 @@
 </div>
 <div *appUserHasRoles="['EXPRESS_REQUESTER_UNLIMITED']" fxLayout="column" fxLayoutAlign="space-between" style="height: 100%">
   <ui5-bar design="Header" slot="header">
-    {{'UNLIMITED'}}
+    {{ 'UNLIMITED' }}
     <ui5-button slot="startContent" design="Transparent" icon="close-command-field" (click)="goBack()">
       {{ 'COMMON.BUTTON_CLOSE' | translate }}
     </ui5-button>
@@ -128,22 +97,18 @@
     <app-input
       [placeholder]="'COMMON.SHIP_FROM' | translate | titlecase"
       [label]="'COMMON.SHIP_FROM' | translate | titlecase"
-      [formatValue]="formatShipFromValue"
       formControlName="shipFrom"
       [required]="true"
-      [icons]="[
-        { icon: 'add-contact', action: openCustomShipFromAddressDialogBound },
-      ]"></app-input>
+      [formatValue]="formatShipFromValueUnlimited"
+      [icons]="[{ icon: 'add-contact', action: openCustomShipFromAddressDialogBound }]"></app-input>
 
     <app-input
       [placeholder]="'COMMON.SHIP_TO' | translate | titlecase"
       [label]="'COMMON.SHIP_TO' | translate | titlecase"
-      [formatValue]="formatShipToValue"
       formControlName="shipTo"
       [required]="true"
-      [icons]="[
-        { icon: 'add-contact', action: openCustomShipToAddressDialogBound },
-      ]"></app-input>
+      [formatValue]="formatShipToValueUnlimited"
+      [icons]="[{ icon: 'add-contact', action: openCustomShipToAddressDialogBound }]"></app-input>
     <app-input
       [placeholder]="'COMMON.UNLOADING_POINT' | translate | titlecase"
       [label]="'COMMON.UNLOADING_POINT' | translate | titlecase"
@@ -155,44 +120,21 @@
       [placeholder]="'COMMON.CONSIGNEE' | translate | titlecase"
       [label]="'COMMON.CONSIGNEE' | translate | titlecase"
       formControlName="consignee"
+      [formatValue]="formatConsigneeValueUnlimited"
       [icons]="[{ icon: 'value-help', action: openConsigneeDialogBound }]"></app-input>
 
     <app-input
-      class="after-icon"
       [placeholder]="'COMMON.CONSIGNOR' | translate | titlecase"
       [label]="'COMMON.CONSIGNOR' | translate | titlecase"
       formControlName="consignor"
+      [formatValue]="formatConsignorValueUnlimited"
       [icons]="[{ icon: 'value-help', action: openConsignorDialogBound }]">
-      <ui5-icon name="question-mark" after (click)="toggleAvailableNetwork()"></ui5-icon>
     </app-input>
 
-    <div class="table-container">
-      <ui5-table mode="SingleSelect" *ngIf="showAvailableNetwork">
-        <ui5-table-column slot="columns">
-          <span>{{ 'COMMON.CONSIGNOR' | translate | titlecase }}</span>
-        </ui5-table-column>
-        <ui5-table-column slot="columns">
-          <span>{{ 'COMMON.SHIP_FROM' | translate | titlecase }}</span>
-        </ui5-table-column>
-        <ui5-table-column slot="columns">
-          <span>{{ 'COMMON.UNLOAD_POINT' | translate | titlecase }}</span>
-        </ui5-table-column>
-        <ui5-table-column slot="columns">
-          <span>{{ 'COMMON.STREET_ADDRESS' | translate | titlecase }}</span>
-        </ui5-table-column>
-        <ui5-table-column slot="columns">
-          <span>{{ 'NETWORK_FORM.VALID_FROM_TO' | translate | titlecase }}</span>
-        </ui5-table-column>
-
-        <ui5-table-row (click)="chooseNetwork(row)" *ngFor="let row of availableNetworks$ | async">
-          <ui5-table-cell>{{ row.consignorId }}</ui5-table-cell>
-          <ui5-table-cell>{{ row.shipFromId }}</ui5-table-cell>
-          <ui5-table-cell>{{ row.unloadingPoint }}</ui5-table-cell>
-          <ui5-table-cell></ui5-table-cell>
-          <ui5-table-cell>{{ row.validFrom | date }} - {{ row.validTo | date }}</ui5-table-cell>
-        </ui5-table-row>
-      </ui5-table>
-    </div>
+    <app-input
+      [placeholder]="'COMMON.PAYER' | translate | titlecase"
+      [label]="'COMMON.PAYER' | translate | titlecase"
+      formControlName="payer"></app-input>
 
     <app-datepicker formControlName="pickupDate" [required]="true" [label]="'COMMON.PICKUP_DATE' | translate | titlecase"></app-datepicker>
 
@@ -202,10 +144,10 @@
       [selectionOptions]="serviceLevelOptions"
       formControlName="serviceLevel"></app-select>
     <app-select
-      [placeholder]="'COMMON.PLANNING_TYPE' | translate"
-      [label]="'COMMON.PLANNING_TYPE' | translate | titlecase"
+      [placeholder]="'COMMON.TYPE' | translate"
+      [label]="'COMMON.TYPE' | translate | titlecase"
       [selectionOptions]="planningTypesOptions"
-      formControlName="planningType"></app-select>
+      formControlName="type"></app-select>
     <app-select
       [placeholder]="'COMMON.TRANSPORT_TYPE' | translate"
       [label]="'COMMON.TRANSPORT_TYPE' | translate | titlecase"
@@ -253,7 +195,7 @@
 
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
-      *ngFor="let consignee of listOfConsignees$"
+      *ngFor="let consignee of listOfConsignees$ | async"
       [description]="consignee.parmaId"
       [additionalText]="consignee.parmaCountryCode"
       (click)="selectConsignee(consignee)">
@@ -268,9 +210,7 @@
 
 <app-dialog #unloadingPointDialogRef dialogHeader="Unloading point" [hideDefaultFooter]="true" accessibleName="Unloading point value help">
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
-    <ui5-li
-      *ngFor="let unloadPoint of unloadingPoints$ | async"
-      (click)="selectLoadingPoint(unloadPoint)">
+    <ui5-li *ngFor="let unloadPoint of unloadingPoints$ | async" (click)="selectLoadingPoint(unloadPoint)">
       {{ unloadPoint }}
     </ui5-li>
   </ui5-list>

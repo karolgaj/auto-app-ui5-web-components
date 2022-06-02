@@ -5,5 +5,6 @@ export const selectNetworkFormState = createFeatureSelector<fromNetworkForm.Stat
 export const selectShipFrom = createSelector(selectNetworkFormState, (state) => state.shipFroms);
 export const selectShipTo = createSelector(selectNetworkFormState, (state) => state.shipTos);
 export const selectConsignors = createSelector(selectNetworkFormState, (state) => state.consignors);
+export const selectConsignees = createSelector(selectNetworkFormState, (state) => state.consignees);
 export const selectNewBooking = createSelector(selectNetworkFormState, (state) => state.booking);
 export const selectUnloadPoint = createSelector(selectNetworkFormState, (state) => state.unloadPoint);

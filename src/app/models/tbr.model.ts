@@ -9,10 +9,10 @@ export interface Tbr extends Partial<BaseEntity> {
   involvedParties: any[];
   otmTransmissionAcks: any[];
   advancedShippingNotices: any[];
-  consignee: Consignee;
-  consignor: Consignee;
-  shipTo: Consignee;
-  shipFrom: Consignee;
+  consignee: TransportParty;
+  consignor: TransportParty;
+  shipTo: TransportParty;
+  shipFrom: TransportParty;
   approvalRequest: any;
   approvalDecision: ApprovalDecision;
   responsibleOfficeDecision: null;
@@ -66,7 +66,7 @@ export interface BaseEntity {
 
 export type ApprovalDecision = any;
 
-export interface Consignee extends BaseEntity {
+export interface TransportParty extends BaseEntity {
   parma: string;
   type: string;
   category: null | string;

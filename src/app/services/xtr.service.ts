@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TbrLightDetails } from '../models/tbr-light.model';
-import { HazmatDetails, Tbr } from '../models/tbr.model';
+import { HazmatDetails, Tbr, TransportParty } from '../models/tbr.model';
 import { PartyLocation } from '../models/location.model';
 
 @Injectable({
@@ -17,27 +17,7 @@ export class XtrService {
     return this.http.post<Tbr>('/gateway/api/xtr/v3/xtr', tbr);
   }
 
-  searchTBRs(search: string, consigneeIds: string[], consignorIds: string[]): Observable<any> {
-    return this.http.post('/gateway/api/xtr/v3/search/xtr', {
-      search,
-      consigneeIds,
-      consignorIds,
-    });
-  }
-
-  searchTBs(search: string, consigneeIds: string[], consignorIds: string[]): Observable<any> {
-    return this.http.post('/gateway/api/xtr/v3/search/tb', {
-      search,
-      consigneeIds,
-      consignorIds,
-    });
-  }
-
   /* PUT METHODS */
-
-  setManualTHU(shipItId: string): Observable<any> {
-    return this.http.put(`/gateway/api/xtr/v3/xtr/${shipItId}/manual/thu/{releaseLine}`, {});
-  }
 
   addHazmatDetails(shipItId: string, releaseLineId: string, hazmatDetails: HazmatDetails): Observable<Tbr> {
     return this.http.put<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/hazmat/${releaseLineId}`, hazmatDetails);
@@ -54,17 +34,17 @@ export class XtrService {
 
   /* DELETE METHODS */
 
-  deleteOldXTRs(): Observable<any> {
-    return this.http.delete('/gateway/api/xtr/v3/xtr');
-  }
-
   deleteHazmatDetails(shipItId: string, releaseLineId: string): Observable<Tbr> {
     return this.http.delete<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/hazmat/${releaseLineId}`);
   }
 
   /* GET METHODS */
-  createEmptyBooking(): Observable<Partial<Tbr>> {
-    return this.http.get('/gateway/api/xtr/v3/xtr/new');
+  createEmptyBooking(): Observable<Partial<Tbr> & Required<{ shipitId: string }>> {
+    return this.http.get<Partial<Tbr> & Required<{ shipitId: string }>>('/gateway/api/xtr/v3/xtr/new');
+  }
+
+  updateUnloadingPoint(shipitId: string, unloadingPoint: string): Observable<any> {
+    return this.http.get(`/v3/xtr/${shipitId}/shipto/${unloadingPoint}`);
   }
 
   getListOfShipFrom(): Observable<PartyLocation[]> {
@@ -83,16 +63,24 @@ export class XtrService {
     return this.http.get<string[]>(`/gateway/api/location/v3/location/unloadpoint/${parmaId}`);
   }
 
-  getShipFromLocation(shipItId: string, parmaId: string): Observable<PartyLocation[]> {
-    return this.http.get<PartyLocation[]>(`/gateway/api/location/v3/location/${shipItId}/SHIP_FROM/${parmaId}`);
+  getListOfConsignees(shipToParma: string): Observable<PartyLocation[]> {
+    return this.http.get<PartyLocation[]>(`/gateway/api/tnd/v3/location/consignee/${shipToParma}`);
   }
 
-  getShipToLocation(shipItId: string, parmaId: string): Observable<PartyLocation[]> {
-    return this.http.get<PartyLocation[]>(`/gateway/api/location/v3/location/${shipItId}/SHIP_TO/${parmaId}`);
+  getShipFromLocation(shipItId: string, parmaId: string): Observable<TransportParty> {
+    return this.http.get<TransportParty>(`/gateway/api/location/v3/location/${shipItId}/SHIP_FROM/${parmaId}`);
   }
 
-  getConsignorLocation(shipItId: string, parmaId: string): Observable<PartyLocation[]> {
-    return this.http.get<PartyLocation[]>(`/gateway/api/location/v3/location/${shipItId}/CONSIGNOR/${parmaId}`);
+  getShipToLocation(shipItId: string, parmaId: string): Observable<TransportParty> {
+    return this.http.get<TransportParty>(`/gateway/api/location/v3/location/${shipItId}/SHIP_TO/${parmaId}`);
+  }
+
+  getConsignorLocation(shipItId: string, parmaId: string): Observable<TransportParty> {
+    return this.http.get<TransportParty>(`/gateway/api/location/v3/location/${shipItId}/CONSIGNOR/${parmaId}`);
+  }
+
+  getConsigneeLocation(shipItId: string, parmaId: string): Observable<TransportParty> {
+    return this.http.get<TransportParty>(`/gateway/api/location/v3/location/${shipItId}/CONSIGNEE/${parmaId}`);
   }
 
   getXtrs(): Observable<TbrLightDetails[]> {
@@ -103,7 +91,12 @@ export class XtrService {
     return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/split/{shipUnitLines}`);
   }
 
-  setPickupAndDeadlineDate(shipItId: string, pickupDate: string, deadlineDate: string, deadlineTime: string): Observable<any> {
+  setPickupAndDeadlineDate(
+    shipItId: string,
+    pickupDate: string,
+    deadlineDate: string | null,
+    deadlineTime: string | null
+  ): Observable<any> {
     return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/pickup/${pickupDate}/deadline/${deadlineDate}/${deadlineTime}`);
   }
 

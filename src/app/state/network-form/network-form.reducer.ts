@@ -6,10 +6,11 @@ import { Tbr } from '../../models/tbr.model';
 export const networkFormFeatureKey = 'networkForm';
 
 export interface State {
-  booking?: Partial<Tbr>;
+  booking?: Partial<Tbr> & Required<{ shipitId: string }>;
   shipFroms?: PartyLocation[];
   shipTos?: PartyLocation[];
   consignors?: PartyLocation[];
+  consignees?: PartyLocation[];
   unloadPoint?: string[];
 }
 
@@ -33,6 +34,10 @@ export const reducer = createReducer(
   on(NetworkFormActions.loadConsignorsSuccess, (state, action) => ({
     ...state,
     consignors: action.data,
+  })),
+  on(NetworkFormActions.loadConsigneesSuccess, (state, action) => ({
+    ...state,
+    consignees: action.data,
   })),
   on(NetworkFormActions.loadUnloadingPointSuccess, (state, action) => ({
     ...state,

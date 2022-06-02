@@ -17,7 +17,8 @@ export class ErrorMessagePipe implements PipeTransform {
   }
 
   private getErrorMessage(value: ValidationErrors): string {
-    switch (value.key) {
+    const key = Object.keys(value)[0];
+    switch (key) {
       case 'required':
         return this.translate.instant('VALIDATORS.REQUIRED');
       case 'email':
@@ -42,6 +43,8 @@ export class ErrorMessagePipe implements PipeTransform {
         return this.translate.instant('VALIDATORS.IS_DATE_AFTER_DATE');
       case 'invalidDate':
         return this.translate.instant('VALIDATORS.INVALID_DATE');
+      case 'parmaNotFound':
+        return this.translate.instant('VALIDATORS.PARMA_NOT_FOUND');
       default:
         return this.translate.instant('VALIDATORS.INVALID');
     }

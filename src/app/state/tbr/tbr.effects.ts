@@ -271,7 +271,7 @@ export class TbrEffects {
         ofType(TbrActions.goToWorkflowSummary),
         tap(({ data }) => {
           if (data) {
-            this.router.navigate(['/', 'xtr', 'workflow', data.shipitId, 'summary']);
+            this.router.navigate(['/', 'xtr', 'workflow', data, 'summary']);
           }
         })
       ),
@@ -302,7 +302,7 @@ export class TbrEffects {
     this.actions$.pipe(
       ofType(TbrActions.finishWorkflowSuccess),
       map(({ data }) => {
-        return TbrActions.goToWorkflowSummary({ data });
+        return TbrActions.goToWorkflowSummary({ data: data.shipitId });
       })
     )
   );

@@ -188,7 +188,7 @@ export class TbrDetailsComponent {
     }
 
     if (WORKFLOW_STATUSES_FOR_SUMMARY.includes(currentStatus)) {
-      this.store.dispatch(goToWorkflowSummary({ data: this.tbrDetails }));
+      this.store.dispatch(goToWorkflowSummary({ data: this.tbrDetails?.shipitId as string }));
       return;
     }
 

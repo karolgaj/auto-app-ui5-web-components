@@ -1,5 +1,5 @@
 import { SelectionOption } from '../../models/selection-option.model';
-import { PlanningType, ServiceLevel, TransportType } from '../../models/network-form.model';
+import { NetworkType, ServiceLevel, TransportType } from '../../models/network.model';
 
 export const SERVICE_LEVEL_OPTIONS: SelectionOption<ServiceLevel>[] = [
   {
@@ -34,7 +34,7 @@ export const TRANSPORT_TYPE_OPTIONS: SelectionOption<TransportType>[] = [
   },
 ];
 
-export const PLANNING_TYPE_OPTIONS: SelectionOption<PlanningType>[] = [
+export const PLANNING_TYPE_OPTIONS: SelectionOption<NetworkType>[] = [
   {
     text: 'Express',
     value: 'EXPRESS',
@@ -48,38 +48,3 @@ export const PLANNING_TYPE_OPTIONS: SelectionOption<PlanningType>[] = [
     value: 'OUTBOUND',
   },
 ];
-
-export const NEW_XTR: any = {
-  details: {
-    consignee: {},
-    consignor: {},
-    involvedParties: [],
-    otmTransmissionAcks: [],
-    advancedShippingNotices: [],
-    shipFrom: {
-      address: {},
-    },
-    shipTo: {
-      category: 'UNLOADING_POINT',
-    },
-    transportNetwork: {
-      valid: true,
-    },
-    shipUnitLines: [],
-    orderReleaseLines: [],
-    transportBookings: [],
-    tbrType: 'MANUAL_EXPRESS',
-    expressType: 'NORMAL',
-    orderType: 'TBR',
-    shipitStatus: 'CREATED',
-    shipitStatusType: 'DRAFT',
-    qualifiersTBR: [],
-    calloffMode: false,
-    totals: {
-      totalCount: 0,
-      totalVolume: 0,
-      totalWeight: 0,
-    },
-  },
-  status: 'NEW',
-};

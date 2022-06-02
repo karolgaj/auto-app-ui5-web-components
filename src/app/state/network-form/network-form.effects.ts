@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, concatMap, map, tap } from 'rxjs/operators';
-import { EMPTY, of } from 'rxjs';
+import { catchError, concatMap, map, switchMap, tap } from 'rxjs/operators';
+import { EMPTY, from, of } from 'rxjs';
 
 import * as NetworkFormActions from './network-form.actions';
 import { XtrService } from '../../services/xtr.service';
+import { TransportNetworkService } from '../../services/transport-network.service';
 
 @Injectable()
 export class NetworkFormEffects {
@@ -70,6 +71,18 @@ export class NetworkFormEffects {
     );
   });
 
+  loadConsignees$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(NetworkFormActions.loadConsignees),
+      concatMap(({ data }) =>
+        this.xtrService.getListOfConsignees(data).pipe(
+          map((res) => NetworkFormActions.loadConsigneesSuccess({ data: res })),
+          catchError((error) => of(NetworkFormActions.loadConsigneesFailure({ error })))
+        )
+      )
+    );
+  });
+
   loadUnloadPoint$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(NetworkFormActions.loadUnloadingPoint),
@@ -82,5 +95,22 @@ export class NetworkFormEffects {
     );
   });
 
-  constructor(private actions$: Actions, private xtrService: XtrService, private router: Router) {}
+  updateNetwork$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(NetworkFormActions.updateNetwork),
+      concatMap(({ data, shipitId }) =>
+        this.networkService.patchNetwork(shipitId, data).pipe(
+          switchMap(() => from([NetworkFormActions.updateNetworkSuccess()])),
+          catchError((error) => of(NetworkFormActions.updateNetworkFailure({ error })))
+        )
+      )
+    )
+  );
+
+  constructor(
+    private actions$: Actions,
+    private xtrService: XtrService,
+    private networkService: TransportNetworkService,
+    private router: Router
+  ) {}
 }

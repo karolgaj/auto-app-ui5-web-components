@@ -11,6 +11,9 @@ type ValueState = 'Success' | 'Error' | 'Warning' | 'None';
 @Directive()
 export abstract class CustomInputAbstract implements ControlValueAccessor, AfterViewInit, OnInit {
   @Input()
+  debug = false;
+
+  @Input()
   inputClasses: string[] = [];
 
   @Input()
@@ -101,16 +104,16 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
     }
 
     if (this.formControl?.touched) {
-      return this.formControl.invalid ? 'Warning' : 'Success';
+      return this.formControl.invalid ? 'Error' : 'Success';
     }
 
     return 'None';
   }
 
   writeValue(value: any): void {
+    this.value = value;
     if (this.formatValue == null) {
-      this.formattedValue = value;
-      this.value = value;
+      this.formattedValue = value || '';
       return;
     }
 
@@ -118,12 +121,10 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
       this.formatValue(value)
         .pipe(take(1))
         .subscribe((v: any) => {
-          this.formattedValue = v;
-          this.value = value;
+          this.formattedValue = v || '';
         });
     } else {
-      this.formattedValue = this.formatValue(value);
-      this.value = value;
+      this.formattedValue = this.formatValue(value) || '';
     }
   }
 

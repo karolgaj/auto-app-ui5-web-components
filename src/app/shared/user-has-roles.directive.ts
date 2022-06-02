@@ -1,9 +1,9 @@
 import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { filter, map } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { UserRole } from '../models/user.model';
-import { selectUserData } from '../state';
+import { selectUserData, selectUserRoles } from '../state';
 
 @UntilDestroy()
 @Directive({
@@ -30,10 +30,9 @@ export class UserHasRolesDirective implements OnInit {
       });
 
     this.store
-      .select(selectUserData)
+      .select(selectUserRoles)
       .pipe(
         filter((value) => value != null),
-        map((userData) => userData!.roles),
         untilDestroyed(this)
       )
       .subscribe((roles) => {

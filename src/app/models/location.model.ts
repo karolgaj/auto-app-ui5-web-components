@@ -1,5 +1,5 @@
 export interface PartyLocation {
-  parmaId: 'string';
-  parmaName: 'string';
-  parmaCountryCode: 'string';
+  parmaId: string;
+  parmaName: string;
+  parmaCountryCode: string;
 }

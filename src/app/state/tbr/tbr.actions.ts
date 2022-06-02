@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Tbr, HazmatDetails } from '../../models/tbr.model';
+import { HazmatDetails, Tbr } from '../../models/tbr.model';
 import { TbrLightDetails } from '../../models/tbr-light.model';
 import { NetworkForm } from '../../models/network-form.model';
 import { TbrNetwork } from '../../models/tbr-network.model';
@@ -95,7 +95,7 @@ export const loadThuListFailure = createAction('[Networks] Load thu list Failure
 export const goToWorkflow = createAction('[XTR] Go to workflow', props<{ data: { status: ShipitStatus; deliveryDate: string } }>());
 export const goToWorkflowSuccess = createAction('[XTR] Go to workflow Success', props<{ data: Tbr }>());
 
-export const goToWorkflowSummary = createAction('[XTR] Go to workflow summary', props<{ data?: Tbr }>());
+export const goToWorkflowSummary = createAction('[XTR] Go to workflow summary', props<{ data: string }>());
 
 export const addHazmatDetails = createAction(
   '[Express] Add hazmat details',
