@@ -40,10 +40,18 @@ export const reducer = createReducer(
     ...state,
     selectedTbr: undefined,
   })),
-  on(TbrActions.selectTbrSuccess, TbrActions.addLineSuccess, TbrActions.splitLineSuccess, (state, action) => ({
-    ...state,
-    selectedTbr: action.data,
-  })),
+  on(
+    TbrActions.selectTbrSuccess,
+    TbrActions.addLineSuccess,
+    TbrActions.addLineWithoutPartNumberSuccess,
+    TbrActions.addHazmatDetailsSuccess,
+    TbrActions.deleteHazmatDetailsSuccess,
+    TbrActions.splitLineSuccess,
+    (state, action) => ({
+      ...state,
+      selectedTbr: action.data,
+    })
+  ),
   on(TbrActions.loadThuListSuccess, (state, action) => ({
     ...state,
     thuList: action.data,

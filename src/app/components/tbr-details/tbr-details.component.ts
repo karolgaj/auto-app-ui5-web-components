@@ -5,7 +5,7 @@ import { IFormBuilder, IFormControl, IFormGroup } from '@rxweb/types';
 import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { TbrLine } from '../../models/tbr-line.model';
-import { addLine, goToWorkflow, goToWorkflowSummary, selectedTbr, splitLine, updateReference } from '../../state';
+import { addLine, addLineWithoutPartNumber, goToWorkflow, goToWorkflowSummary, selectedTbr, splitLine, updateReference } from '../../state';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { Tbr } from '../../models/tbr.model';
 import { CommonValidators } from '../../utils/validators';
@@ -16,6 +16,13 @@ interface AddLineForm {
   partNo: string;
   plannedQty: number;
   poNumber: string;
+  description: string;
+  weight: string;
+}
+
+interface AddLineOptions {
+  text: string;
+  value: string;
 }
 
 interface AddRefForm {
@@ -47,19 +54,24 @@ export class TbrDetailsComponent {
   linesTable!: ElementRef;
 
   private details$ = this.store.select(selectedTbr);
+  addLineOptions: AddLineOptions[] = [
+    { text: 'COMMON.VOLVO_GROUP_PART', value: 'VolvoPart' },
+    { text: 'COMMON.NO_PART_NUMBER_AVAILIABLE', value: 'OtherPart' },
+  ];
   tbrDetails?: Tbr;
   lines?: ExtendedTbrLine[];
   selectedRowsIndexes: number[] = [];
   addLineFormGroup!: IFormGroup<AddLineForm>;
   addRefFormGroup!: IFormGroup<AddRefForm>;
+  addLineType = this.addLineOptions[0].value;
   deliveryDateFormControl!: IFormControl<string>;
+  addLineOptionsFormControl!: IFormControl<string>;
 
   private fb: IFormBuilder;
 
   constructor(private router: Router, private store: Store, fb: FormBuilder) {
     this.fb = fb;
     this.createForm();
-
     this.details$.pipe(untilDestroyed(this)).subscribe((value) => {
       this.tbrDetails = value;
       if (this.tbrDetails == null) {
@@ -77,6 +89,7 @@ export class TbrDetailsComponent {
       });
       this.patchForm(this.tbrDetails);
     });
+    this.watchForm();
   }
 
   goBack(): void {
@@ -93,14 +106,25 @@ export class TbrDetailsComponent {
     this.addLineFormGroup.markAsPristine();
 
     if (this.tbrDetails) {
-      this.store.dispatch(
-        addLine({
-          data: {
-            shipItId: this.tbrDetails.shipitId,
-            ...newLineData,
-          },
-        })
-      );
+      if (this.addLineType === 'VolvoPart') {
+        this.store.dispatch(
+          addLine({
+            data: {
+              shipItId: this.tbrDetails.shipitId,
+              ...newLineData,
+            },
+          })
+        );
+      } else if (this.addLineType === 'OtherPart') {
+        this.store.dispatch(
+          addLineWithoutPartNumber({
+            data: {
+              shipItId: this.tbrDetails.shipitId,
+              ...newLineData,
+            },
+          })
+        );
+      }
     }
     this.cancelAddLine();
   }
@@ -201,6 +225,8 @@ export class TbrDetailsComponent {
       partNo: [null, Validators.required],
       plannedQty: [null, Validators.required],
       poNumber: [null, Validators.required],
+      description: [null, Validators.required],
+      weight: [null, Validators.required],
     });
 
     this.addRefFormGroup = this.fb.group<AddRefForm>({
@@ -210,6 +236,7 @@ export class TbrDetailsComponent {
       orderNumber: [null],
       pickupRef: [null],
     });
+    this.addLineOptionsFormControl = this.fb.control<string>(this.addLineOptions[0].value);
 
     this.deliveryDateFormControl = this.fb.control<string>(null, [Validators.required, CommonValidators.IsNotPastDateValidator()]);
   }
@@ -220,6 +247,12 @@ export class TbrDetailsComponent {
       msgToCarrier: value.messageToCarrier,
       dispatchAdviceNumber: value.dispatchAdviceNumber,
       pickupRef: value.pickupReference,
+    });
+  }
+
+  private watchForm(): void {
+    this.addLineOptionsFormControl.valueChanges.pipe(untilDestroyed(this)).subscribe((value) => {
+      if (value) this.addLineType = value;
     });
   }
 }
