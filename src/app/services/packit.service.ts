@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TransportHandlingUnit } from '../models/transport-handling-unit.model';
 import { ThuDetails } from '../models/thu-details';
+import { SubTransportHandlingUnit } from '../models/sub-transport-handling-unit.model';
+import { PlantSpecific } from '../models/plant-specific-model';
 
 @Injectable({ providedIn: 'root' })
 export class PackItService {
@@ -14,15 +16,15 @@ export class PackItService {
   getTHUListByShipFrom(shipFrom: string): Observable<TransportHandlingUnit[]> {
     return this.http.get<TransportHandlingUnit[]>(`/gateway/api/packit/v1/thu/list/${shipFrom}`);
   }
-  getSubTHUById(shipFrom: string): Observable<any> {
-    return this.http.get(`/gateway/api/packit/v1/thu/list/sub/thu/${shipFrom}`);
+  getSubTHUById(shipFrom: string): Observable<SubTransportHandlingUnit[]> {
+    return this.http.get<SubTransportHandlingUnit[]>(`/gateway/api/packit/v1/thu/list/sub/thu/${shipFrom}`);
   }
 
   getPlantSpecificTHUListForMaterialNumber(materialNumber: string): Observable<any> {
     return this.http.get(`/gateway/api/packit/v1/plantspecific/description/${materialNumber}`);
   }
-  getPlantSpecificTHUListForShipFrom(): Observable<any> {
-    return this.http.get(`/gateway/api/packit/v1/plantspecific/list`);
+  getPlantSpecificTHUListForShipFrom(): Observable<PlantSpecific[]> {
+    return this.http.get<PlantSpecific[]>(`/gateway/api/packit/v1/plantspecific/list`);
   }
 
   getPartInformationByPartNumber(partNumber: string): Observable<any> {

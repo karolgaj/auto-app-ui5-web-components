@@ -1,5 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { ThuDetails } from 'src/app/models/thu-details';
+import { SubTransportHandlingUnit } from 'src/app/models/sub-transport-handling-unit.model';
+import { PlantSpecific } from 'src/app/models/plant-specific-model';
 import { Tbr, HazmatDetails } from '../../models/tbr.model';
 import { TbrLightDetails } from '../../models/tbr-light.model';
 import { NetworkForm } from '../../models/network-form.model';
@@ -130,3 +132,23 @@ export const loadThuDataFailure = createAction('[Tbr] Load THU data Failure', pr
 export const setManualThu = createAction('[Tbr] Set manual thu', props<{ shipItId: string; releaseLineId: string; pi: ThuDetails }>());
 export const setManualThuSuccess = createAction('[Tbr] Set manual thu Success', props<{ data: Tbr }>());
 export const setManualThuFailure = createAction('[Tbr] Set manual thu Failure', props<{ error: unknown }>());
+
+export const deleteLine = createAction(
+  '[XTR] Delete line',
+  props<{
+    data: {
+      shipItId: string;
+      releaseLineId: string;
+    };
+  }>()
+);
+export const deleteLineSuccess = createAction('[XTR] Delete line Success', props<{ data: Tbr }>());
+export const deleteLineFailure = createAction('[XTR] delete line Failure', props<{ error: unknown }>());
+
+export const loadSubThuList = createAction('[Networks] Load sub thu list', props<{ data: string }>());
+export const loadSubThuListSuccess = createAction('[Networks] Load sub thu list Success', props<{ data: SubTransportHandlingUnit[] }>());
+export const loadSubThuListFailure = createAction('[Networks] Load sub thu list Failure', props<{ error: unknown }>());
+
+export const loadPlantSpecificList = createAction('[Networks] Load plant specific list');
+export const loadPlantSpecificListSuccess = createAction('[Networks] Load plant specific list Success', props<{ data: PlantSpecific[] }>());
+export const loadPlantSpecificListFailure = createAction('[Networks] Load plant specific list Failure', props<{ error: unknown }>());

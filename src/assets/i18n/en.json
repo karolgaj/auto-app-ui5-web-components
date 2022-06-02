@@ -82,7 +82,7 @@
     "STACKABLE": "Stackable",
     "PACKAGE_MATERIAL": "Package Material",
     "UNIT_LOAD": "Unit Load",
-    "CONTAINS_PART":"CONTAINS_PART",
+    "CONTAINS_PART":"Contains Part",
     "QTY_PER_LAYER": "Qty/Layer",
     "LAYERS": "Layers",
     "PARTS_PER_UNIT": "Contains Part/Qty per unit",

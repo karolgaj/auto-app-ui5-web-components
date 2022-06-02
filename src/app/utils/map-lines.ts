@@ -1,3 +1,4 @@
+import { Linter } from 'eslint';
 import { OrderReleaseLine, ShipUnitLine, Tbr } from '../models/tbr.model';
 import { TbrLine } from '../models/tbr-line.model';
 
@@ -143,7 +144,7 @@ export function mapToLines(tbr: Tbr): TbrLine[] {
       aSubHUs = aSubHUs.concat(res.aSubHU);
       const { oTBRline } = res;
       oTBRline.tbrType = tbr.tbrType;
-      aTBRlines.push(oTBRline);
+      if (!oTBRline.deleted && !oTBRline.notDelivered) aTBRlines.push(oTBRline);
     }
   });
   return aTBRlines;

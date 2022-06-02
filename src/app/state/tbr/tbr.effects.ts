@@ -138,7 +138,11 @@ export class TbrEffects {
       ofType(TbrActions.selectTbrSuccess),
       switchMap(({ data }) => {
         this.router.navigate(['/', 'xtr', data.shipitId]);
-        return of(TbrActions.loadThuList({ data: data.shipFrom.parma }));
+        return from([
+          TbrActions.loadThuList({ data: data.shipFrom.parma }),
+          TbrActions.loadSubThuList({ data: data.shipFrom.parma }),
+          TbrActions.loadPlantSpecificList(),
+        ]);
       })
     );
   });
@@ -150,6 +154,30 @@ export class TbrEffects {
         this.packItService.getTHUListByShipFrom(data).pipe(
           map((res) => TbrActions.loadThuListSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.loadThuListFailure({ error })))
+        )
+      )
+    );
+  });
+
+  loadSubTHUList$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.loadSubThuList),
+      concatMap(({ data }) =>
+        this.packItService.getSubTHUById(data).pipe(
+          map((res) => TbrActions.loadSubThuListSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.loadSubThuListFailure({ error })))
+        )
+      )
+    );
+  });
+
+  loadPlantSpecificList$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.loadPlantSpecificList),
+      concatMap(({}) =>
+        this.packItService.getPlantSpecificTHUListForShipFrom().pipe(
+          map((res) => TbrActions.loadPlantSpecificListSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.loadPlantSpecificListFailure({ error })))
         )
       )
     );
@@ -185,6 +213,18 @@ export class TbrEffects {
         this.xtrService.addLine(data.shipItId, data.poNumber, data.partNo, data.plannedQty).pipe(
           map((res) => TbrActions.addLineSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.addLineFailure({ error })))
+        )
+      )
+    )
+  );
+
+  deleteLine$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.deleteLine),
+      concatMap(({ data }) =>
+        this.xtrService.deleteLine(data.shipItId, data.releaseLineId).pipe(
+          map((res) => TbrActions.deleteLineSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.deleteLineFailure({ error })))
         )
       )
     )

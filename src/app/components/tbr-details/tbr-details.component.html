@@ -74,30 +74,32 @@
           *ngFor="let line of lines; let i = index"
           [attr.data-index]="i"
           (click)="navigateToThuDetails($event, line, tbrDetails.shipitId)">
-          <ui5-table-cell>{{ line.articleNumber }}</ui5-table-cell>
-          <ui5-table-cell>{{ line.articleName }}</ui5-table-cell>
-          <ui5-table-cell>{{ line.requestedQuantity }}</ui5-table-cell>
-          <ui5-table-cell>
-            <app-input [formControl]="line.packagedQuantityControl"></app-input>
-            <!--          <ui5-input style="width: 140px !important" [value]="row.packagedQuantity"></ui5-input>-->
-          </ui5-table-cell>
-          <ui5-table-cell>{{ line.purchaseOrderNumber }}</ui5-table-cell>
-          <ui5-table-cell>{{ line.weightSUL }} {{ line.weightSULUom }}</ui5-table-cell>
-          <ui5-table-cell>{{ line.volumeSUL }} {{ line.volumeSULUom }}</ui5-table-cell>
-          <ui5-table-cell>{{ line.quantity }}</ui5-table-cell>
-          <ui5-table-cell>
-            <app-input [formControl]="line.typeControl" [icons]="[{ icon: 'value-help', action: openThuListDialogBound }]"></app-input>
-          </ui5-table-cell>
-          <ui5-table-cell>{{ line.subHu }}</ui5-table-cell>
-          <ui5-table-cell>
-            <ui5-icon name="cancel" style="color: red"></ui5-icon>
-          </ui5-table-cell>
-          <ui5-table-cell>
-            <ui5-icon *ngIf="line.shipUnitLineId" name="circle-task-2" style="color: orange"></ui5-icon>
-            <ui5-icon *ngIf="line.mixValid" name="circle-task-2" style="color: #47962d"></ui5-icon>
-          </ui5-table-cell>
-          <ui5-table-cell>{{ line.dangerousGoods }}</ui5-table-cell>
-          <ui5-table-cell>{{ line.whLoc }}</ui5-table-cell>
+          <ng-container *ngIf="!line.deleted">
+            <ui5-table-cell>{{ line.articleNumber }}</ui5-table-cell>
+            <ui5-table-cell>{{ line.articleName }}</ui5-table-cell>
+            <ui5-table-cell>{{ line.requestedQuantity }}</ui5-table-cell>
+            <ui5-table-cell>
+              <app-input [formControl]="line.packagedQuantityControl"></app-input>
+              <!--          <ui5-input style="width: 140px !important" [value]="row.packagedQuantity"></ui5-input>-->
+            </ui5-table-cell>
+            <ui5-table-cell>{{ line.purchaseOrderNumber }}</ui5-table-cell>
+            <ui5-table-cell>{{ line.weightSUL }} {{ line.weightSULUom }}</ui5-table-cell>
+            <ui5-table-cell>{{ line.volumeSUL }} {{ line.volumeSULUom }}</ui5-table-cell>
+            <ui5-table-cell>{{ line.quantity }}</ui5-table-cell>
+            <ui5-table-cell>
+              <app-input [formControl]="line.typeControl" [icons]="[{ icon: 'value-help', action: openThuListDialogBound }]"></app-input>
+            </ui5-table-cell>
+            <ui5-table-cell>{{ line.subHu }}</ui5-table-cell>
+            <ui5-table-cell>
+              <ui5-icon name="cancel" style="color: red" (click)="deleteLine()"></ui5-icon>
+            </ui5-table-cell>
+            <ui5-table-cell>
+              <ui5-icon *ngIf="line.shipUnitLineId" name="circle-task-2" style="color: orange"></ui5-icon>
+              <ui5-icon *ngIf="line.mixValid" name="circle-task-2" style="color: #47962d"></ui5-icon>
+            </ui5-table-cell>
+            <ui5-table-cell>{{ line.dangerousGoods }}</ui5-table-cell>
+            <ui5-table-cell>{{ line.whLoc }}</ui5-table-cell>
+          </ng-container>
         </ui5-table-row>
       </ui5-table>
     </div>
@@ -188,14 +190,15 @@
   </div>
 </app-dialog>
 
-<app-dialog #manualThuDetailsDialog [dialogHeader]="'Thu data' | translate | titlecase"
-(close)="cancelManualThuDetails()"
-(save)="saveManualThuDetails()">
+<app-dialog
+  #manualThuDetailsDialog
+  [dialogHeader]="'THU details' | translate | titlecase"
+  (close)="cancelManualThuDetails()"
+  (save)="saveManualThuDetails()">
   <div
     fxLayout="column"
     fxLayoutAlign="center center"
     fxLayoutGap="1rem"
-
     class="thu-list-select-form-group"
     [formGroup]="thuListSelecFormGroup">
     <ui5-table data-ui5-compact-size>
@@ -205,18 +208,20 @@
       <ui5-table-column slot="columns">
         <span> </span>
       </ui5-table-column>
-
+      <ui5-table-column slot="columns">
+        <span> {{ 'COMMON.QTY_PER_LAYER' | translate }} </span>
+      </ui5-table-column>
       <ui5-table-column slot="columns">
         <span> {{ 'COMMON.LAYERS' | translate }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
-        <span> {{ 'COMMON.CONTAINS_PART' | translate }}(MM) </span>
+        <span> {{ 'COMMON.CONTAINS_PART' | translate }} </span>
       </ui5-table-column>
       <ui5-table-column slot="columns">
         <span> {{ 'COMMON.UNIT_LOAD' | translate }} </span>
       </ui5-table-column>
 
-      <ng-container *ngIf=" thuDetails$| async as thuDetails">
+      <ng-container *ngIf="thuDetails$ | async as thuDetails">
         <ui5-table-row *ngFor="let packMack of thuDetails.packInstructionMaterials">
           <ui5-table-cell class="w-100">
             <div>{{ packMack.materialDescription }}</div>
@@ -228,30 +233,63 @@
           <ui5-table-cell> {{ packMack.numberOfLayers }} </ui5-table-cell>
           <ui5-table-cell> {{ packMack.containsPart }} </ui5-table-cell>
           <ui5-table-cell> {{ packMack.partQuantity }} </ui5-table-cell>
-
         </ui5-table-row>
       </ng-container>
     </ui5-table>
   </div>
 </app-dialog>
 
+<app-dialog #thuListSelectDialog [hideDefaultFooter]="true">
+  <div slot="header">
+    <h2 style="text-align: center">{{ 'TBR_DETAILS.SELECT_THU' | translate | titlecase }}</h2>
+    <ui5-tabcontainer collapsed fixed (tab-select)="tabSelectionChange($event)">
+      <ui5-tab text="Thu List" selected></ui5-tab>
 
-<app-dialog #thuListSelectDialog [dialogHeader]="'TBR_DETAILS.SELECT_THU' | translate | titlecase" [hideDefaultFooter]="true">
+      <ui5-tab text="Sub Thu List"></ui5-tab>
+      <ui5-tab text="Plant Specific"></ui5-tab>
+    </ui5-tabcontainer>
+  </div>
   <div
     fxLayout="column"
     fxLayoutAlign="center center"
     fxLayoutGap="1rem"
     class="thu-list-select-form-group"
     [formGroup]="thuListSelecFormGroup">
-    <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
-      <ui5-li *ngFor="let thu of thuList$ | async"
-      [description]="thu.description"
-      [additionalText]="thu.id"
-      (click)="selectThu(thu.thuId)">
-      {{ thu.thuId }}
-      </ui5-li>
-    </ui5-list>
-
+    <ul [ngSwitch]="selectedTabIndex">
+      <li *ngSwitchCase="'0'">
+        <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
+          <ui5-li
+            *ngFor="let thu of thuList$ | async"
+            [description]="thu.description"
+            [additionalText]="thu.id"
+            (click)="selectThu(thu.thuId)">
+            {{ thu.thuId }}
+          </ui5-li>
+        </ui5-list>
+      </li>
+      <li *ngSwitchCase="'1'">
+        <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
+          <ui5-li
+            *ngFor="let thu of subThuList$ | async"
+            [description]="thu.description"
+            [additionalText]="thu.thuId"
+            (click)="selectThu(thu.thuId)">
+            {{ thu.thuId }}
+          </ui5-li>
+        </ui5-list>
+      </li>
+      <li *ngSwitchCase="'2'">
+        <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
+          <ui5-li
+            *ngFor="let thu of plantSpecificList$ | async"
+            [description]="thu.description"
+            [additionalText]="thu.materialNumber"
+            (click)="selectThu(thu.materialNumber)">
+            {{ thu.materialNumber }}
+          </ui5-li>
+        </ui5-list>
+      </li>
+    </ul>
     <div slot="footer">
       <ui5-button design="Transparent" (click)="cancelSelectThuType()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
     </div>

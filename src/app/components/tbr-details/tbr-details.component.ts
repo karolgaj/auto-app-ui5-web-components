@@ -22,6 +22,9 @@ import {
   splitLine,
   updateReference,
   setManualThu,
+  deleteLine,
+  selectSubThuList,
+  selectPlantSpecificList,
 } from '../../state';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { Tbr } from '../../models/tbr.model';
@@ -77,7 +80,12 @@ export class TbrDetailsComponent {
   linesTable!: ElementRef;
 
   private details$ = this.store.select(selectedTbr);
+  private editedLine?: TbrLine;
   thuList$ = this.store.select(selectThuList);
+  subThuList$ = this.store.select(selectSubThuList);
+  plantSpecificList$ = this.store.select(selectPlantSpecificList);
+  selectedThuList$ = this.store.select(selectThuList);
+
   thuDetails$ = this.store.select(selectThu);
 
   addLineOptions: AddLineOptions[] = [
@@ -90,17 +98,16 @@ export class TbrDetailsComponent {
   lines?: ExtendedTbrLine[];
 
   selectedRowsIndexes: number[] = [];
+  selectedTabIndex = 0;
+
+  openThuListDialogBound = this.openThuListDialog.bind(this);
   addLineFormGroup!: IFormGroup<AddLineForm>;
   addRefFormGroup!: IFormGroup<AddRefForm>;
   thuListSelecFormGroup!: IFormGroup<TransportHandlingUnit>;
-  openThuListDialogBound = this.openThuListDialog.bind(this);
-
   addLineType = this.addLineOptions[0].value;
   deliveryDateFormControl!: IFormControl<string>;
   addLineOptionsFormControl!: IFormControl<string>;
-
   private fb: IFormBuilder;
-
   constructor(private router: Router, private tbrService: TbrService, private store: Store, fb: FormBuilder) {
     this.fb = fb;
     this.createForm();
@@ -128,30 +135,25 @@ export class TbrDetailsComponent {
 
     this.watchForm();
   }
-
   goBack(): void {
     this.router.navigate(['../']);
   }
-
   openAddDialog(): void {
     this.addLineDialog.openDialog();
   }
-
   openThuListDialog(): void {
     this.thuListSelectDialog.openDialog();
   }
-
   openManualThuDetailsDialog(): void {
     this.manualThuDetailsDialog.openDialog();
   }
+
   cancelAddLine(): void {
     this.addLineDialog.closeDialog();
   }
-
   cancelManualThuDetails(): void {
     this.manualThuDetailsDialog.closeDialog();
   }
-
   cancelSelectThuType(): void {
     this.thuListSelectDialog.closeDialog();
   }
@@ -160,12 +162,12 @@ export class TbrDetailsComponent {
     this.addReferencesDialog.openDialog();
   }
 
-  saveManualThuDetails(): void {
-    if (this.tbrDetails && this.manualThu) {
+  saveManualThuDetails() {
+    if (this.tbrDetails && this.manualThu && this.editedLine) {
       this.store.dispatch(
         setManualThu({
           shipItId: this.tbrDetails.shipitId,
-          releaseLineId: '123',
+          releaseLineId: this.editedLine.releaseLineId,
           pi: this.manualThu,
         })
       );
@@ -202,6 +204,18 @@ export class TbrDetailsComponent {
     this.cancelAddLine();
   }
 
+  deleteLine(): void {
+    if (this.tbrDetails && this.editedLine) {
+      this.store.dispatch(
+        deleteLine({
+          data: {
+            shipItId: this.tbrDetails.shipitId,
+            releaseLineId: this.editedLine.releaseLineId,
+          },
+        })
+      );
+    }
+  }
   selectThu(selectedThuId: string): void {
     this.thuListSelecFormGroup.controls.thuId.setValue(selectedThuId);
     this.cancelSelectThuType();
@@ -228,7 +242,7 @@ export class TbrDetailsComponent {
 
   navigateToThuDetails(event: MouseEvent, line: TbrLine, shipitId: string): void {
     const anyEvent = event as any;
-
+    this.editedLine = line;
     const pathHasCheckbox = anyEvent.path
       .map((path: { classList: DOMTokenList }) => path.classList?.toString() || '')
       .includes('ui5-checkbox-inner');
@@ -265,6 +279,10 @@ export class TbrDetailsComponent {
       .map((row: HTMLElement) => row.getAttribute('data-index'))
       .filter((index: string | null) => index != null)
       .map((index: string) => parseInt(index, 10));
+  }
+  tabSelectionChange(e: Event) {
+    this.selectedTabIndex = (e as any).detail.tabIndex;
+    console.log('selectedTabIndex', this.selectedTabIndex);
   }
 
   goToWorkflow() {

@@ -92,8 +92,8 @@ export class XtrService {
     return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/line/split/${releaseLine}`);
   }
 
-  deleteLine(shipItId: string, releaseLineId: string): Observable<any> {
-    return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/line/delete/${releaseLineId}`);
+  deleteLine(shipItId: string, releaseLineId: string): Observable<Tbr> {
+    return this.http.get<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/line/delete/${releaseLineId}`);
   }
 
   addLine(shipItId: string, purchaseOrderNumber: string, partNumber: string, quantity: number): Observable<Tbr> {
