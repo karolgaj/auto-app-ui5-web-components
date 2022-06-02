@@ -8,9 +8,7 @@ export const selectUserData = createSelector(selectUserState, (state) => state.u
 export const selectIsAuthenticated = createSelector(selectUserState, (state) => state.isAuthenticated);
 export const selectUserTimeFormat = createSelector(selectUserData, (userData) => userData?.timeFormat);
 export const selectUserDateFormat = createSelector(selectUserData, (userData) => userData?.dateFormat);
-export const selectUserRoles = createSelector(selectUserData, (userData) =>
-  userData?.roles.filter((r) => r !== 'EXPRESS_REQUESTER_LIMITED')
-);
+export const selectUserRoles = createSelector(selectUserData, (userData) => userData?.roles);
 export const selectUserConsignorParmas = createSelector(selectUserData, (userData) =>
   userData?.consignorParmas.map(
     (v) =>
