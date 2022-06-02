@@ -144,7 +144,7 @@ export function mapToLines(tbr: Tbr): TbrLine[] {
       aSubHUs = aSubHUs.concat(res.aSubHU);
       const { oTBRline } = res;
       oTBRline.tbrType = tbr.tbrType;
-      if (!oTBRline.deleted && !oTBRline.notDelivered) aTBRlines.push(oTBRline);
+      aTBRlines.push(oTBRline);
     }
   });
   return aTBRlines;

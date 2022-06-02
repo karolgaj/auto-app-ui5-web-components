@@ -21,7 +21,7 @@ export interface ThuDetails {
   longText: string;
   minimumQuantity: number;
   oldPackInstructionNumber: string;
-  packInstructionMaterials: PackInstructionMaterial[] | null;
+  packInstructionMaterials?: PackInstructionMaterial[];
   packInstructionNumber: string;
   packRefCode: string;
   parmaList: string[];

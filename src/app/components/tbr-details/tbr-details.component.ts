@@ -6,8 +6,9 @@ import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { TransportHandlingUnit } from 'src/app/models/transport-handling-unit.model';
-import { combineLatest, startWith } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, startWith } from 'rxjs';
 import { ThuDetails } from 'src/app/models/thu-details';
+import { PackInstructionMaterial } from 'src/app/models/pack-instruction-material';
 import { TbrService } from '../../services';
 import { TbrLine } from '../../models/tbr-line.model';
 import {
@@ -58,6 +59,12 @@ interface ExtendedTbrLine extends TbrLine {
   typeControl: IFormControl<string>;
 }
 
+interface ExtendedPackMaterial extends PackInstructionMaterial {
+  qtyOfLayersControl: IFormControl<number>;
+  unitLoadPerPackMatControl: IFormControl<number>;
+  containsPartPackMatControl: IFormControl<string>;
+}
+
 @UntilDestroy()
 @Component({
   selector: 'app-tbr-details',
@@ -81,9 +88,12 @@ export class TbrDetailsComponent {
 
   private details$ = this.store.select(selectedTbr);
   private editedLine?: TbrLine;
+  private endIndex = new BehaviorSubject(10);
   thuList$ = this.store.select(selectThuList);
   subThuList$ = this.store.select(selectSubThuList);
-  plantSpecificList$ = this.store.select(selectPlantSpecificList);
+  plantSpecificList$ = combineLatest([this.store.select(selectPlantSpecificList), this.endIndex]).pipe(
+    map(([list, endIndex]) => list?.slice(0, endIndex))
+  );
   selectedThuList$ = this.store.select(selectThuList);
 
   thuDetails$ = this.store.select(selectThu);
@@ -93,8 +103,11 @@ export class TbrDetailsComponent {
     { text: 'COMMON.NO_PART_NUMBER_AVAILIABLE', value: 'OtherPart' },
   ];
 
+  containsPartOptions: AddLineOptions[] = [{ text: '', value: 'containsPart' }];
+
   tbrDetails?: Tbr;
   manualThu?: ThuDetails;
+  extendedPackMaterial?: ExtendedPackMaterial[];
   lines?: ExtendedTbrLine[];
 
   selectedRowsIndexes: number[] = [];
@@ -107,6 +120,7 @@ export class TbrDetailsComponent {
   addLineType = this.addLineOptions[0].value;
   deliveryDateFormControl!: IFormControl<string>;
   addLineOptionsFormControl!: IFormControl<string>;
+  containsPartOptionsFormControl!: IFormControl<string>;
   private fb: IFormBuilder;
   constructor(private router: Router, private tbrService: TbrService, private store: Store, fb: FormBuilder) {
     this.fb = fb;
@@ -131,6 +145,30 @@ export class TbrDetailsComponent {
 
     this.thuDetails$.pipe(untilDestroyed(this)).subscribe((value) => {
       this.manualThu = value;
+      if (this.manualThu == null) {
+        return;
+      }
+      this.extendedPackMaterial = value?.packInstructionMaterials?.map((packMat, index) => {
+        const qtyOfLayersControl = this.fb.control<number>(packMat.numberOfLayers, [Validators.required]);
+        const unitLoadPerPackMatControl = this.fb.control<number>(packMat.partQuantity, [Validators.required]);
+        const containsPartPackMatControl = this.fb.control<string>(packMat.containsPart ? 'containsPart' : 'notContainsPart', [
+          Validators.required,
+        ]);
+        if (!packMat.containsPart) {
+          unitLoadPerPackMatControl.disable();
+        }
+
+        if (!packMat.layerEnabled) {
+          qtyOfLayersControl.disable();
+        }
+
+        return {
+          ...packMat,
+          qtyOfLayersControl,
+          unitLoadPerPackMatControl,
+          containsPartPackMatControl,
+        };
+      });
     });
 
     this.watchForm();
@@ -148,10 +186,15 @@ export class TbrDetailsComponent {
     this.manualThuDetailsDialog.openDialog();
   }
 
+  linesIdentifier(index: number, line: ExtendedTbrLine) {
+    return line.id;
+  }
+
   cancelAddLine(): void {
     this.addLineDialog.closeDialog();
   }
   cancelManualThuDetails(): void {
+    this.extendedPackMaterial = [];
     this.manualThuDetailsDialog.closeDialog();
   }
   cancelSelectThuType(): void {
@@ -168,7 +211,18 @@ export class TbrDetailsComponent {
         setManualThu({
           shipItId: this.tbrDetails.shipitId,
           releaseLineId: this.editedLine.releaseLineId,
-          pi: this.manualThu,
+          pi: {
+            ...this.manualThu,
+            packInstructionMaterials: this.extendedPackMaterial?.map((packMat) => {
+              const a = {
+                ...packMat,
+                numberOfLayers: packMat.qtyOfLayersControl?.value,
+                partQuantity: packMat.unitLoadPerPackMatControl?.value,
+              };
+
+              return a as PackInstructionMaterial;
+            }),
+          },
         })
       );
     }
@@ -282,9 +336,12 @@ export class TbrDetailsComponent {
   }
   tabSelectionChange(e: Event) {
     this.selectedTabIndex = (e as any).detail.tabIndex;
-    console.log('selectedTabIndex', this.selectedTabIndex);
   }
 
+  loadMorePlantSpecificThu(): void {
+    console.log('loadMore');
+    this.endIndex.next(this.endIndex.value + 10);
+  }
   goToWorkflow() {
     const areLinesInvalid: boolean =
       this.lines == null ||

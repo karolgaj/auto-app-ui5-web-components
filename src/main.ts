@@ -26,6 +26,7 @@ import '@ui5/webcomponents/dist/Slider';
 import '@ui5/webcomponents/dist/TextArea';
 import '@ui5/webcomponents/dist/TabContainer';
 import '@ui5/webcomponents/dist/Tab';
+import '@ui5/webcomponents/dist/StepInput';
 
 import '@ui5/webcomponents-fiori/dist/Bar';
 import '@ui5/webcomponents-fiori/dist/ShellBar';
