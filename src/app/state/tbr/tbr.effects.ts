@@ -247,7 +247,7 @@ export class TbrEffects {
           shipitStatus: data.status,
           deliveryDate: data.deliveryDate,
         };
-        return this.xtrService.saveXTR(updatedTbr).pipe(map((res) => TbrActions.goToWorkflowSuccess({ data: res })));
+        return this.xtrService.saveXTR(updatedTbr).pipe(map((res) => TbrActions.goToWorkflowSuccess({ data: res.shipitId })));
       })
     )
   );
@@ -257,7 +257,7 @@ export class TbrEffects {
       this.actions$.pipe(
         ofType(TbrActions.goToWorkflowSuccess),
         tap(({ data }) => {
-          this.router.navigate(['/', 'xtr', 'workflow', data.shipitId]);
+          this.router.navigate(['/', 'xtr', 'workflow', data]);
         })
       ),
     {

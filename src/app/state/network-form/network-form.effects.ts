@@ -7,6 +7,7 @@ import { EMPTY, from, of } from 'rxjs';
 import * as NetworkFormActions from './network-form.actions';
 import { XtrService } from '../../services/xtr.service';
 import { TransportNetworkService } from '../../services/transport-network.service';
+import { goToWorkflowSuccess } from '../tbr';
 
 @Injectable()
 export class NetworkFormEffects {
@@ -100,7 +101,7 @@ export class NetworkFormEffects {
       ofType(NetworkFormActions.updateNetwork),
       concatMap(({ data, shipitId }) =>
         this.networkService.patchNetwork(shipitId, data).pipe(
-          switchMap(() => from([NetworkFormActions.updateNetworkSuccess()])),
+          switchMap(() => from([NetworkFormActions.updateNetworkSuccess({ shipitId }), goToWorkflowSuccess({ data: shipitId })])),
           catchError((error) => of(NetworkFormActions.updateNetworkFailure({ error })))
         )
       )

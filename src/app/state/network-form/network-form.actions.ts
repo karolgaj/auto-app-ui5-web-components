@@ -31,5 +31,5 @@ export const loadUnloadingPointSuccess = createAction('[NetworkForm] Load Unload
 export const loadUnloadingPointFailure = createAction('[NetworkForm] Load Unloading Point Failure', props<{ error: unknown }>());
 
 export const updateNetwork = createAction('[NetworkForm] Update network', props<{ data: Partial<Network>; shipitId: string }>());
-export const updateNetworkSuccess = createAction('[NetworkForm] Update network success');
+export const updateNetworkSuccess = createAction('[NetworkForm] Update network success', props<{ shipitId: string }>());
 export const updateNetworkFailure = createAction('[NetworkForm] Update network failure', props<{ error: unknown }>());
