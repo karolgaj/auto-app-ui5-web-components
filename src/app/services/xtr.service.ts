@@ -44,7 +44,7 @@ export class XtrService {
   }
 
   updateUnloadingPoint(shipitId: string, unloadingPoint: string): Observable<any> {
-    return this.http.get(`/v3/xtr/${shipitId}/shipto/${unloadingPoint}`);
+    return this.http.get(`/gateway/api/location/v3/xtr/${shipitId}/shipto/${unloadingPoint}`);
   }
 
   getListOfShipFrom(): Observable<PartyLocation[]> {
