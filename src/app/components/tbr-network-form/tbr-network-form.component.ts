@@ -117,7 +117,6 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       .subscribe((data) => {
         if (data) {
           this.data = data;
-          this.xtrService.updateReference(this.data.shipitId, 'test', 'test').subscribe();
         } else {
           this.store.dispatch(createEmptyBooking());
         }
