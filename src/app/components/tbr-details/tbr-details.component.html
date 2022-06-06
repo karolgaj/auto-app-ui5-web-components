@@ -228,11 +228,11 @@
             <img width="50" height="50" [src]="manualThu.packInstructionMaterials[i].imageUri" alt="materialImage" />
           </ui5-table-cell>
           <ui5-table-cell> {{ manualThu.packInstructionMaterials[i].quantityPerLayer }} </ui5-table-cell>
-          <ui5-table-cell> <app-input [formControl]="packMack.qtyOfLayersControl"></app-input> </ui5-table-cell>
+          <ui5-table-cell> <app-step-input [formControl]="packMack.qtyOfLayersControl"></app-step-input> </ui5-table-cell>
           <ui5-table-cell>
             <app-radio-group [options]="containsPartOptions" [formControl]="packMack.containsPartPackMatControl"> </app-radio-group>
           </ui5-table-cell>
-          <ui5-table-cell> <app-input [formControl]="packMack.unitLoadPerPackMatControl"></app-input></ui5-table-cell>
+          <ui5-table-cell> <app-step-input [formControl]="packMack.unitLoadPerPackMatControl"></app-step-input> </ui5-table-cell>
         </ng-container>
       </ui5-table-row>
     </ui5-table>

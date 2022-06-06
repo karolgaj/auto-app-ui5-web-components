@@ -1,0 +1,21 @@
+<div
+  [fxLayout]="vertical ? 'column' : 'row'"
+  [fxLayoutAlign]="vertical ? '' : 'end center'"
+  [fxLayoutGap]="vertical ? '0.25rem' : '0.5rem'"
+  [ngClass]="inputContainerClasses">
+  <ng-content [before]></ng-content>
+  <ui5-label *ngIf="label" [ngClass]="labelClasses" [for]="getId()" [required]="required" [showColon]="showColon"> {{ label }} </ui5-label>
+  <ui5-step-input
+    [ngClass]="inputClasses"
+    #customInput
+    [id]="getId()"
+    [value]="formatValue ? formattedValue : value"
+    [disabled]="disabled"
+    [valueState]="valueState"
+    [min]="min"
+    [max]="max"
+    [step]="step"
+    [valuePrecision]="valuePrecision">
+  </ui5-step-input>
+  <ng-content [after]></ng-content>
+</div>

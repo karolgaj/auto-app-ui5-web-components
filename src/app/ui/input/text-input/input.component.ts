@@ -12,7 +12,6 @@ type IconActions = {
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
-  styleUrls: ['./input.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
