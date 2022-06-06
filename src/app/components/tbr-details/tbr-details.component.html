@@ -294,3 +294,39 @@
     <ui5-button design="Transparent" (click)="cancelSelectThuType()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
   </div>
 </app-dialog>
+
+
+<app-dialog
+  #customThuDialog
+  [dialogHeader]="'TBR_DETAILS.CUSTOM_THU' | translate | titlecase"
+  (close)="cancelCustomThu()"
+  (save)="saveCustomThuDetails()">
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="customThuFromGroup">
+    <app-input
+      formControlName="length"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.LENGTH_MM' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="width"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.WIDTH_MM' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="height"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.HIGHT_MM' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="weight"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.NET_WEIGHT' | translate | titlecase"></app-input>
+      <app-input
+      formControlName="unitLoad"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.UNIT_LOAD_PER_NUMBER_PARTS' | translate | titlecase"></app-input>
+    <app-checkbox formControlName="stackable" [label]="'COMMON.STACKABLE' | translate | titlecase"></app-checkbox>
+  </div>
+</app-dialog>

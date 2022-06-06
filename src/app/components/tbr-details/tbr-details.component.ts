@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { IFormBuilder, IFormControl, IFormGroup } from '@rxweb/types';
 import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-
 import { TransportHandlingUnit } from 'src/app/models/transport-handling-unit.model';
 import { BehaviorSubject, combineLatest, map, startWith } from 'rxjs';
 import { ThuDetails } from 'src/app/models/thu-details';
 import { PackInstructionMaterial } from 'src/app/models/pack-instruction-material';
+import { prepareCustomThuPI, prepareSubThuPI } from '../../utils/prepare-PI';
 import { TbrService } from '../../services';
 import { TbrLine } from '../../models/tbr-line.model';
 import {
@@ -54,6 +54,15 @@ interface AddRefForm {
   doNotMerge: string;
 }
 
+interface CustomThuFrom {
+  width: number;
+  length: number;
+  height: number;
+  weight: number;
+  unitLoad: number;
+  stackable: boolean;
+}
+
 interface ExtendedTbrLine extends TbrLine {
   packagedQuantityControl: IFormControl<string>;
   typeControl: IFormControl<string>;
@@ -76,6 +85,9 @@ export class TbrDetailsComponent {
 
   @ViewChild('addReferencesDialog')
   addReferencesDialog!: DialogComponent;
+
+  @ViewChild('customThuDialog')
+  customThuDialog!: DialogComponent;
 
   @ViewChild('thuListSelectDialog')
   thuListSelectDialog!: DialogComponent;
@@ -116,6 +128,7 @@ export class TbrDetailsComponent {
   openThuListDialogBound = this.openThuListDialog.bind(this);
   addLineFormGroup!: IFormGroup<AddLineForm>;
   addRefFormGroup!: IFormGroup<AddRefForm>;
+  customThuFromGroup!: IFormGroup<CustomThuFrom>;
   thuListSelecFormGroup!: IFormGroup<TransportHandlingUnit>;
   addLineType = this.addLineOptions[0].value;
   deliveryDateFormControl!: IFormControl<string>;
@@ -161,7 +174,7 @@ export class TbrDetailsComponent {
         if (!packMat.layerEnabled) {
           qtyOfLayersControl.disable();
         }
-
+        containsPartPackMatControl.disable();
         return {
           ...packMat,
           qtyOfLayersControl,
@@ -184,6 +197,10 @@ export class TbrDetailsComponent {
   }
   openManualThuDetailsDialog(): void {
     this.manualThuDetailsDialog.openDialog();
+  }
+
+  openCustomThuDialog(): void {
+    this.customThuDialog.openDialog();
   }
 
   linesIdentifier(index: number, line: ExtendedTbrLine) {
@@ -223,6 +240,26 @@ export class TbrDetailsComponent {
               return a as PackInstructionMaterial;
             }),
           },
+        })
+      );
+    }
+    this.cancelManualThuDetails();
+  }
+
+  saveCustomThuDetails() {
+    if (this.tbrDetails && this.editedLine) {
+      this.store.dispatch(
+        setManualThu({
+          shipItId: this.tbrDetails.shipitId,
+          releaseLineId: this.editedLine.releaseLineId,
+          pi: prepareCustomThuPI(
+            this.customThuFromGroup.getRawValue().width,
+            this.customThuFromGroup.getRawValue().length,
+            this.customThuFromGroup.getRawValue().height,
+            this.customThuFromGroup.getRawValue().weight,
+            this.customThuFromGroup.getRawValue().unitLoad,
+            this.customThuFromGroup.getRawValue().stackable
+          ),
         })
       );
     }
@@ -271,9 +308,14 @@ export class TbrDetailsComponent {
     }
   }
   selectThu(selectedThuId: string): void {
-    this.thuListSelecFormGroup.controls.thuId.setValue(selectedThuId);
-    this.cancelSelectThuType();
-    this.openManualThuDetailsDialog();
+    if (selectedThuId !== 'OTHER') {
+      this.thuListSelecFormGroup.controls.thuId.setValue(selectedThuId);
+      this.cancelSelectThuType();
+      this.openManualThuDetailsDialog();
+    } else {
+      this.cancelSelectThuType();
+      this.openCustomThuDialog();
+    }
   }
 
   saveAddRef(): void {
@@ -292,6 +334,12 @@ export class TbrDetailsComponent {
     this.addRefFormGroup.reset();
     this.addRefFormGroup.markAsPristine();
     this.addReferencesDialog.closeDialog();
+  }
+
+  cancelCustomThu(): void {
+    this.customThuFromGroup.reset();
+    this.customThuFromGroup.markAsPristine();
+    this.customThuDialog.closeDialog();
   }
 
   navigateToThuDetails(event: MouseEvent, line: TbrLine, shipitId: string): void {
@@ -339,7 +387,6 @@ export class TbrDetailsComponent {
   }
 
   loadMorePlantSpecificThu(): void {
-    console.log('loadMore');
     this.endIndex.next(this.endIndex.value + 10);
   }
   goToWorkflow() {
@@ -382,6 +429,15 @@ export class TbrDetailsComponent {
       msgToCarrier: [null],
       orderNumber: [null],
       pickupRef: [null],
+    });
+
+    this.customThuFromGroup = this.fb.group<CustomThuFrom>({
+      width: [null],
+      length: [null],
+      height: [null],
+      weight: [null],
+      unitLoad: [null],
+      stackable: [false],
     });
 
     this.thuListSelecFormGroup = this.fb.group<TransportHandlingUnit>({
