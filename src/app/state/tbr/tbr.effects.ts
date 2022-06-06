@@ -276,7 +276,7 @@ export class TbrEffects {
   setManualThu$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TbrActions.setManualThu),
-      concatMap(({ shipItId, releaseLineId, pi }) =>
+      switchMap(({ shipItId, releaseLineId, pi }) =>
         this.xtrService.setManualTHU(shipItId, releaseLineId, pi).pipe(
           map((res) => TbrActions.setManualThuSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.setManualThuFailure({ error })))

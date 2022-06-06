@@ -6,26 +6,25 @@ import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { TransportHandlingUnit } from 'src/app/models/transport-handling-unit.model';
-import { BehaviorSubject, combineLatest, map, startWith } from 'rxjs';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { ThuDetails } from 'src/app/models/thu-details';
-import { PackInstructionMaterial } from 'src/app/models/pack-instruction-material';
 import { TbrService } from '../../services';
 import { TbrLine } from '../../models/tbr-line.model';
 import {
   addLine,
   addLineWithoutPartNumber,
+  deleteLine,
   goToWorkflow,
   goToWorkflowSummary,
-  selectedTbr,
   loadThuData,
+  selectedTbr,
+  selectPlantSpecificList,
+  selectSubThuList,
   selectThu,
   selectThuList,
+  setManualThu,
   splitLine,
   updateReference,
-  setManualThu,
-  deleteLine,
-  selectSubThuList,
-  selectPlantSpecificList,
 } from '../../state';
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { Tbr } from '../../models/tbr.model';
@@ -41,9 +40,10 @@ interface AddLineForm {
   weight: string;
 }
 
+type AddLineOptionValue = 'VolvoPart' | 'OtherPart';
 interface AddLineOptions {
   text: string;
-  value: string;
+  value: AddLineOptionValue;
 }
 
 interface AddRefForm {
@@ -59,7 +59,7 @@ interface ExtendedTbrLine extends TbrLine {
   typeControl: IFormControl<string>;
 }
 
-interface ExtendedPackMaterial extends PackInstructionMaterial {
+interface ExtendedPackMaterial {
   qtyOfLayersControl: IFormControl<number>;
   unitLoadPerPackMatControl: IFormControl<number>;
   containsPartPackMatControl: IFormControl<string>;
@@ -94,7 +94,6 @@ export class TbrDetailsComponent {
   plantSpecificList$ = combineLatest([this.store.select(selectPlantSpecificList), this.endIndex]).pipe(
     map(([list, endIndex]) => list?.slice(0, endIndex))
   );
-  selectedThuList$ = this.store.select(selectThuList);
 
   thuDetails$ = this.store.select(selectThu);
 
@@ -103,11 +102,11 @@ export class TbrDetailsComponent {
     { text: 'COMMON.NO_PART_NUMBER_AVAILIABLE', value: 'OtherPart' },
   ];
 
-  containsPartOptions: AddLineOptions[] = [{ text: '', value: 'containsPart' }];
+  containsPartOptions = [{ text: '', value: 'containsPart' }];
 
   tbrDetails?: Tbr;
   manualThu?: ThuDetails;
-  extendedPackMaterial?: ExtendedPackMaterial[];
+  extendedPackMaterial: ExtendedPackMaterial[] = [];
   lines?: ExtendedTbrLine[];
 
   selectedRowsIndexes: number[] = [];
@@ -119,8 +118,8 @@ export class TbrDetailsComponent {
   thuListSelecFormGroup!: IFormGroup<TransportHandlingUnit>;
   addLineType = this.addLineOptions[0].value;
   deliveryDateFormControl!: IFormControl<string>;
-  addLineOptionsFormControl!: IFormControl<string>;
-  containsPartOptionsFormControl!: IFormControl<string>;
+  addLineOptionsFormControl!: IFormControl<AddLineOptionValue>;
+
   private fb: IFormBuilder;
   constructor(private router: Router, private tbrService: TbrService, private store: Store, fb: FormBuilder) {
     this.fb = fb;
@@ -145,10 +144,10 @@ export class TbrDetailsComponent {
 
     this.thuDetails$.pipe(untilDestroyed(this)).subscribe((value) => {
       this.manualThu = value;
-      if (this.manualThu == null) {
+      if (this.manualThu == null || value?.packInstructionMaterials == null) {
         return;
       }
-      this.extendedPackMaterial = value?.packInstructionMaterials?.map((packMat, index) => {
+      this.extendedPackMaterial = value?.packInstructionMaterials?.map((packMat) => {
         const qtyOfLayersControl = this.fb.control<number>(packMat.numberOfLayers, [Validators.required]);
         const unitLoadPerPackMatControl = this.fb.control<number>(packMat.partQuantity, [Validators.required]);
         const containsPartPackMatControl = this.fb.control<string>(packMat.containsPart ? 'containsPart' : 'notContainsPart', [
@@ -163,7 +162,6 @@ export class TbrDetailsComponent {
         }
 
         return {
-          ...packMat,
           qtyOfLayersControl,
           unitLoadPerPackMatControl,
           containsPartPackMatControl,
@@ -173,15 +171,19 @@ export class TbrDetailsComponent {
 
     this.watchForm();
   }
+
   goBack(): void {
     this.router.navigate(['../']);
   }
+
   openAddDialog(): void {
     this.addLineDialog.openDialog();
   }
+
   openThuListDialog(): void {
     this.thuListSelectDialog.openDialog();
   }
+
   openManualThuDetailsDialog(): void {
     this.manualThuDetailsDialog.openDialog();
   }
@@ -207,21 +209,18 @@ export class TbrDetailsComponent {
 
   saveManualThuDetails() {
     if (this.tbrDetails && this.manualThu && this.editedLine) {
+      const packInstructionMaterials = this.manualThu.packInstructionMaterials?.map((packMat, i) => ({
+        ...packMat,
+        numberOfLayers: this.extendedPackMaterial[i].qtyOfLayersControl.value as number,
+        partQuantity: this.extendedPackMaterial[i].unitLoadPerPackMatControl.value as number,
+      }));
       this.store.dispatch(
         setManualThu({
           shipItId: this.tbrDetails.shipitId,
           releaseLineId: this.editedLine.releaseLineId,
           pi: {
             ...this.manualThu,
-            packInstructionMaterials: this.extendedPackMaterial?.map((packMat) => {
-              const a = {
-                ...packMat,
-                numberOfLayers: packMat.qtyOfLayersControl?.value,
-                partQuantity: packMat.unitLoadPerPackMatControl?.value,
-              };
-
-              return a as PackInstructionMaterial;
-            }),
+            packInstructionMaterials,
           },
         })
       );
@@ -270,6 +269,7 @@ export class TbrDetailsComponent {
       );
     }
   }
+
   selectThu(selectedThuId: string): void {
     this.thuListSelecFormGroup.controls.thuId.setValue(selectedThuId);
     this.cancelSelectThuType();
@@ -339,10 +339,10 @@ export class TbrDetailsComponent {
   }
 
   loadMorePlantSpecificThu(): void {
-    console.log('loadMore');
     this.endIndex.next(this.endIndex.value + 10);
   }
-  goToWorkflow() {
+
+  goToWorkflow(): void {
     const areLinesInvalid: boolean =
       this.lines == null ||
       this.lines?.length === 0 ||
@@ -390,7 +390,7 @@ export class TbrDetailsComponent {
       thuId: [null],
     });
 
-    this.addLineOptionsFormControl = this.fb.control<string>(this.addLineOptions[0].value);
+    this.addLineOptionsFormControl = this.fb.control<AddLineOptionValue>(this.addLineOptions[0].value);
     this.deliveryDateFormControl = this.fb.control<string>(null, [Validators.required, CommonValidators.IsNotPastDateValidator()]);
   }
 
@@ -405,22 +405,22 @@ export class TbrDetailsComponent {
 
   private watchForm(): void {
     this.addLineOptionsFormControl.valueChanges.pipe(untilDestroyed(this)).subscribe((value) => {
-      if (value) this.addLineType = value;
+      if (value) {
+        this.addLineType = value;
+      }
     });
 
-    combineLatest([this.thuListSelecFormGroup.controls.thuId.valueChanges.pipe(startWith(this.thuListSelecFormGroup.controls.thuId.value))])
-      .pipe(untilDestroyed(this))
-      .subscribe(([selectedThuId]) => {
-        if (selectedThuId && this.tbrDetails) {
-          this.store.dispatch(
-            loadThuData({
-              data: {
-                thuId: selectedThuId,
-                shipFromId: this.tbrDetails.shipFrom.parma,
-              },
-            })
-          );
-        }
-      });
+    this.thuListSelecFormGroup.controls.thuId.valueChanges.pipe(untilDestroyed(this)).subscribe((selectedThuId) => {
+      if (selectedThuId && this.tbrDetails) {
+        this.store.dispatch(
+          loadThuData({
+            data: {
+              thuId: selectedThuId,
+              shipFromId: this.tbrDetails.shipFrom.parma,
+            },
+          })
+        );
+      }
+    });
   }
 }
