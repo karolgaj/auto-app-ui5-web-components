@@ -1,36 +1,42 @@
 <ui5-bar design="Header" slot="header">
   <ui5-label>{{ 'COMMON.TBRS' | translate }}</ui5-label>
 </ui5-bar>
-<!--<div fxLayout="column" style="height: calc(100vh - 44px); max-height: calc(100vh - 44px)">-->
-<ui5-list [noDataText]="'COMMON.NO_DATA' | translate" style="height: calc(100% - 88px)">
+<app-input
+  [placeholder]="'COMMON.SEARCH' | translate"
+  [inputClasses]="['w-100']"
+  [disableValueState]="true"
+  [formControl]="searchFormControl"
+  [icons]="[{ icon: 'sys-cancel', action: clearSearch }]"></app-input>
+<div fxLayout="column" style="height: calc(100% - 130px); overflow: auto">
   <ng-container *ngFor="let type of tbrTypes">
     <ui5-panel [attr.header-text]="type" accessible-role="Complementary" style="width: 100%" *ngIf="tbrTypesLists[type] | async as list">
-      <ng-container *ngIf="list.length; else noData">
-        <ui5-li-custom mode="Single Select" style="height: 130px" (click)="selectTbr(tbr)" *ngFor="let tbr of list">
-          <div fxLayout="column" fxLayoutGap="0.25rem" style="margin-bottom: 1rem; cursor: pointer">
-            <ui5-label style="margin-bottom: 0.25rem; font-weight: bold; text-transform: capitalize; cursor: pointer">
-              {{ tbr.shipToName | lowercase }}
-            </ui5-label>
-            <div fxLayout fxLayoutAlign="space-between end" style="cursor: pointer">
-              <ui5-icon class="samples-margin" name="approvals" style="height: 1.5rem; width: 1.5rem; color: black"></ui5-icon>
-              <span> {{ tbr.consigneeId }} </span>
-              <span> {{ tbr.unloadingPoint }} </span>
-              <ui5-icon class="samples-margin" name="laptop" style="height: 1.5rem; width: 1.5rem; color: black"></ui5-icon>
+<!--      <ui5-list [noDataText]="'COMMON.NO_DATA' | translate" style="height: calc(100% - 88px)">-->
+        <ng-container *ngIf="list.length; else noData">
+          <ui5-li-custom mode="Single Select" style="height: 130px" (click)="selectTbr(tbr)" *ngFor="let tbr of list">
+            <div fxLayout="column" fxLayoutGap="0.25rem" style="margin-bottom: 1rem; cursor: pointer">
+              <ui5-label style="margin-bottom: 0.25rem; font-weight: bold; text-transform: capitalize; cursor: pointer">
+                {{ tbr.shipToName | lowercase }}
+              </ui5-label>
+              <div fxLayout fxLayoutAlign="space-between end" style="cursor: pointer">
+                <ui5-icon class="samples-margin" name="approvals" style="height: 1.5rem; width: 1.5rem; color: black"></ui5-icon>
+                <span> {{ tbr.consigneeId }} </span>
+                <span> {{ tbr.unloadingPoint }} </span>
+                <ui5-icon class="samples-margin" name="laptop" style="height: 1.5rem; width: 1.5rem; color: black"></ui5-icon>
+              </div>
+              <ui5-label style="cursor: pointer"> {{ tbr.shipFromId }} - {{ tbr.shipFromName }} </ui5-label>
+              <ui5-label style="cursor: pointer"> {{ tbr.consignorId }} - {{ tbr.consignorName }} </ui5-label>
+              <ui5-label style="cursor: pointer"> {{ 'COMMON.PICKUP_DATE' | translate }}: {{ tbr.deliveryDate | parseDate }} </ui5-label>
+              <ui5-label style="cursor: pointer">
+                {{ 'COMMON.STATUS' | translate }}:
+                <span [ngStyle]="{ color: tbr.shipitStatus | shipitStatus: 'color' }"> {{ tbr.shipitStatus | shipitStatus }} </span>
+              </ui5-label>
             </div>
-            <ui5-label style="cursor: pointer"> {{ tbr.shipFromId }} - {{ tbr.shipFromName }} </ui5-label>
-            <ui5-label style="cursor: pointer"> {{ tbr.consignorId }} - {{ tbr.consignorName }} </ui5-label>
-            <ui5-label style="cursor: pointer"> {{ 'COMMON.PICKUP_DATE' | translate }}: {{ tbr.deliveryDate | parseDate }} </ui5-label>
-            <ui5-label style="cursor: pointer">
-              {{ 'COMMON.STATUS' | translate }}:
-              <span [ngStyle]="{ color: tbr.shipitStatus | shipitStatus: 'color' }"> {{ tbr.shipitStatus | shipitStatus }} </span>
-            </ui5-label>
-          </div>
-        </ui5-li-custom>
-      </ng-container>
+          </ui5-li-custom>
+        </ng-container>
+<!--      </ui5-list>-->
     </ui5-panel>
   </ng-container>
-</ui5-list>
-<!--</div>-->
+</div>
 <ui5-bar design="Footer" slot="footer" class="tbr-list__footer">
   <ui5-button
     *appUserHasRoles="['EXPRESS_REQUESTER_LIMITED', 'EXPRESS_REQUESTER_UNLIMITED']"

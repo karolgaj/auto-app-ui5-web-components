@@ -139,7 +139,8 @@
     "APPROVED": "Approved",
     "UNAPPROVED": "Unapproved",
     "PAYER": "Payer",
-    "TYPE": "Type"
+    "TYPE": "Type",
+    "SEARCH": "Search"
   },
   "NETWORK_FORM": {
     "VALID_FROM_TO": "valid from - to",

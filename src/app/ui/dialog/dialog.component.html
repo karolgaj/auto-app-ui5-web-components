@@ -1,7 +1,7 @@
 <ui5-dialog #dialog [accessibleName]="accessibleName">
   <div slot="header">
     <ng-content select="[header]"></ng-content>
-    <h2 *ngIf="dialogHeader">{{ dialogHeader }}</h2>
+    <h2 style="padding-inline: 1rem" *ngIf="dialogHeader">{{ dialogHeader }}</h2>
   </div>
   <ng-content></ng-content>
   <div slot="footer">

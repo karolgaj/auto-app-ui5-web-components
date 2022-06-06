@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { combineLatest, debounceTime, Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { ShipItStatusTypeName } from '../../models/tbr-type.model';
 import { TbrLightDetails } from '../../models/tbr-light.model';
 import { loadTbrs, refreshTbrList, selectTbr, selectTbrsByType } from '../../state';
@@ -25,13 +27,24 @@ export class TbrListComponent {
   ];
 
   tbrTypesLists: Record<ShipItStatusTypeName, Observable<TbrLightDetails[]>>;
+  searchFormControl = new FormControl('');
 
   constructor(private router: Router, private store: Store) {
     this.store.dispatch(loadTbrs({ data: { query: '' } }));
 
     this.tbrTypesLists = {} as Record<ShipItStatusTypeName, Observable<TbrLightDetails[]>>;
     this.tbrTypes.forEach((tbrType) => {
-      this.tbrTypesLists[tbrType] = this.store.select(selectTbrsByType(ShipItStatusTypeMap[tbrType]));
+      this.tbrTypesLists[tbrType] = combineLatest([
+        this.store.select(selectTbrsByType(ShipItStatusTypeMap[tbrType])),
+        this.searchFormControl.valueChanges.pipe(debounceTime(200), startWith('')),
+      ]).pipe(
+        map(([tbrDetails, search]: [TbrLightDetails[], string]) => {
+          if (search == null || search === '') {
+            return tbrDetails;
+          }
+          return tbrDetails?.filter((details) => Object.values(details).join('').includes(search));
+        })
+      );
     });
   }
 
@@ -46,4 +59,8 @@ export class TbrListComponent {
   refreshList(): void {
     this.store.dispatch(refreshTbrList({ data: { query: '' } }));
   }
+
+  clearSearch = () => {
+    this.searchFormControl.setValue('');
+  };
 }

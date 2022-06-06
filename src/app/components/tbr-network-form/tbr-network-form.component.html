@@ -169,7 +169,12 @@
   [dialogHeader]="'COMMON.CONSIGNOR' | translate | titlecase"
   [hideDefaultFooter]="true"
   [accessibleName]="'Consignor Value Help'">
-  <!--  <app-input placeholder="Search" [control]="networkForm.controls.pickupDate" [icons]="[{ icon: 'clear' }]"></app-input>-->
+  <app-input
+    [placeholder]="'COMMON.SEARCH' | translate"
+    [inputClasses]="['w-100']"
+    [disableValueState]="true"
+    [formControl]="searchFormControl"
+    [icons]="[{ icon: 'sys-cancel', action: clearSearch }]"></app-input>
 
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
@@ -191,7 +196,12 @@
   [dialogHeader]="'COMMON.CONSIGNEE' | translate | titlecase"
   [hideDefaultFooter]="true"
   [accessibleName]="'Consignees Value Help'">
-  <!--  <app-input placeholder="Search" [control]="networkForm.controls.pickupDate" [icons]="[{ icon: 'clear' }]"></app-input>-->
+  <app-input
+    [placeholder]="'COMMON.SEARCH' | translate"
+    [inputClasses]="['w-100']"
+    [disableValueState]="true"
+    [formControl]="searchFormControl"
+    [icons]="[{ icon: 'sys-cancel', action: clearSearch }]"></app-input>
 
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
@@ -209,6 +219,13 @@
 </app-dialog>
 
 <app-dialog #unloadingPointDialogRef dialogHeader="Unloading point" [hideDefaultFooter]="true" accessibleName="Unloading point value help">
+  <app-input
+    [placeholder]="'COMMON.SEARCH' | translate"
+    [inputClasses]="['w-100']"
+    [disableValueState]="true"
+    [formControl]="searchFormControl"
+    [icons]="[{ icon: 'sys-cancel', action: clearSearch }]"></app-input>
+
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li *ngFor="let unloadPoint of unloadingPoints$ | async" (click)="selectLoadingPoint(unloadPoint)">
       {{ unloadPoint }}
@@ -221,6 +238,13 @@
 </app-dialog>
 
 <app-dialog #shipFromListDialog [hideDefaultFooter]="true" [dialogHeader]="'COMMON.SHIP_FROM' | translate | titlecase">
+  <app-input
+    [placeholder]="'COMMON.SEARCH' | translate"
+    [inputClasses]="['w-100']"
+    [disableValueState]="true"
+    [formControl]="searchFormControl"
+    [icons]="[{ icon: 'sys-cancel', action: clearSearch }]"></app-input>
+
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
       *ngFor="let shipFrom of listOfShipFrom$ | async"
@@ -237,6 +261,13 @@
 </app-dialog>
 
 <app-dialog #shipToListDialog [hideDefaultFooter]="true" [dialogHeader]="'COMMON.SHIP_TO' | translate | titlecase">
+  <app-input
+    [placeholder]="'COMMON.SEARCH' | translate"
+    [inputClasses]="['w-100']"
+    [disableValueState]="true"
+    [formControl]="searchFormControl"
+    [icons]="[{ icon: 'sys-cancel', action: clearSearch }]"></app-input>
+
   <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
     <ui5-li
       *ngFor="let shipTo of listOfShipTo$ | async"

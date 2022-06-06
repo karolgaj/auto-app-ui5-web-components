@@ -43,6 +43,9 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   @Input()
   readonly = false;
 
+  @Input()
+  disableValueState = false;
+
   @ViewChild('customInput')
   customInput!: ElementRef;
 

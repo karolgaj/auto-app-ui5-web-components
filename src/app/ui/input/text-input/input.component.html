@@ -13,7 +13,7 @@
     [showSuggestions]="showSuggestions"
     [value]="formatValue ? formattedValue : value"
     [disabled]="disabled"
-    [valueState]="valueState">
+    [valueState]="disableValueState ? 'None' : valueState">
     <ng-container *ngFor="let icon of icons">
       <ui5-icon *ngIf="icon.icon" slot="icon" [name]="icon.icon" (click)="icon.action && icon.action()"></ui5-icon>
     </ng-container>

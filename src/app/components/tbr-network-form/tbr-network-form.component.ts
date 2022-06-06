@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { IFormBuilder, IFormGroup } from '@rxweb/types';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { of, switchMap, tap } from 'rxjs';
-import { catchError, filter, map, take } from 'rxjs/operators';
+import { combineLatest, debounceTime, of, switchMap, tap } from 'rxjs';
+import { catchError, filter, map, startWith, take } from 'rxjs/operators';
 
 import { DialogComponent } from '../../ui/dialog/dialog.component';
 import { selectUserConsigneeParmas, selectUserConsignorParmas, selectUserRoles } from '../../state';
@@ -62,16 +62,61 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   private addressSelection?: 'shipFrom' | 'shipTo';
   private loadingPointSelection?: 'loadingPoint' | 'unloadingPoint';
 
+  searchFormControl = new FormControl('');
+  searchQuery$ = this.searchFormControl.valueChanges.pipe(debounceTime(200), startWith(''));
   isLimitedRequester$ = this.store.select(selectUserRoles).pipe(map((roles) => roles?.includes('EXPRESS_REQUESTER_LIMITED')));
   isUnlimitedRequester$ = this.store.select(selectUserRoles).pipe(map((roles) => roles?.includes('EXPRESS_REQUESTER_UNLIMITED')));
-  unloadingPoints$ = this.store.select(selectUnloadPoint);
-  listOfShipFrom$ = this.isLimitedRequester$.pipe(switchMap((value) => (value ? this.store.select(selectShipFrom) : of([]))));
-  listOfShipTo$ = this.isLimitedRequester$.pipe(switchMap((value) => (value ? this.store.select(selectShipTo) : of([]))));
-  lostOfConsignors$ = this.isLimitedRequester$.pipe(
-    switchMap((value) => (value ? this.store.select(selectConsignors) : this.store.select(selectUserConsignorParmas)))
+  unloadingPoints$ = combineLatest([this.store.select(selectUnloadPoint), this.searchQuery$]).pipe(
+    map(([unloadingPoints, search]) => {
+      if (search == null || search === '') {
+        return unloadingPoints;
+      }
+      return unloadingPoints?.filter((unloadPoint) => unloadPoint.includes(search));
+    })
   );
-  listOfConsignees$ = this.isLimitedRequester$.pipe(
-    switchMap((value) => (value ? this.store.select(selectConsignees) : this.store.select(selectUserConsigneeParmas)))
+  private listOfShipFromLimited$ = combineLatest([this.store.select(selectShipFrom), this.searchQuery$]).pipe(
+    map(([shipFroms, search]) => {
+      if (search == null || search === '') {
+        return shipFroms;
+      }
+      return shipFroms?.filter((shipFrom) => Object.values(shipFrom).join(',').includes(search));
+    })
+  );
+  private listOfShipToLimited$ = combineLatest([this.store.select(selectShipTo), this.searchQuery$]).pipe(
+    map(([shipTos, search]) => {
+      if (search == null || search === '') {
+        return shipTos;
+      }
+      return shipTos?.filter((shipTo) => Object.values(shipTo).join(',').includes(search));
+    })
+  );
+  listOfShipFrom$ = this.isLimitedRequester$.pipe(switchMap((value) => (value ? this.listOfShipFromLimited$ : of([]))));
+  listOfShipTo$ = this.isLimitedRequester$.pipe(switchMap((value) => (value ? this.listOfShipToLimited$ : of([]))));
+  lostOfConsignors$ = combineLatest([
+    this.isLimitedRequester$.pipe(
+      switchMap((value) => (value ? this.store.select(selectConsignors) : this.store.select(selectUserConsignorParmas)))
+    ),
+    this.searchQuery$,
+  ]).pipe(
+    map(([consignors, search]) => {
+      if (search == null || search === '') {
+        return consignors;
+      }
+      return consignors?.filter((consignor) => Object.values(consignor).join(',').includes(search));
+    })
+  );
+  listOfConsignees$ = combineLatest([
+    this.isLimitedRequester$.pipe(
+      switchMap((value) => (value ? this.store.select(selectConsignees) : this.store.select(selectUserConsigneeParmas)))
+    ),
+    this.searchQuery$,
+  ]).pipe(
+    map(([consignees, search]) => {
+      if (search == null || search === '') {
+        return consignees;
+      }
+      return consignees?.filter((consignee) => Object.values(consignee).join(',').includes(search));
+    })
   );
 
   addressToApprove?: string;
@@ -191,6 +236,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       this.networkForm.controls.loadingPoint.setValue(loadingPoint);
     }
     this.unloadingPointDialog.closeDialog();
+    this.searchFormControl.setValue('');
   }
 
   saveCustomAddress(): void {
@@ -215,6 +261,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       this.networkForm.controls.shipTo.setValue(shipItem.parmaId);
       this.shipToListDialog.closeDialog();
     }
+    this.searchFormControl.setValue('');
   }
 
   goBack(): void {
@@ -267,12 +314,14 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     this.networkForm.controls.consignee.setValue(parma.parmaId);
 
     this.consigneeDialog.closeDialog();
+    this.searchFormControl.setValue('');
   }
 
   selectConsignor(parma: PartyLocation): void {
     this.networkForm.controls.consignor.setValue(parma.parmaId);
 
     this.consignorDialog.closeDialog();
+    this.searchFormControl.setValue('');
   }
 
   approveAddress(): void {
@@ -487,5 +536,9 @@ export class TbrNetworkFormComponent implements AfterViewInit {
         return newValue ? `${parmaId} - ${newValue}` : parmaId;
       })
     );
+  };
+
+  clearSearch = () => {
+    this.searchFormControl.setValue('');
   };
 }
