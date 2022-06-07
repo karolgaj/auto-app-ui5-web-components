@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TbrLightDetails } from '../models/tbr-light.model';
 import { HazmatDetails, Tbr, TransportParty } from '../models/tbr.model';
+import { ThuDetails } from '../models/thu-details';
+
 import { PartyLocation } from '../models/location.model';
 
 @Injectable({
@@ -18,6 +20,10 @@ export class XtrService {
   }
 
   /* PUT METHODS */
+
+  setManualTHU(shipItId: string, releaseLineId: string, pi: ThuDetails): Observable<Tbr> {
+    return this.http.put<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/manual/thu/${releaseLineId}`, pi);
+  }
 
   addHazmatDetails(shipItId: string, releaseLineId: string, hazmatDetails: HazmatDetails): Observable<Tbr> {
     return this.http.put<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/hazmat/${releaseLineId}`, hazmatDetails);
@@ -116,8 +122,8 @@ export class XtrService {
     return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/line/split/${releaseLine}`);
   }
 
-  deleteLine(shipItId: string, releaseLineId: string): Observable<any> {
-    return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/line/delete/${releaseLineId}`);
+  deleteLine(shipItId: string, releaseLineId: string): Observable<Tbr> {
+    return this.http.get<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/line/delete/${releaseLineId}`);
   }
 
   addLine(shipItId: string, purchaseOrderNumber: string, partNumber: string, quantity: number): Observable<Tbr> {

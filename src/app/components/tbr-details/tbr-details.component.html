@@ -71,7 +71,7 @@
 
         <ui5-table-row
           data-ui5-compact-size
-          *ngFor="let line of lines; let i = index"
+          *ngFor="let line of lines; trackBy: linesIdentifier; let i = index"
           [attr.data-index]="i"
           (click)="navigateToThuDetails($event, line, tbrDetails.shipitId)">
           <ui5-table-cell>{{ line.articleNumber }}</ui5-table-cell>
@@ -86,12 +86,11 @@
           <ui5-table-cell>{{ line.volumeSUL }} {{ line.volumeSULUom }}</ui5-table-cell>
           <ui5-table-cell>{{ line.quantity }}</ui5-table-cell>
           <ui5-table-cell>
-            <app-input [formControl]="line.typeControl"></app-input>
-            <!--          <ui5-input [value]="row.type"></ui5-input>-->
+            <app-input [formControl]="line.typeControl" [icons]="[{ icon: 'value-help', action: openThuListDialogBound }]"></app-input>
           </ui5-table-cell>
           <ui5-table-cell>{{ line.subHu }}</ui5-table-cell>
           <ui5-table-cell>
-            <ui5-icon name="cancel" style="color: red"></ui5-icon>
+            <ui5-icon name="cancel" style="color: red" (click)="deleteLine()"></ui5-icon>
           </ui5-table-cell>
           <ui5-table-cell>
             <ui5-icon *ngIf="line.shipUnitLineId" name="circle-task-2" style="color: orange"></ui5-icon>
@@ -122,6 +121,7 @@
 <ng-template #emptyState>
   <app-tbr-empty-state></app-tbr-empty-state>
 </ng-template>
+
 <app-dialog #addLineDialog [dialogHeader]="'TBR_DETAILS.ADD_LINE' | translate | titlecase" (close)="cancelAddLine()" (save)="saveAddLine()">
   <app-radio-group *ngIf="addLineOptionsFormControl" [options]="addLineOptions" [formControl]="addLineOptionsFormControl">
   </app-radio-group>
@@ -185,5 +185,148 @@
       [vertical]="true"
       [label]="'COMMON.ORDER_NUMBER' | translate | titlecase"></app-input>
     <app-checkbox formControlName="doNotMerge" [label]="'COMMON.DO_NOT_MERGE' | translate | titlecase"></app-checkbox>
+  </div>
+</app-dialog>
+
+<app-dialog
+  #manualThuDetailsDialog
+  [dialogHeader]="'THU details' | translate | titlecase"
+  (close)="cancelManualThuDetails()"
+  (save)="saveManualThuDetails()">
+  <div
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="1rem"
+    class="thu-list-select-form-group"
+    [formGroup]="thuListSelecFormGroup">
+    <ui5-table data-ui5-compact-size>
+      <ui5-table-column slot="columns" class="w-100">
+        <span> {{ 'COMMON.PACKAGE_MATERIAL' | translate }} </span>
+      </ui5-table-column>
+      <ui5-table-column slot="columns">
+        <span> </span>
+      </ui5-table-column>
+      <ui5-table-column slot="columns">
+        <span> {{ 'COMMON.QTY_PER_LAYER' | translate }} </span>
+      </ui5-table-column>
+      <ui5-table-column slot="columns">
+        <span> {{ 'COMMON.LAYERS' | translate }} </span>
+      </ui5-table-column>
+      <ui5-table-column slot="columns">
+        <span> {{ 'COMMON.CONTAINS_PART' | translate }} </span>
+      </ui5-table-column>
+      <ui5-table-column slot="columns">
+        <span> {{ 'COMMON.UNIT_LOAD' | translate }} </span>
+      </ui5-table-column>
+
+      <ui5-table-row *ngFor="let packMack of extendedPackMaterial; let i = index">
+        <ng-container *ngIf="manualThu?.packInstructionMaterials && manualThu.packInstructionMaterials[i]">
+          <ui5-table-cell class="w-100">
+            <div>{{ manualThu.packInstructionMaterials[i].materialDescription }}</div>
+          </ui5-table-cell>
+          <ui5-table-cell>
+            <img width="50" height="50" [src]="manualThu.packInstructionMaterials[i].imageUri" alt="materialImage" />
+          </ui5-table-cell>
+          <ui5-table-cell> {{ manualThu.packInstructionMaterials[i].quantityPerLayer }} </ui5-table-cell>
+          <ui5-table-cell> <app-step-input [formControl]="packMack.qtyOfLayersControl"></app-step-input> </ui5-table-cell>
+          <ui5-table-cell>
+            <app-radio-group [options]="containsPartOptions" [formControl]="packMack.containsPartPackMatControl"> </app-radio-group>
+          </ui5-table-cell>
+          <ui5-table-cell> <app-step-input [formControl]="packMack.unitLoadPerPackMatControl"></app-step-input> </ui5-table-cell>
+        </ng-container>
+      </ui5-table-row>
+    </ui5-table>
+  </div>
+</app-dialog>
+
+<app-dialog #thuListSelectDialog [hideDefaultFooter]="true">
+  <div slot="header">
+    <h2 style="text-align: center">{{ 'TBR_DETAILS.SELECT_THU' | translate | titlecase }}</h2>
+    <ui5-tabcontainer collapsed fixed (tab-select)="tabSelectionChange($event)">
+      <ui5-tab text="Thu List" selected></ui5-tab>
+      <ui5-tab text="Sub Thu List"></ui5-tab>
+      <ui5-tab text="Plant Specific"></ui5-tab>
+    </ui5-tabcontainer>
+  </div>
+  <div
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="1rem"
+    class="thu-list-select-form-group"
+    [formGroup]="thuListSelecFormGroup">
+    <ng-container [ngSwitch]="selectedTabIndex">
+      <ng-container *ngSwitchCase="'0'">
+        <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
+          <ui5-li
+            *ngFor="let thu of thuList$ | async"
+            [description]="thu.description"
+            [additionalText]="thu.id"
+            (click)="selectThu(thu.thuId)">
+            {{ thu.thuId }}
+          </ui5-li>
+        </ui5-list>
+      </ng-container>
+      <ng-container *ngSwitchCase="'1'">
+        <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
+          <ui5-li
+            *ngFor="let thu of subThuList$ | async"
+            [description]="thu.description"
+            [additionalText]="thu.thuId"
+            (click)="selectSubThu(thu)">
+            {{ thu.thuId }}
+          </ui5-li>
+        </ui5-list>
+      </ng-container>
+      <ng-container *ngSwitchCase="'2'">
+        <ui5-list growing="Scroll" (load-more)="loadMorePlantSpecificThu()" [noDataText]="'COMMON.NO_DATA' | translate">
+          <ui5-li
+            *ngFor="let thu of plantSpecificList$ | async"
+            [description]="thu.description"
+            [additionalText]="thu.materialNumber"
+            (click)="selectThu(thu.materialNumber)">
+            {{ thu.materialNumber }}
+          </ui5-li>
+        </ui5-list>
+      </ng-container>
+    </ng-container>
+  </div>
+  <div slot="footer">
+    <ui5-button design="Transparent" (click)="cancelSelectThuType()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
+  </div>
+</app-dialog>
+
+
+<app-dialog
+  #customThuDialog
+  [dialogHeader]="'TBR_DETAILS.CUSTOM_THU' | translate | titlecase"
+  (close)="cancelCustomThu()"
+  (save)="saveCustomThuDetails()">
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="customThuFormGroup">
+    <app-input
+      formControlName="length"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.LENGTH_MM' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="width"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.WIDTH_MM' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="height"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.HIGHT_MM' | translate | titlecase"></app-input>
+    <app-input
+      formControlName="weight"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.NET_WEIGHT' | translate | titlecase"></app-input>
+      <app-input
+      formControlName="unitLoad"
+      [inputClasses]="['w-100']"
+      [vertical]="true"
+      [label]="'COMMON.UNIT_LOAD_PER_NUMBER_PARTS' | translate | titlecase"></app-input>
+    <app-checkbox formControlName="stackable" [label]="'COMMON.STACKABLE' | translate | titlecase"></app-checkbox>
   </div>
 </app-dialog>

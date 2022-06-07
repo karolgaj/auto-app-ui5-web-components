@@ -1,4 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
+import { ThuDetails } from 'src/app/models/thu-details';
+import { SubTransportHandlingUnit } from 'src/app/models/sub-transport-handling-unit.model';
+import { PlantSpecific } from 'src/app/models/plant-specific-model';
 import * as TbrActions from './tbr.actions';
 import { Tbr } from '../../models/tbr.model';
 import { TbrLightDetails } from '../../models/tbr-light.model';
@@ -15,9 +18,12 @@ export interface State {
   networks?: TbrNetwork[];
   consignors?: Consignor[];
   unloadingPoints?: UnloadingPoint[];
+  thuData?: ThuDetails;
   shipItems?: ShipItem[];
   selectedTbr?: Tbr;
   thuList?: TransportHandlingUnit[];
+  subThuList?: SubTransportHandlingUnit[];
+  plantSpecificList?: PlantSpecific[];
   error?: any;
 }
 
@@ -46,6 +52,8 @@ export const reducer = createReducer(
     TbrActions.addLineWithoutPartNumberSuccess,
     TbrActions.addHazmatDetailsSuccess,
     TbrActions.deleteHazmatDetailsSuccess,
+    TbrActions.setManualThuSuccess,
+    TbrActions.deleteLineSuccess,
     TbrActions.splitLineSuccess,
     (state, action) => ({
       ...state,
@@ -55,6 +63,18 @@ export const reducer = createReducer(
   on(TbrActions.loadThuListSuccess, (state, action) => ({
     ...state,
     thuList: action.data,
+  })),
+  on(TbrActions.loadSubThuListSuccess, (state, action) => ({
+    ...state,
+    subThuList: action.data,
+  })),
+  on(TbrActions.loadThuDataSuccess, (state, action) => ({
+    ...state,
+    thuData: action.data,
+  })),
+  on(TbrActions.loadPlantSpecificListSuccess, (state, action) => ({
+    ...state,
+    plantSpecificList: action.data,
   })),
   on(TbrActions.updateSelectedTbr, (state, action) => {
     let selectedTbr = { ...state.selectedTbr } as Tbr;

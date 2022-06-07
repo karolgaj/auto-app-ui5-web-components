@@ -138,7 +138,11 @@ export class TbrEffects {
       ofType(TbrActions.selectTbrSuccess),
       switchMap(({ data }) => {
         this.router.navigate(['/', 'xtr', data.shipitId]);
-        return of(TbrActions.loadThuList({ data: data.shipFrom.parma }));
+        return from([
+          TbrActions.loadThuList({ data: data.shipFrom.parma }),
+          TbrActions.loadSubThuList({ data: data.shipFrom.parma }),
+          TbrActions.loadPlantSpecificList(),
+        ]);
       })
     );
   });
@@ -155,6 +159,41 @@ export class TbrEffects {
     );
   });
 
+  loadSubTHUList$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.loadSubThuList),
+      concatMap(({ data }) =>
+        this.packItService.getSubTHUById(data).pipe(
+          map((res) => TbrActions.loadSubThuListSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.loadSubThuListFailure({ error })))
+        )
+      )
+    );
+  });
+
+  loadPlantSpecificList$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.loadPlantSpecificList),
+      concatMap(({}) =>
+        this.packItService.getPlantSpecificTHUListForShipFrom().pipe(
+          map((res) => TbrActions.loadPlantSpecificListSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.loadPlantSpecificListFailure({ error })))
+        )
+      )
+    );
+  });
+
+  loadTHUData$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(TbrActions.loadThuData),
+      concatMap(({ data }) =>
+        this.packItService.getTHUById(data.thuId, data.shipFromId).pipe(
+          map((res) => TbrActions.loadThuDataSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.loadThuDataFailure({ error })))
+        )
+      )
+    );
+  });
   createTbr$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TbrActions.createTbr),
@@ -174,6 +213,18 @@ export class TbrEffects {
         this.xtrService.addLine(data.shipItId, data.poNumber, data.partNo, data.plannedQty).pipe(
           map((res) => TbrActions.addLineSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.addLineFailure({ error })))
+        )
+      )
+    )
+  );
+
+  deleteLine$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.deleteLine),
+      concatMap(({ data }) =>
+        this.xtrService.deleteLine(data.shipItId, data.releaseLineId).pipe(
+          map((res) => TbrActions.deleteLineSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.deleteLineFailure({ error })))
         )
       )
     )
@@ -217,6 +268,18 @@ export class TbrEffects {
         this.xtrService.addHazmatDetails(shipitId, releaseLineId, hazmatDetails).pipe(
           map((res) => TbrActions.addHazmatDetailsSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.addHazmatDetailsFailure({ error })))
+        )
+      )
+    )
+  );
+
+  setManualThu$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TbrActions.setManualThu),
+      switchMap(({ shipItId, releaseLineId, pi }) =>
+        this.xtrService.setManualTHU(shipItId, releaseLineId, pi).pipe(
+          map((res) => TbrActions.setManualThuSuccess({ data: res })),
+          catchError((error: unknown) => of(TbrActions.setManualThuFailure({ error })))
         )
       )
     )

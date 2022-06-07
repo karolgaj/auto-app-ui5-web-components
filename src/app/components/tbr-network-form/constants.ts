@@ -1,3 +1,4 @@
+import { ThuDetails } from 'src/app/models/thu-details';
 import { SelectionOption } from '../../models/selection-option.model';
 import { NetworkType, ServiceLevel, TransportType } from '../../models/network.model';
 

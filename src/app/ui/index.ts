@@ -6,6 +6,7 @@ import {
   InputComponent,
   RadioGroupComponent,
   SelectComponent,
+  StepInputComponent,
   TextareaComponent,
   TimepickerComponent,
 } from './input';
@@ -22,4 +23,5 @@ export const UI_COMPONENTS = [
   TextareaComponent,
   RadioGroupComponent,
   LayoutComponent,
+  StepInputComponent,
 ];
