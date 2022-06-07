@@ -6,7 +6,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { IFormArray, IFormBuilder } from '@rxweb/types';
 import { Observable } from 'rxjs';
-import { filter, map, pluck, switchMap, take } from 'rxjs/operators';
+import { filter, map, pluck, switchMap, take, withLatestFrom } from 'rxjs/operators';
 import { TbrLine } from 'src/app/models/tbr-line.model';
 import { HazmatDetails } from 'src/app/models/tbr.model';
 import { DialogComponent } from 'src/app/ui/dialog/dialog.component';
@@ -40,12 +40,11 @@ export class ThuDetailsComponent {
   ) {
     this.line$ = this.route.paramMap.pipe(
       switchMap((paramMap) => {
-        const articleNumber = paramMap.get('articleNumber');
+        const releaseLineId = paramMap.get('releaseLineId');
         return this.store.select(selectedTbr).pipe(
           map((tbr) => {
             if (tbr) {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-              return tbr.lines?.find((line: { articleNumber: string }) => line.articleNumber === articleNumber);
+              return tbr.lines?.find((line: { releaseLineId: string }) => line.releaseLineId === releaseLineId);
             }
             return undefined;
           })
@@ -57,9 +56,13 @@ export class ThuDetailsComponent {
     this.hazmatDetails$ = this.line$.pipe(filter(Boolean), pluck<TbrLine>('hazmatDetails')) as Observable<HazmatDetails>;
     this.thuList$ = this.store.select(selectedTbr).pipe(
       filter(Boolean),
-      map((tbrDetails) => {
+      withLatestFrom(this.releaseLineId$),
+      map(([tbrDetails, releaseLine]) => {
         this.shipitId = tbrDetails?.shipitId;
-        const thus = tbrDetails?.shipUnitLines.map((slu) => slu.transportHandlingUnits).reduce((acc, curr) => acc.concat(curr));
+        const thus = tbrDetails?.shipUnitLines
+          .filter((sul) => sul.releaseLineIds.includes(releaseLine))
+          .map((slu) => slu.transportHandlingUnits)
+          .reduce((acc, curr) => acc.concat(curr));
         return thus ? thus[0] : null;
       })
     );

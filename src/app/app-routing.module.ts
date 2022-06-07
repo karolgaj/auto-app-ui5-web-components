@@ -52,7 +52,7 @@ const routes: Routes = [
         canActivate: [LoadedExpressGuard],
       },
       {
-        path: ':shipItId/:articleNumber',
+        path: ':shipItId/:releaseLineId',
         component: ThuDetailsComponent,
         canActivate: [LoadedExpressGuard],
       },

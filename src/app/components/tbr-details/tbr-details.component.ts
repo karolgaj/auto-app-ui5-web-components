@@ -8,7 +8,7 @@ import { TransportHandlingUnit } from 'src/app/models/transport-handling-unit.mo
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { ThuDetails } from 'src/app/models/thu-details';
 import { SubTransportHandlingUnit } from 'src/app/models/sub-transport-handling-unit.model';
-import { prepareCustomThuPayload, prepareSubThuPayload } from '../../utils/prepare-PI';
+import { prepareCustomThuPayload, prepareSubThuPayload } from '../../utils/prepare-thu-payload';
 import { TbrLine } from '../../models/tbr-line.model';
 
 import {
@@ -341,7 +341,7 @@ export class TbrDetailsComponent {
     if (pathHasCheckbox || anyEvent.target.id.includes('custom-input') || anyEvent.srcElement.localName === 'ui5-icon') {
       return;
     }
-    this.router.navigate(['/', 'xtr', shipitId, line.articleNumber]);
+    this.router.navigate(['/', 'xtr', shipitId, line.releaseLineId]);
   }
 
   split(): void {

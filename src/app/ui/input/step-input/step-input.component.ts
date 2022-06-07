@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, forwardRef, Injector, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { CustomInputAbstract } from '../custom-input.abstract';
 import { fromEvent } from 'rxjs';
+import { CustomInputAbstract } from '../custom-input.abstract';
 
 @UntilDestroy()
 @Component({
@@ -31,7 +31,6 @@ export class StepInputComponent extends CustomInputAbstract implements AfterView
     // @ts-ignore
     fromEvent(this.customInput.nativeElement, 'change').subscribe((e: any) => {
       const value = e.detail?.value ?? e.target.value;
-      console.log(value);
       this.writeValue(value);
       this.onChange(this.value);
       this.markAsTouched();
