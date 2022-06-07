@@ -1,30 +1,37 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { IFormBuilder, IFormGroup } from '@rxweb/types';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest } from 'rxjs';
-import { filter, startWith, take } from 'rxjs/operators';
+import { combineLatest, debounceTime, of, switchMap, tap } from 'rxjs';
+import { catchError, filter, map, startWith, take } from 'rxjs/operators';
 
 import { DialogComponent } from '../../ui/dialog/dialog.component';
-import {
-  loadConsignors,
-  loadShipItems,
-  loadShipPoints,
-  loadUnloadingPoints,
-  selectConsignors,
-  selectNetworks,
-  selectShipItems,
-  selectUnloadingPoints,
-} from '../../state';
-import { TbrLightDetails } from '../../models/tbr-light.model';
+import { selectUserConsigneeParmas, selectUserConsignorParmas, selectUserRoles } from '../../state';
 import { NetworkForm } from '../../models/network-form.model';
 import { CustomAddress } from '../../models/custom-address.model';
-import { TbrNetwork } from '../../models/tbr-network.model';
 import { PLANNING_TYPE_OPTIONS, SERVICE_LEVEL_OPTIONS, TRANSPORT_TYPE_OPTIONS } from './constants';
 import { CommonValidators } from '../../utils/validators';
-import { UnloadingPoint } from '../../models/unloading-point.model';
+import {
+  createEmptyBooking,
+  loadConsignees,
+  loadConsignors,
+  loadShipFrom,
+  loadShipTo,
+  loadUnloadingPoint,
+  selectConsignees,
+  selectConsignors,
+  selectNewBooking,
+  selectShipFrom,
+  selectShipTo,
+  selectUnloadPoint,
+  updateNetwork,
+} from '../../state/network-form';
+import { PartyLocation } from '../../models/location.model';
+import { Tbr, TransportParty } from '../../models/tbr.model';
+import { XtrService } from '../../services/xtr.service';
+import { Network } from '../../models/network.model';
 
 @UntilDestroy()
 @Component({
@@ -32,16 +39,22 @@ import { UnloadingPoint } from '../../models/unloading-point.model';
   templateUrl: './tbr-network-form.component.html',
 })
 export class TbrNetworkFormComponent implements AfterViewInit {
-  @ViewChild('parmaDialog')
-  parmaDialog!: DialogComponent;
+  @ViewChild('consignorDialog')
+  consignorDialog!: DialogComponent;
+
+  @ViewChild('consigneeDialog')
+  consigneeDialog!: DialogComponent;
 
   @ViewChild('customAddressDialog')
   customAddressDialog!: DialogComponent;
 
-  @ViewChild('shipListDialog')
-  shipListDialog!: DialogComponent;
+  @ViewChild('shipFromListDialog')
+  shipFromListDialog!: DialogComponent;
 
-  @ViewChild('unloadingPointDialog')
+  @ViewChild('shipToListDialog')
+  shipToListDialog!: DialogComponent;
+
+  @ViewChild('unloadingPointDialogRef')
   unloadingPointDialog!: DialogComponent;
 
   private fb: IFormBuilder;
@@ -49,11 +62,64 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   private addressSelection?: 'shipFrom' | 'shipTo';
   private loadingPointSelection?: 'loadingPoint' | 'unloadingPoint';
 
-  consignors$ = this.store.select(selectConsignors);
-  availableNetworks$ = this.store.select(selectNetworks);
-  unloadingPoints$ = this.store.select(selectUnloadingPoints);
-  shipItems$ = this.store.select(selectShipItems);
-  showAvailableNetwork = false;
+  searchFormControl = new FormControl('');
+  searchQuery$ = this.searchFormControl.valueChanges.pipe(debounceTime(200), startWith(''));
+  isLimitedRequester$ = this.store.select(selectUserRoles).pipe(map((roles) => roles?.includes('EXPRESS_REQUESTER_LIMITED')));
+  isUnlimitedRequester$ = this.store.select(selectUserRoles).pipe(map((roles) => roles?.includes('EXPRESS_REQUESTER_UNLIMITED')));
+  unloadingPoints$ = combineLatest([this.store.select(selectUnloadPoint), this.searchQuery$]).pipe(
+    map(([unloadingPoints, search]) => {
+      if (search == null || search === '') {
+        return unloadingPoints;
+      }
+      return unloadingPoints?.filter((unloadPoint) => unloadPoint.includes(search));
+    })
+  );
+  private listOfShipFromLimited$ = combineLatest([this.store.select(selectShipFrom), this.searchQuery$]).pipe(
+    map(([shipFroms, search]) => {
+      if (search == null || search === '') {
+        return shipFroms;
+      }
+      return shipFroms?.filter((shipFrom) => Object.values(shipFrom).join(',').includes(search));
+    })
+  );
+  private listOfShipToLimited$ = combineLatest([this.store.select(selectShipTo), this.searchQuery$]).pipe(
+    map(([shipTos, search]) => {
+      if (search == null || search === '') {
+        return shipTos;
+      }
+      return shipTos?.filter((shipTo) => Object.values(shipTo).join(',').includes(search));
+    })
+  );
+  listOfShipFrom$ = this.isLimitedRequester$.pipe(switchMap((value) => (value ? this.listOfShipFromLimited$ : of([]))));
+  listOfShipTo$ = this.isLimitedRequester$.pipe(switchMap((value) => (value ? this.listOfShipToLimited$ : of([]))));
+  lostOfConsignors$ = combineLatest([
+    this.isLimitedRequester$.pipe(
+      switchMap((value) => (value ? this.store.select(selectConsignors) : this.store.select(selectUserConsignorParmas)))
+    ),
+    this.searchQuery$,
+  ]).pipe(
+    map(([consignors, search]) => {
+      if (search == null || search === '') {
+        return consignors;
+      }
+      return consignors?.filter((consignor) => Object.values(consignor).join(',').includes(search));
+    })
+  );
+  listOfConsignees$ = combineLatest([
+    this.isLimitedRequester$.pipe(
+      switchMap((value) => (value ? this.store.select(selectConsignees) : this.store.select(selectUserConsigneeParmas)))
+    ),
+    this.searchQuery$,
+  ]).pipe(
+    map(([consignees, search]) => {
+      if (search == null || search === '') {
+        return consignees;
+      }
+      return consignees?.filter((consignee) => Object.values(consignee).join(',').includes(search));
+    })
+  );
+
+  addressToApprove?: string;
 
   openConsigneeDialogBound!: () => void;
   openConsignorDialogBound!: () => void;
@@ -72,31 +138,59 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   transportTypeOptions = TRANSPORT_TYPE_OPTIONS;
   planningTypesOptions = PLANNING_TYPE_OPTIONS;
 
-  constructor(fb: FormBuilder, private router: Router, private store: Store, private commonValidators: CommonValidators) {
+  data!: Partial<Tbr> & Required<{ shipitId: string }>;
+  private unlimitedShipFrom?: TransportParty;
+  private unlimitedShipTo?: TransportParty;
+  private unlimitedConsignee?: TransportParty;
+  private unlimitedConsignor?: TransportParty;
+
+  constructor(
+    fb: FormBuilder,
+    private router: Router,
+    private store: Store,
+    private commonValidators: CommonValidators,
+    private xtrService: XtrService
+  ) {
     this.fb = fb;
-    this.store.dispatch(loadConsignors({}));
-    this.store.dispatch(loadShipItems());
+
     this.createForms();
     this.watchForms();
+
+    this.store
+      .select(selectNewBooking)
+      .pipe(untilDestroyed(this))
+      .subscribe((data) => {
+        if (data) {
+          this.data = data;
+        } else {
+          this.store.dispatch(createEmptyBooking());
+        }
+      });
+
+    this.isLimitedRequester$.pipe(filter(Boolean), untilDestroyed(this)).subscribe(() => this.limitedRequestedInitialization());
+
+    this.isUnlimitedRequester$.pipe(filter(Boolean), untilDestroyed(this)).subscribe(() => {
+      this.unlimitedRequestedInitialization();
+    });
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.openConsigneeDialogBound = () => {
         this.parmaSelection = 'consignee';
-        TbrNetworkFormComponent.openDialog.call(this, this.parmaDialog);
+        TbrNetworkFormComponent.openDialog.call(this, this.consigneeDialog);
       };
       this.openConsignorDialogBound = () => {
         this.parmaSelection = 'consignor';
-        TbrNetworkFormComponent.openDialog.call(this, this.parmaDialog);
+        TbrNetworkFormComponent.openDialog.call(this, this.consignorDialog);
       };
       this.openShipToListDialogBound = () => {
         this.addressSelection = 'shipTo';
-        TbrNetworkFormComponent.openDialog.call(this, this.shipListDialog);
+        TbrNetworkFormComponent.openDialog.call(this, this.shipToListDialog);
       };
       this.openShipFromListDialogBound = () => {
         this.addressSelection = 'shipFrom';
-        TbrNetworkFormComponent.openDialog.call(this, this.shipListDialog);
+        TbrNetworkFormComponent.openDialog.call(this, this.shipFromListDialog);
       };
       this.openCustomShipToAddressDialogBound = () => {
         this.addressSelection = 'shipTo';
@@ -119,34 +213,7 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     });
   }
 
-  get parmaDialogAccessibleName(): string {
-    if (this.parmaSelection === 'consignor') {
-      return 'Consignor Value Help';
-    }
-    if (this.parmaSelection === 'consignee') {
-      return 'Consignees Value Help';
-    }
-    return '';
-  }
-  get parmaDialogHeader(): string {
-    if (this.parmaSelection === 'consignor') {
-      return 'COMMON.CONSIGNOR';
-    }
-    if (this.parmaSelection === 'consignee') {
-      return 'COMMON.CONSIGNEE';
-    }
-    return '';
-  }
   get addressDialogHeader(): string {
-    if (this.addressSelection === 'shipFrom') {
-      return 'COMMON.SHIP_FROM';
-    }
-    if (this.addressSelection === 'shipTo') {
-      return 'COMMON.SHIP_TO';
-    }
-    return '';
-  }
-  get shipListDialogHeader(): string {
     if (this.addressSelection === 'shipFrom') {
       return 'COMMON.SHIP_FROM';
     }
@@ -157,28 +224,26 @@ export class TbrNetworkFormComponent implements AfterViewInit {
   }
 
   closeCustomAddressDialog(): void {
+    this.customAddressForm.reset();
+    this.customAddressForm.markAsPristine();
     this.customAddressDialog.closeDialog();
   }
-  closeShipListDialog(): void {
-    this.shipListDialog.closeDialog();
-  }
-  closeParmaDialog(): void {
-    this.parmaDialog.closeDialog();
-  }
-  closeUnloadingPointDialog(): void {
-    this.unloadingPointDialog.closeDialog();
-  }
 
-  selectLoadingPoint(loadingPoint: UnloadingPoint): void {
+  selectLoadingPoint(loadingPoint: string): void {
     if (this.loadingPointSelection === 'unloadingPoint') {
-      this.networkForm.controls.unloadingPoint.setValue(loadingPoint.unloadingPoint);
+      this.networkForm.controls.unloadingPoint.setValue(loadingPoint);
     } else {
-      this.networkForm.controls.loadingPoint.setValue(loadingPoint.unloadingPoint);
+      this.networkForm.controls.loadingPoint.setValue(loadingPoint);
     }
-    this.closeUnloadingPointDialog();
+    this.unloadingPointDialog.closeDialog();
+    this.searchFormControl.setValue('');
   }
 
   saveCustomAddress(): void {
+    if (this.customAddressForm.invalid) {
+      return;
+    }
+
     if (this.addressSelection === 'shipFrom') {
       this.networkForm.controls.shipFrom.setValue('CUSTOM');
     } else {
@@ -188,64 +253,84 @@ export class TbrNetworkFormComponent implements AfterViewInit {
     this.closeCustomAddressDialog();
   }
 
-  selectShipItem(shipItem: any): void {
+  selectShipItem(shipItem: PartyLocation): void {
     if (this.addressSelection === 'shipFrom') {
-      this.networkForm.controls.shipFrom.setValue(shipItem.parma);
+      this.networkForm.controls.shipFrom.setValue(shipItem.parmaId);
+      this.shipFromListDialog.closeDialog();
     } else {
-      this.networkForm.controls.shipTo.setValue(shipItem.parma);
+      this.networkForm.controls.shipTo.setValue(shipItem.parmaId);
+      this.shipToListDialog.closeDialog();
     }
-    this.closeShipListDialog();
+    this.searchFormControl.setValue('');
   }
 
   goBack(): void {
     this.router.navigate(['../']);
   }
 
-  chooseNetwork(tbrNetwork: TbrNetwork): void {
-    this.networkForm.patchValue({
-      ...tbrNetwork,
-      consignor: tbrNetwork.consignorId,
-      consignee: tbrNetwork.consigneeId,
-      shipTo: tbrNetwork.shipToId,
-      shipFrom: tbrNetwork.shipFromId,
-    });
-  }
+  // chooseNetwork(tbrNetwork: TbrNetwork): void {
+  //   this.networkForm.patchValue({
+  //     ...tbrNetwork,
+  //     consignor: tbrNetwork.consignorId,
+  //     consignee: tbrNetwork.consigneeId,
+  //     shipTo: tbrNetwork.shipToId,
+  //     shipFrom: tbrNetwork.shipFromId,
+  //   });
+  // }
 
   createTbr(): void {
     if (this.networkForm.invalid) {
       this.networkForm.markAllAsTouched();
       return;
     }
-    const payload: Partial<TbrLightDetails> = {
-      ...this.networkForm.getRawValue(),
+
+    const networkFormData = this.networkForm.getRawValue();
+
+    const payload: Partial<Network> = {
+      customs: networkFormData.customs,
+      useLoadingMeters: networkFormData.useLoadingMeters,
+      doNotMerge: networkFormData.doNotMerge,
+      freightClass: networkFormData.freightClass,
+      type: networkFormData.type,
+      planningType: networkFormData.planningType,
+      serviceLevel: networkFormData.serviceLevel,
+      transportType: networkFormData.transportType,
+      networkId: null,
+
+      deliveryLeadTime: null,
+      incoTerm: null,
+      valid: true,
     };
 
-    // console.log(payload);
-
-    // console.log(NEW_XTR);
-
-    // this.store.dispatch(createTbr({ data: payload }));
+    this.store.dispatch(
+      updateNetwork({
+        data: payload,
+        shipitId: this.data.shipitId,
+      })
+    );
   }
 
-  selectParma(parma: { parma: string }): void {
-    if (this.parmaSelection === 'consignor') {
-      this.networkForm.controls.consignor.setValue(parma.parma);
-    } else if (this.parmaSelection === 'consignee') {
-      this.networkForm.controls.consignee.setValue(parma.parma);
-    }
+  selectConsignee(parma: PartyLocation): void {
+    this.networkForm.controls.consignee.setValue(parma.parmaId);
 
-    this.closeParmaDialog();
+    this.consigneeDialog.closeDialog();
+    this.searchFormControl.setValue('');
   }
 
-  toggleAvailableNetwork(): void {
-    this.availableNetworks$
-      .pipe(
-        take(1),
-        filter((value) => !!value?.length)
-      )
-      .subscribe(() => {
-        this.showAvailableNetwork = !this.showAvailableNetwork;
-      });
+  selectConsignor(parma: PartyLocation): void {
+    this.networkForm.controls.consignor.setValue(parma.parmaId);
+
+    this.consignorDialog.closeDialog();
+    this.searchFormControl.setValue('');
+  }
+
+  approveAddress(): void {
+    this.customAddressForm.patchValue(
+      {
+        isAddressValidated: !this.customAddressForm.controls.isAddressValidated.value,
+      },
+      { emitEvent: false }
+    );
   }
 
   private createForms(): void {
@@ -256,14 +341,16 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       shipTo: [null, [Validators.required]],
       unloadingPoint: [null, [Validators.required]],
       loadingPoint: [null],
-      pickupDate: [null, [Validators.required, CommonValidators.IsNotPastDateValidator]],
+      pickupDate: [null, [Validators.required, CommonValidators.IsNotPastDateValidator()]],
       freightClass: [null],
-      planningType: ['INBOUND'],
+      planningType: ['DDT'],
+      type: ['INBOUND'],
       serviceLevel: ['STD_INB'],
       transportType: ['FTL'],
       customs: [false],
       doNotMerge: [true],
       useLoadingMeters: [false],
+      payer: [null, Validators.required],
     });
 
     this.customAddressForm = this.fb.group<CustomAddress>({
@@ -272,34 +359,186 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       name: [null],
       postalCode: [null],
       street1: [null],
+      isAddressValidated: [false, Validators.requiredTrue],
     });
   }
 
   private watchForms(): void {
-    combineLatest([
-      this.networkForm.controls.consignor.valueChanges.pipe(startWith(this.networkForm.controls.consignor.value)),
-      this.networkForm.controls.shipFrom.valueChanges.pipe(startWith(this.networkForm.controls.shipFrom.value)),
-    ])
-      .pipe(untilDestroyed(this))
-      .subscribe(([consignor, shipFrom]) => {
-        if (consignor) {
-          this.store.dispatch(loadShipPoints({ data: consignor }));
+    this.networkForm.controls.shipTo.valueChanges.pipe(untilDestroyed(this)).subscribe((value) => {
+      if (value) {
+        this.store.dispatch(loadUnloadingPoint({ data: value }));
+      }
+    });
 
-          if (shipFrom != null) {
-            this.store.dispatch(
-              loadUnloadingPoints({
-                data: {
-                  shipFrom,
-                  consignor,
-                },
-              })
-            );
+    this.networkForm.controls.consignee.valueChanges.pipe(untilDestroyed(this)).subscribe((value) => {
+      if (value) {
+        this.networkForm.controls.payer.patchValue(value);
+      }
+    });
+
+    this.networkForm.controls.pickupDate.valueChanges
+      .pipe(
+        filter(Boolean),
+        switchMap((value) => this.xtrService.setPickupAndDeadlineDate(this.data.shipitId, value, null, null)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+
+    this.networkForm.controls.unloadingPoint.valueChanges
+      .pipe(
+        filter(Boolean),
+        switchMap((value) => this.xtrService.updateUnloadingPoint(this.data.shipitId, value)),
+        untilDestroyed(this)
+      )
+      .subscribe();
+
+    this.customAddressForm.valueChanges
+      .pipe(
+        filter((value) => {
+          if (value) {
+            return !Object.values(value).some((v) => v == null);
           }
-        }
+          return false;
+        }),
+        switchMap((value) => this.commonValidators.validateAddressWithGoogle(value)),
+        untilDestroyed(this)
+      )
+      .subscribe((value) => {
+        this.customAddressForm.patchValue(
+          {
+            isAddressValidated: false,
+          },
+          {
+            emitEvent: false,
+          }
+        );
+        this.addressToApprove = value?.location?.formatted_address;
       });
+  }
+
+  private unlimitedRequestedInitialization(): void {}
+
+  private limitedRequestedInitialization(): void {
+    this.store.dispatch(loadShipFrom());
+    this.store.dispatch(loadShipTo());
+    this.store.dispatch(loadConsignors());
+    this.networkForm.controls.consignee.setValidators([Validators.required]);
+    this.networkForm.controls.shipTo.valueChanges.pipe(untilDestroyed(this)).subscribe((value) => {
+      if (value) {
+        this.store.dispatch(loadConsignees({ data: value }));
+      }
+    });
   }
 
   private static openDialog(dialog: DialogComponent): void {
     dialog.openDialog();
   }
+
+  formatShipFromValueUnlimited = (v: string) => {
+    return of(v).pipe(
+      switchMap((value) => {
+        if (value == null || value.length === 0) {
+          return of(v);
+        }
+        return this.xtrService.getShipFromLocation(this.data.shipitId, v).pipe(
+          tap((shipFrom) => (this.unlimitedShipFrom = shipFrom)),
+          map((shipFrom) => `${shipFrom.parma} - ${shipFrom.name}`),
+          catchError(() => {
+            this.networkForm.controls.shipFrom.setErrors({ parmaNotFound: v });
+            return of(v);
+          })
+        );
+      })
+    );
+  };
+
+  formatShipToValueUnlimited = (v: string) => {
+    return of(v).pipe(
+      switchMap((value) => {
+        if (value == null || value.length === 0) {
+          return of(v);
+        }
+        return this.xtrService.getShipToLocation(this.data.shipitId, v).pipe(
+          tap((shipTo) => (this.unlimitedShipTo = shipTo)),
+          map((shipTo) => `${shipTo.parma} - ${shipTo.name}`),
+          catchError(() => {
+            this.networkForm.controls.shipTo.setErrors({ parmaNotFound: v });
+            return of(v);
+          })
+        );
+      })
+    );
+  };
+
+  formatConsigneeValueUnlimited = (v: string) => {
+    return of(v).pipe(
+      switchMap((value) => {
+        if (value == null || value.length === 0) {
+          return of(v);
+        }
+        return this.xtrService.getConsigneeLocation(this.data.shipitId, v).pipe(
+          take(1),
+          tap((consignee) => (this.unlimitedConsignee = consignee)),
+          map((consignee) => `${consignee.parma} - ${consignee.name}`),
+          catchError(() => {
+            this.networkForm.controls.consignee.setErrors({ parmaNotFound: v });
+            return of(v);
+          })
+        );
+      })
+    );
+  };
+
+  formatConsignorValueUnlimited = (v: string) => {
+    return of(v).pipe(
+      switchMap((value) => {
+        if (value == null || value.length === 0) {
+          return of(v);
+        }
+        return this.xtrService.getConsignorLocation(this.data.shipitId, v).pipe(
+          take(1),
+          tap((consignor) => (this.unlimitedConsignor = consignor)),
+          map((consignor) => `${consignor.parma} - ${consignor.name}`),
+          catchError(() => {
+            this.networkForm.controls.consignor.setErrors({ parmaNotFound: v });
+            return of(v);
+          })
+        );
+      })
+    );
+  };
+
+  formatShipFromValue = (parmaId: string) => {
+    return this.listOfShipFrom$.pipe(
+      filter(Boolean),
+      map((shipFroms) => {
+        const newValue = shipFroms?.find((shipFrom) => shipFrom.parmaId === parmaId)?.parmaName || parmaId;
+        return newValue ? `${parmaId} - ${newValue}` : parmaId;
+      })
+    );
+  };
+
+  formatShipToValue = (parmaId: string) => {
+    return this.listOfShipTo$.pipe(
+      filter(Boolean),
+      map((shipTos) => {
+        const newValue = shipTos?.find((shipTo) => shipTo.parmaId === parmaId)?.parmaName || parmaId;
+        return newValue ? `${parmaId} - ${newValue}` : parmaId;
+      })
+    );
+  };
+
+  formatConsignorValue = (parmaId: string) => {
+    return this.lostOfConsignors$.pipe(
+      filter(Boolean),
+      map((consignors) => {
+        const newValue = consignors?.find((consignor) => consignor.parmaId === parmaId)?.parmaName || parmaId;
+        return newValue ? `${parmaId} - ${newValue}` : parmaId;
+      })
+    );
+  };
+
+  clearSearch = () => {
+    this.searchFormControl.setValue('');
+  };
 }

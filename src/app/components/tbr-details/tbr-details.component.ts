@@ -9,7 +9,6 @@ import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { ThuDetails } from 'src/app/models/thu-details';
 import { SubTransportHandlingUnit } from 'src/app/models/sub-transport-handling-unit.model';
 import { prepareCustomThuPayload, prepareSubThuPayload } from '../../utils/prepare-PI';
-import { TbrService } from '../../services';
 import { TbrLine } from '../../models/tbr-line.model';
 
 import {
@@ -102,7 +101,8 @@ export class TbrDetailsComponent {
   addLineOptionsFormControl!: IFormControl<AddLineOptionValue>;
 
   private fb: IFormBuilder;
-  constructor(private router: Router, private tbrService: TbrService, private store: Store, fb: FormBuilder) {
+
+  constructor(private router: Router, private store: Store, fb: FormBuilder) {
     this.fb = fb;
     this.createForm();
     this.details$.pipe(untilDestroyed(this)).subscribe((value) => {
@@ -396,7 +396,7 @@ export class TbrDetailsComponent {
     }
 
     if (WORKFLOW_STATUSES_FOR_SUMMARY.includes(currentStatus)) {
-      this.store.dispatch(goToWorkflowSummary({ data: this.tbrDetails }));
+      this.store.dispatch(goToWorkflowSummary({ data: this.tbrDetails?.shipitId as string }));
       return;
     }
 

@@ -1,6 +1,4 @@
-export type TransportType = 'FCL' | 'FTL' | 'LCL' | 'LTL' | 'MIX';
-export type PlanningType = 'EXPRESS' | 'INBOUND' | 'OUTBOUND';
-export type ServiceLevel = 'CLOSED_LOOP' | 'STD_INB';
+import { NetworkType, PlanningType, ServiceLevel, TransportType } from './network.model';
 
 export interface NetworkForm {
   consignor: string;
@@ -14,7 +12,9 @@ export interface NetworkForm {
   useLoadingMeters: boolean;
   doNotMerge: boolean;
   freightClass: string;
+  payer: string;
   transportType: TransportType;
   planningType: PlanningType;
+  type: NetworkType;
   serviceLevel: ServiceLevel;
 }

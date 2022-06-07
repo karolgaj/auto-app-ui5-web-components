@@ -77,7 +77,7 @@ export class AuthService {
           this.tokenGranted.next();
         }),
         catchError(() => {
-          this.login();
+          // this.login();
           return EMPTY;
         })
       );

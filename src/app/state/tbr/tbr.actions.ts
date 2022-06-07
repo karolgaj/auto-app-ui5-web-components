@@ -96,9 +96,9 @@ export const loadThuListSuccess = createAction('[Networks] Load thu list Success
 export const loadThuListFailure = createAction('[Networks] Load thu list Failure', props<{ error: unknown }>());
 
 export const goToWorkflow = createAction('[XTR] Go to workflow', props<{ data: { status: ShipitStatus; deliveryDate: string } }>());
-export const goToWorkflowSuccess = createAction('[XTR] Go to workflow Success', props<{ data: Tbr }>());
+export const goToWorkflowSuccess = createAction('[XTR] Go to workflow Success', props<{ data: string }>());
 
-export const goToWorkflowSummary = createAction('[XTR] Go to workflow summary', props<{ data?: Tbr }>());
+export const goToWorkflowSummary = createAction('[XTR] Go to workflow summary', props<{ data: string }>());
 
 export const addHazmatDetails = createAction(
   '[Express] Add hazmat details',

@@ -1,8 +1,8 @@
 import { AfterViewInit, Directive, ElementRef, Injector, Input, OnInit, ViewChild } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormControlDirective, FormControlName, FormGroupDirective, NgControl } from '@angular/forms';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Observable } from 'rxjs';
 import { untilDestroyed } from '@ngneat/until-destroy';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 
 let id = 0;
 
@@ -10,6 +10,9 @@ type ValueState = 'Success' | 'Error' | 'Warning' | 'None';
 
 @Directive()
 export abstract class CustomInputAbstract implements ControlValueAccessor, AfterViewInit, OnInit {
+  @Input()
+  debug = false;
+
   @Input()
   inputClasses: string[] = [];
 
@@ -35,7 +38,13 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
   vertical = false;
 
   @Input()
-  formatValue?: (value: any) => any;
+  formatValue?: (value: any) => any | Observable<any>;
+
+  @Input()
+  readonly = false;
+
+  @Input()
+  disableValueState = false;
 
   @ViewChild('customInput')
   customInput!: ElementRef;
@@ -62,6 +71,10 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
       this.onChange(this.value);
       this.markAsTouched();
     });
+
+    if (this.readonly) {
+      this.customInput.nativeElement.setAttribute('readonly', true);
+    }
   }
 
   ngOnInit(): void {
@@ -94,15 +107,32 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
     }
 
     if (this.formControl?.touched) {
-      return this.formControl.invalid ? 'Warning' : 'Success';
+      return this.formControl.invalid ? 'Error' : 'Success';
     }
 
     return 'None';
   }
 
   writeValue(value: any): void {
-    this.formattedValue = this.formatValue ? this.formatValue(value) : value;
     this.value = value;
+    if (this.formatValue == null) {
+      this.formattedValue = value || '';
+      return;
+    }
+
+    if (this.assertIsObservable(this.formatValue(value))) {
+      this.formatValue(value)
+        .pipe(take(1))
+        .subscribe((v: any) => {
+          this.formattedValue = v || '';
+        });
+    } else {
+      this.formattedValue = this.formatValue(value) || '';
+    }
+  }
+
+  assertIsObservable(value: any): value is Observable<any> {
+    return !!value?.source;
   }
 
   registerOnChange(onChange: any): void {

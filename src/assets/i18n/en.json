@@ -13,7 +13,8 @@
     "IS_HOUR_AFTER_HOUR": "Hour must be after {{AFTER_HOUR}}",
     "IS_DATE_AFTER_DATE": "Date must be after {{AFTER_DATE}}",
     "INVALID_DATE": "Enter valid date",
-    "INVALID": "Invalid value"
+    "INVALID": "Invalid value",
+    "PARMA_NOT_FOUND": "Parma not found"
   },
   "COMMON": {
     "EXPRESS_TRANSPORT_REQUEST": "Express Transport Requests",
@@ -42,6 +43,7 @@
     "BUTTON_SEND_TO_APPROVAL": "Send to Approval",
     "BUTTON_APPROVAL": "Approval",
     "BUTTON_APPROVE": "Approve",
+    "BUTTON_DISAPPROVE": "Disapprove",
     "NO_DATA": "No data",
     "ADDRESS_NAME": "Name",
     "ADDRESS_COUNTRY": "Country",
@@ -140,7 +142,12 @@
     "BUTTON_CREATE_EXPRESS": "Create Express",
     "BUTTON_CREATE_TBR": "Create TBR",
     "BUTTON_REMOVE_ALL": "Remove All",
-    "BASKET": "Basket"
+    "BASKET": "Basket",
+    "APPROVED": "Approved",
+    "UNAPPROVED": "Unapproved",
+    "PAYER": "Payer",
+    "TYPE": "Type",
+    "SEARCH": "Search"
   },
   "NETWORK_FORM": {
     "VALID_FROM_TO": "valid from - to",

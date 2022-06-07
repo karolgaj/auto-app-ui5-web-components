@@ -3,7 +3,7 @@
     <div fxFlex="60" fxLayout="column" fxLayoutGap="1rem">
       <ui5-label> {{ tbrDetails.shipitId }} </ui5-label>
       <div fxLayout>
-        <img style="max-height: 3rem; max-width: 3rem; margin-right: 0.5rem" src="assets/volvo-logo.png" />
+        <img style="max-height: 3rem; max-width: 3rem; margin-right: 0.5rem" src="assets/volvo-logo.png" alt="volvo-logo"/>
         <ui5-title level="H2">{{ tbrDetails.consignee | consignorText }}</ui5-title>
       </div>
       <ui5-label> {{ 'COMMON.SHIP_FROM' | translate | titlecase }}: {{ tbrDetails.shipFrom | address }} </ui5-label>

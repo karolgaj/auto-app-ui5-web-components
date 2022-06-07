@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TbrLightDetails } from '../models/tbr-light.model';
-import { HazmatDetails, Tbr } from '../models/tbr.model';
+import { HazmatDetails, Tbr, TransportParty } from '../models/tbr.model';
 import { ThuDetails } from '../models/thu-details';
+
+import { PartyLocation } from '../models/location.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,22 +17,6 @@ export class XtrService {
 
   saveXTR(tbr: Tbr): Observable<Tbr> {
     return this.http.post<Tbr>('/gateway/api/xtr/v3/xtr', tbr);
-  }
-
-  searchTBRs(search: string, consigneeIds: string[], consignorIds: string[]): Observable<any> {
-    return this.http.post('/gateway/api/xtr/v3/search/xtr', {
-      search,
-      consigneeIds,
-      consignorIds,
-    });
-  }
-
-  searchTBs(search: string, consigneeIds: string[], consignorIds: string[]): Observable<any> {
-    return this.http.post('/gateway/api/xtr/v3/search/tb', {
-      search,
-      consigneeIds,
-      consignorIds,
-    });
   }
 
   /* PUT METHODS */
@@ -54,15 +40,54 @@ export class XtrService {
 
   /* DELETE METHODS */
 
-  deleteOldXTRs(): Observable<any> {
-    return this.http.delete('/gateway/api/xtr/v3/xtr');
-  }
-
   deleteHazmatDetails(shipItId: string, releaseLineId: string): Observable<Tbr> {
     return this.http.delete<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/hazmat/${releaseLineId}`);
   }
 
   /* GET METHODS */
+  createEmptyBooking(): Observable<Partial<Tbr> & Required<{ shipitId: string }>> {
+    return this.http.get<Partial<Tbr> & Required<{ shipitId: string }>>('/gateway/api/xtr/v3/xtr/new');
+  }
+
+  updateUnloadingPoint(shipitId: string, unloadingPoint: string): Observable<any> {
+    return this.http.get(`/gateway/api/location/v3/xtr/${shipitId}/shipto/${unloadingPoint}`);
+  }
+
+  getListOfShipFrom(): Observable<PartyLocation[]> {
+    return this.http.get<PartyLocation[]>('/gateway/api/tnd/v3/location/SHIP_FROM');
+  }
+
+  getListOfShipTo(): Observable<PartyLocation[]> {
+    return this.http.get<PartyLocation[]>('/gateway/api/tnd/v3/location/SHIP_TO');
+  }
+
+  getListOfConsignors(): Observable<PartyLocation[]> {
+    return this.http.get<PartyLocation[]>('/gateway/api/tnd/v3/location/CONSIGNOR');
+  }
+
+  getListOfUnloadingPoints(parmaId: string): Observable<string[]> {
+    return this.http.get<string[]>(`/gateway/api/location/v3/location/unloadpoint/${parmaId}`);
+  }
+
+  getListOfConsignees(shipToParma: string): Observable<PartyLocation[]> {
+    return this.http.get<PartyLocation[]>(`/gateway/api/tnd/v3/location/consignee/${shipToParma}`);
+  }
+
+  getShipFromLocation(shipItId: string, parmaId: string): Observable<TransportParty> {
+    return this.http.get<TransportParty>(`/gateway/api/location/v3/location/${shipItId}/SHIP_FROM/${parmaId}`);
+  }
+
+  getShipToLocation(shipItId: string, parmaId: string): Observable<TransportParty> {
+    return this.http.get<TransportParty>(`/gateway/api/location/v3/location/${shipItId}/SHIP_TO/${parmaId}`);
+  }
+
+  getConsignorLocation(shipItId: string, parmaId: string): Observable<TransportParty> {
+    return this.http.get<TransportParty>(`/gateway/api/location/v3/location/${shipItId}/CONSIGNOR/${parmaId}`);
+  }
+
+  getConsigneeLocation(shipItId: string, parmaId: string): Observable<TransportParty> {
+    return this.http.get<TransportParty>(`/gateway/api/location/v3/location/${shipItId}/CONSIGNEE/${parmaId}`);
+  }
 
   getXtrs(): Observable<TbrLightDetails[]> {
     return this.http.get<TbrLightDetails[]>(`/gateway/api/xtr/v3/xtr`);
@@ -72,7 +97,12 @@ export class XtrService {
     return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/split/{shipUnitLines}`);
   }
 
-  setPickupAndDeadlineDate(shipItId: string, pickupDate: string, deadlineDate: string, deadlineTime: string): Observable<any> {
+  setPickupAndDeadlineDate(
+    shipItId: string,
+    pickupDate: string,
+    deadlineDate: string | null,
+    deadlineTime: string | null
+  ): Observable<any> {
     return this.http.get(`/gateway/api/xtr/v3/xtr/${shipItId}/pickup/${pickupDate}/deadline/${deadlineDate}/${deadlineTime}`);
   }
 
