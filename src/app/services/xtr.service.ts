@@ -36,7 +36,6 @@ export class XtrService {
   /* PUT METHODS */
 
   setManualTHU(shipItId: string, releaseLineId: string, pi: ThuDetails): Observable<Tbr> {
-    console.log('setManual');
     return this.http.put<Tbr>(`/gateway/api/xtr/v3/xtr/${shipItId}/manual/thu/${releaseLineId}`, pi);
   }
 

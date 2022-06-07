@@ -1,4 +1,3 @@
-import { Linter } from 'eslint';
 import { OrderReleaseLine, ShipUnitLine, Tbr } from '../models/tbr.model';
 import { TbrLine } from '../models/tbr-line.model';
 

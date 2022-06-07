@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { ThuDetails } from 'src/app/models/thu-details';
 import { SubTransportHandlingUnit } from 'src/app/models/sub-transport-handling-unit.model';
 import { PlantSpecific } from 'src/app/models/plant-specific-model';
-import { Tbr, HazmatDetails } from '../../models/tbr.model';
+import { HazmatDetails, Tbr } from '../../models/tbr.model';
 import { TbrLightDetails } from '../../models/tbr-light.model';
 import { NetworkForm } from '../../models/network-form.model';
 import { TbrNetwork } from '../../models/tbr-network.model';

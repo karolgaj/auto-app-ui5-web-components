@@ -220,18 +220,20 @@
       </ui5-table-column>
 
       <ui5-table-row *ngFor="let packMack of extendedPackMaterial; let i = index">
-        <ui5-table-cell class="w-100">
-          <div>{{ packMack.materialDescription }}</div>
-        </ui5-table-cell>
-        <ui5-table-cell>
-          <img width="50" height="50" [src]="packMack.imageUri" alt="materialImage" />
-        </ui5-table-cell>
-        <ui5-table-cell> {{ packMack.quantityPerLayer }} </ui5-table-cell>
-        <ui5-table-cell> <app-input [formControl]="packMack.qtyOfLayersControl"></app-input> </ui5-table-cell>
-        <ui5-table-cell>
-          <app-radio-group [options]="containsPartOptions" [formControl]="packMack.containsPartPackMatControl"> </app-radio-group
-        ></ui5-table-cell>
-        <ui5-table-cell> <app-input [formControl]="packMack.unitLoadPerPackMatControl"></app-input></ui5-table-cell>
+        <ng-container *ngIf="manualThu?.packInstructionMaterials && manualThu.packInstructionMaterials[i]">
+          <ui5-table-cell class="w-100">
+            <div>{{ manualThu.packInstructionMaterials[i].materialDescription }}</div>
+          </ui5-table-cell>
+          <ui5-table-cell>
+            <img width="50" height="50" [src]="manualThu.packInstructionMaterials[i].imageUri" alt="materialImage" />
+          </ui5-table-cell>
+          <ui5-table-cell> {{ manualThu.packInstructionMaterials[i].quantityPerLayer }} </ui5-table-cell>
+          <ui5-table-cell> <app-step-input [formControl]="packMack.qtyOfLayersControl"></app-step-input> </ui5-table-cell>
+          <ui5-table-cell>
+            <app-radio-group [options]="containsPartOptions" [formControl]="packMack.containsPartPackMatControl"> </app-radio-group>
+          </ui5-table-cell>
+          <ui5-table-cell> <app-step-input [formControl]="packMack.unitLoadPerPackMatControl"></app-step-input> </ui5-table-cell>
+        </ng-container>
       </ui5-table-row>
     </ui5-table>
   </div>
@@ -242,7 +244,6 @@
     <h2 style="text-align: center">{{ 'TBR_DETAILS.SELECT_THU' | translate | titlecase }}</h2>
     <ui5-tabcontainer collapsed fixed (tab-select)="tabSelectionChange($event)">
       <ui5-tab text="Thu List" selected></ui5-tab>
-
       <ui5-tab text="Sub Thu List"></ui5-tab>
       <ui5-tab text="Plant Specific"></ui5-tab>
     </ui5-tabcontainer>
@@ -253,8 +254,8 @@
     fxLayoutGap="1rem"
     class="thu-list-select-form-group"
     [formGroup]="thuListSelecFormGroup">
-    <ng-container  [ngSwitch]="selectedTabIndex">
-      <ng-container  *ngSwitchCase="'0'">
+    <ng-container [ngSwitch]="selectedTabIndex">
+      <ng-container *ngSwitchCase="'0'">
         <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
           <ui5-li
             *ngFor="let thu of thuList$ | async"
@@ -264,19 +265,19 @@
             {{ thu.thuId }}
           </ui5-li>
         </ui5-list>
-      </ng-container >
-      <ng-container  *ngSwitchCase="'1'">
+      </ng-container>
+      <ng-container *ngSwitchCase="'1'">
         <ui5-list [noDataText]="'COMMON.NO_DATA' | translate">
           <ui5-li
             *ngFor="let thu of subThuList$ | async"
             [description]="thu.description"
             [additionalText]="thu.thuId"
-            (click)="selectThu(thu.thuId)">
+            (click)="selectSubThu(thu)">
             {{ thu.thuId }}
           </ui5-li>
         </ui5-list>
-      </ng-container >
-      <ng-container  *ngSwitchCase="'2'">
+      </ng-container>
+      <ng-container *ngSwitchCase="'2'">
         <ui5-list growing="Scroll" (load-more)="loadMorePlantSpecificThu()" [noDataText]="'COMMON.NO_DATA' | translate">
           <ui5-li
             *ngFor="let thu of plantSpecificList$ | async"
@@ -286,9 +287,8 @@
             {{ thu.materialNumber }}
           </ui5-li>
         </ui5-list>
-      </ng-container >
+      </ng-container>
     </ng-container>
-
   </div>
   <div slot="footer">
     <ui5-button design="Transparent" (click)="cancelSelectThuType()"> {{ 'COMMON.BUTTON_CANCEL' | translate }} </ui5-button>
@@ -301,7 +301,7 @@
   [dialogHeader]="'TBR_DETAILS.CUSTOM_THU' | translate | titlecase"
   (close)="cancelCustomThu()"
   (save)="saveCustomThuDetails()">
-  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="customThuFromGroup">
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="1rem" class="custom-address-form" [formGroup]="customThuFormGroup">
     <app-input
       formControlName="length"
       [inputClasses]="['w-100']"

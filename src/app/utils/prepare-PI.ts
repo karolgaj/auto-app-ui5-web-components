@@ -1,30 +1,23 @@
-import { Linter } from 'eslint';
+import { CustomThuForm } from '../components/tbr-details/tbr-details.models';
 import { ThuDetails } from '../models/thu-details';
 
-export function prepareCustomThuPI(
-  widthInpunt: number,
-  lenghtInpunt: number,
-  heightInput: number,
-  grossWeightInput: number,
-  unitLoad: number,
-  stackableInput: boolean
-): ThuDetails {
+export function prepareCustomThuPayload(input: CustomThuForm): ThuDetails {
   return {
     type: 'OTHER',
     partWeight: 0,
     weightUom: 'KG',
     dimensionUom: 'MM',
-    width: widthInpunt,
-    height: heightInput,
-    length: lenghtInpunt,
-    partQuantity: unitLoad,
+    width: input.width,
+    height: input.height,
+    length: input.length,
+    partQuantity: input.unitLoad,
     loadingDirection: 'ANY',
     packInstructionNumber: 'OTHER',
     description: 'OTHER',
-    stackable: stackableInput,
+    stackable: input.stackable,
     baseThuId: 'OTHER',
     thuId: 'OTHER',
-    volume: widthInpunt * heightInput * lenghtInpunt,
+    volume: input.width * input.height * input.length,
     volumeUom: 'M3',
     packInstructionMaterials: [
       {
@@ -36,14 +29,14 @@ export function prepareCustomThuPI(
         key: '',
         iconName: '',
         thuId: 'OTHER',
-        width: widthInpunt,
-        height: heightInput,
-        length: lenghtInpunt,
+        width: input.width,
+        height: input.height,
+        length: input.length,
         accountNumber: '',
         materialType: '',
         dimensionUom: 'MM',
-        grossWeight: grossWeightInput,
-        baseUom: '',
+        grossWeight: input.weight,
+        baseUom: 'EA',
         weightUom: 'KG',
         layerTotal: 0,
         packInstructionKey: '0001',
@@ -55,7 +48,7 @@ export function prepareCustomThuPI(
         originalNumberOfLayers: 1,
         partNumber: '',
         displayMode: false,
-        partQuantity: unitLoad,
+        partQuantity: input.unitLoad,
         containsPart: true,
         iconType: '',
         edit: false,
@@ -84,7 +77,7 @@ export function prepareCustomThuPI(
     dimensionOverRide: false,
     dynamicCallOff: false,
     flexibleUnitLoad: false,
-    grossWeight: grossWeightInput,
+    grossWeight: input.weight,
     internalText: '',
     lastCheck: '',
     longText: '',
@@ -113,12 +106,10 @@ export function prepareCustomThuPI(
   };
 }
 
-export function prepareSubThuPI(
+export function prepareSubThuPayload(
   widthInpunt: number,
   lenghtInpunt: number,
   heightInput: number,
-  grossWeightInput: number,
-  unitLoad: number,
   thuIdInput: string,
   descriptionInput: string
 ): ThuDetails {
@@ -130,7 +121,7 @@ export function prepareSubThuPI(
     width: widthInpunt,
     height: heightInput,
     length: lenghtInpunt,
-    partQuantity: unitLoad,
+    partQuantity: 1,
     loadingDirection: 'ANY',
     packInstructionNumber: thuIdInput,
     description: thuIdInput,
@@ -155,8 +146,8 @@ export function prepareSubThuPI(
         accountNumber: '',
         materialType: '',
         dimensionUom: 'MM',
-        grossWeight: grossWeightInput,
-        baseUom: '',
+        grossWeight: 100,
+        baseUom: 'EA',
         weightUom: 'KG',
         layerTotal: 0,
         packInstructionKey: '0001',
@@ -168,7 +159,7 @@ export function prepareSubThuPI(
         originalNumberOfLayers: 1,
         partNumber: '',
         displayMode: false,
-        partQuantity: unitLoad,
+        partQuantity: 1,
         containsPart: true,
         iconType: '',
         edit: false,
@@ -197,7 +188,7 @@ export function prepareSubThuPI(
     dimensionOverRide: false,
     dynamicCallOff: false,
     flexibleUnitLoad: false,
-    grossWeight: grossWeightInput,
+    grossWeight: 100,
     internalText: '',
     lastCheck: '',
     longText: '',
