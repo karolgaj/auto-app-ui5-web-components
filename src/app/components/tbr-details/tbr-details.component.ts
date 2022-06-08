@@ -180,7 +180,7 @@ export class TbrDetailsComponent {
     this.customThuDialog.openDialog();
   }
 
-  linesIdentifier(index: number, line: ExtendedTbrLine) {
+  linesIdentifier(_index: number, line: ExtendedTbrLine) {
     return line.id;
   }
 

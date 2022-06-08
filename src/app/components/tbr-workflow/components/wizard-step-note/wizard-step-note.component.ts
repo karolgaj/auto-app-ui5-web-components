@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { WizardStepAbstract } from '../wizard-step-abstract';
 import { Tbr } from '../../../../models/tbr.model';
 
@@ -9,7 +9,7 @@ import { Tbr } from '../../../../models/tbr.model';
 })
 export class WizardStepNoteComponent extends WizardStepAbstract implements OnInit {
   form!: FormGroup;
-  internalNote = this.fb.control('');
+  internalNote!: FormControl;
 
   constructor(fb: FormBuilder) {
     super(fb);
@@ -25,7 +25,9 @@ export class WizardStepNoteComponent extends WizardStepAbstract implements OnIni
     return this.internalNote.valid;
   }
 
-  protected createForm(): void {}
+  protected createForm(): void {
+    this.internalNote = this.fb.control('');
+  }
 
   protected patchInitialForm(): void {
     this.internalNote.patchValue(this.data.internalNote);

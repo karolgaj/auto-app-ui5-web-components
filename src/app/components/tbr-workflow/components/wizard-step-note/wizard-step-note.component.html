@@ -1,6 +1,6 @@
 <div class="wizard-step">
   <ui5-title>{{ title }}</ui5-title>
-  <div class="wizard-step__content" style="width: 100%">
+  <div class="wizard-step__content" style="width: 100%" *ngIf="internalNote">
     <ui5-label>{{ 'COMMON.NOTE_DETAILS' | translate }}</ui5-label>
     <app-textarea [formControl]="internalNote"></app-textarea>
   </div>

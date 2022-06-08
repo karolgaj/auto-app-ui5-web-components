@@ -50,7 +50,7 @@ export class TbrWorkflowComponent {
     );
   }
 
-  stepChange($event: any): void {
+  stepChange(): void {
     this.activeStep = Array.from(this.wizard.nativeElement.children as HTMLCollection).findIndex((step: any) => step.selected);
   }
 

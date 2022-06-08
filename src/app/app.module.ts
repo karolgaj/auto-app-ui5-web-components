@@ -17,7 +17,7 @@ import { AppComponent } from './app.component';
 // @ts-ignore
 import { setTheme } from '@ui5/webcomponents-base/dist/config/Theme';
 // @ts-ignore
-import { getLanguage, setLanguage } from '@ui5/webcomponents-base/dist/config/Language';
+import { setLanguage } from '@ui5/webcomponents-base/dist/config/Language';
 
 import { StateModule } from './state/state.module';
 

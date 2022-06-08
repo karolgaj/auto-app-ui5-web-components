@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { concatMap, Observable, retryWhen, throwError } from 'rxjs';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { concatMap, Observable, retry } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthService } from '../../services';
 import { HTTP_BASE_URL } from './value-tokens';
@@ -14,15 +14,18 @@ export class UnauthorizedErrorInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
-      retryWhen((errors) => {
-        return errors.pipe(
-          concatMap((error, count) => {
-            if (count <= retryCount && error.status === 401) {
-              return this.reAuthenticate().pipe(switchMap(() => next.handle(request)));
-            }
-            return throwError(error);
-          })
-        );
+      retry({
+        count: 1,
+        delay: (errors) => {
+          return errors.pipe(
+            concatMap((error: HttpErrorResponse, count) => {
+              if (count <= retryCount && error.status === 401) {
+                return this.reAuthenticate().pipe(switchMap(() => next.handle(request)));
+              }
+              throw error;
+            })
+          );
+        },
       })
     );
   }

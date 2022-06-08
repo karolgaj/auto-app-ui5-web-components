@@ -97,7 +97,6 @@ export class WizardStepCostOwnerComponent extends WizardStepAbstract implements 
         };
         break;
       default:
-        const exhaustCheck: never = costOwnerSelection;
         throw Error(`Not supported cost owner selection value: ${costOwnerSelection}`);
     }
 

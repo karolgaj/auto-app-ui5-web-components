@@ -44,13 +44,13 @@ export class CommonValidators {
         const len = timestamp.toString().length;
 
         if (len > 12) {
-          timestamp = Number(timestamp.toString().substr(0, 12));
+          timestamp = Number(timestamp.toString().slice(0, 12));
         }
         return this.http
           .get(`${this.googleApiUrl}/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${this.googleApiKey}`)
           .pipe(
-            map((value) => ({
-              ...value,
+            map((v) => ({
+              ...v,
               location: result,
             }))
           );

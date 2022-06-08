@@ -77,14 +77,14 @@ export class AuthService {
           this.tokenGranted.next();
         }),
         catchError(() => {
-          // this.login();
+          this.login();
           return EMPTY;
         })
       );
   }
 
   private static dec2hex(dec: number): string {
-    return `0${dec.toString(16)}`.substr(-2);
+    return `0${dec.toString(16)}`.slice(-2);
   }
 
   private static generateCodeVerifier(): string {

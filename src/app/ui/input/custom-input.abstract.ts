@@ -86,7 +86,7 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
     if (ngControl instanceof FormControlName) {
       this.formControl = this.injector.get(FormGroupDirective).getControl(ngControl);
     } else {
-      this.formControl = (ngControl as FormControlDirective).form as FormControl;
+      this.formControl = (ngControl as FormControlDirective).form;
     }
 
     this.formControl.valueChanges
@@ -156,6 +156,6 @@ export abstract class CustomInputAbstract implements ControlValueAccessor, After
 
   abstract getId(): string;
 
-  onChange = (value: any) => {};
-  onTouched = () => {};
+  onChange!: (value: any) => {};
+  onTouched!: () => {};
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormControl } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { selectedTbr, updateTbr } from '../../../../state';
+import { selectedTbr, selectTbr, updateTbr } from '../../../../state';
 import { DialogComponent } from '../../../../ui/dialog/dialog.component';
 import { Tbr } from '../../../../models/tbr.model';
 
@@ -39,7 +39,9 @@ export class WizardSummaryComponent implements OnInit {
     });
   }
 
-  close(): void {}
+  close(): void {
+    this.store.dispatch(selectTbr({ data: null }));
+  }
 
   editSection(
     pickupInfo: 'PICKUP_INFO' | 'CONTACT_PERSON' | 'TRANSPORT_TYPE' | 'COST_OWNER' | 'REASON_CODE' | 'NOTE' | 'ADDITIONAL_CONTACTS'

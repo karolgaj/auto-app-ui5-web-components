@@ -9,23 +9,12 @@ export const selectIsAuthenticated = createSelector(selectUserState, (state) => 
 export const selectUserTimeFormat = createSelector(selectUserData, (userData) => userData?.timeFormat);
 export const selectUserDateFormat = createSelector(selectUserData, (userData) => userData?.dateFormat);
 export const selectUserRoles = createSelector(selectUserData, (userData) => userData?.roles);
-export const selectUserConsignorParmas = createSelector(selectUserData, (userData) =>
-  userData?.consignorParmas.map(
-    (v) =>
-      ({
-        parmaId: v,
-        parmaName: v,
-        parmaCountryCode: '',
-      } as PartyLocation)
-  )
-);
-export const selectUserConsigneeParmas = createSelector(selectUserData, (userData) =>
-  userData?.consigneeParmas.map(
-    (v) =>
-      ({
-        parmaId: v,
-        parmaName: v,
-        parmaCountryCode: '',
-      } as PartyLocation)
-  )
-);
+export const selectUserConsignorParmas = createSelector(selectUserData, (userData) => userData?.consignorParmas.map(mapToPartyLocation));
+export const selectUserConsigneeParmas = createSelector(selectUserData, (userData) => userData?.consigneeParmas.map(mapToPartyLocation));
+
+const mapToPartyLocation = (v: string) =>
+  ({
+    parmaId: v,
+    parmaName: v,
+    parmaCountryCode: '',
+  } as PartyLocation);

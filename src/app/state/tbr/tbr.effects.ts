@@ -31,7 +31,7 @@ export class TbrEffects {
   loadNetworks$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TbrActions.loadAvailableNetworks),
-      concatMap(({ data }) =>
+      concatMap(() =>
         this.tbrService.getTbrNetworks().pipe(
           map((res) => TbrActions.loadAvailableNetworksSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.loadAvailableNetworksFailure({ error })))
@@ -43,7 +43,7 @@ export class TbrEffects {
   loadConsignors$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TbrActions.loadConsignors),
-      concatMap(({ data }) =>
+      concatMap(() =>
         this.tbrService.getConsignors().pipe(
           map((res) => TbrActions.loadConsignorsSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.loadConsignorsFailure({ error })))
@@ -174,7 +174,7 @@ export class TbrEffects {
   loadPlantSpecificList$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(TbrActions.loadPlantSpecificList),
-      concatMap(({}) =>
+      concatMap(() =>
         this.packItService.getPlantSpecificTHUListForShipFrom().pipe(
           map((res) => TbrActions.loadPlantSpecificListSuccess({ data: res })),
           catchError((error: unknown) => of(TbrActions.loadPlantSpecificListFailure({ error })))

@@ -168,10 +168,6 @@ export class TbrNetworkFormComponent implements AfterViewInit {
       });
 
     this.isLimitedRequester$.pipe(filter(Boolean), untilDestroyed(this)).subscribe(() => this.limitedRequestedInitialization());
-
-    this.isUnlimitedRequester$.pipe(filter(Boolean), untilDestroyed(this)).subscribe(() => {
-      this.unlimitedRequestedInitialization();
-    });
   }
 
   ngAfterViewInit(): void {
@@ -415,8 +411,6 @@ export class TbrNetworkFormComponent implements AfterViewInit {
         this.addressToApprove = value?.location?.formatted_address;
       });
   }
-
-  private unlimitedRequestedInitialization(): void {}
 
   private limitedRequestedInitialization(): void {
     this.store.dispatch(loadShipFrom());
