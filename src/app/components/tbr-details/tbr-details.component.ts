@@ -21,6 +21,7 @@ import {
   selectedTbr,
   selectPlantSpecificList,
   selectSubThuList,
+  selectTbr,
   selectThu,
   selectThuList,
   setManualThu,
@@ -160,7 +161,7 @@ export class TbrDetailsComponent {
   }
 
   goBack(): void {
-    this.router.navigate(['../']);
+    this.store.dispatch(selectTbr({ data: null }));
   }
 
   openAddDialog(): void {

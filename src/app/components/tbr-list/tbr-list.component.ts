@@ -6,7 +6,7 @@ import { combineLatest, debounceTime, Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ShipItStatusTypeName } from '../../models/tbr-type.model';
 import { TbrLightDetails } from '../../models/tbr-light.model';
-import { loadTbrs, refreshTbrList, selectTbr, selectTbrsByType } from '../../state';
+import { loadTbrs, refreshTbrList, selectedTbr, selectTbr, selectTbrsByType } from '../../state';
 import { ShipItStatusTypeMap } from './constants';
 import { createEmptyBooking } from '../../state/network-form';
 
@@ -28,6 +28,7 @@ export class TbrListComponent {
 
   tbrTypesLists: Record<ShipItStatusTypeName, Observable<TbrLightDetails[]>>;
   searchFormControl = new FormControl('');
+  selectedTbr$ = this.store.select(selectedTbr).pipe(map((tbr) => tbr?.shipitId));
 
   constructor(private router: Router, private store: Store) {
     this.store.dispatch(loadTbrs({ data: { query: '' } }));
