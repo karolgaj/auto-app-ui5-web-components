@@ -45,7 +45,6 @@ const routes: Routes = [
         component: WizardSummaryComponent,
         canActivate: [LoadedExpressGuard],
       },
-
       {
         path: ':shipItId',
         component: TbrDetailsComponent,
